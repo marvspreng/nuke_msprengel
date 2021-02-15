@@ -1,0 +1,361 @@
+#! C:/Program Files/Nuke10.5v5/nuke-10.5.5.dll -nx
+version 10.5 v5
+Gizmo {
+ tile_color 0x9fffff
+ gl_color 0x9fffff
+ addUserKnob {20 grain l Grain}
+ addUserKnob {41 iso l ISO T NoOp1.iso}
+ addUserKnob {26 ""}
+ addUserKnob {26 sign l "" +STARTLINE T "Grain ARRI Alexa by Huseyin Cay, 2018©\nwww.huseyincay.com"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  label "blue grain"
+  note_font_size 20
+  xpos -84
+  ypos -256
+  bdwidth 206
+  bdheight 307
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  label "red grain"
+  note_font_size 20
+  xpos -345
+  ypos -223
+  bdwidth 204
+  bdheight 301
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  label "green grain"
+  note_font_size 20
+  xpos -594
+  ypos -127
+  bdwidth 208
+  bdheight 315
+ }
+ NoOp {
+  inputs 0
+  name NoOp1
+  xpos 1125
+  ypos 436
+  addUserKnob {20 User}
+  addUserKnob {7 iso l ISO R 100 3200}
+  iso 3200
+ }
+ Input {
+  inputs 0
+  name source
+  xpos 951
+  ypos -60
+ }
+ Dot {
+  name Dot2
+  xpos 985
+  ypos 38
+ }
+set Ne996400 [stack 0]
+ Dot {
+  name Dot7
+  xpos 854
+  ypos 38
+ }
+set Ne996000 [stack 0]
+ Dot {
+  name Dot1
+  xpos 725
+  ypos 38
+ }
+set Nf1047c00 [stack 0]
+push $Nf1047c00
+ Dot {
+  name Dot4
+  xpos 599
+  ypos 38
+ }
+set Nf1047800 [stack 0]
+ ColorLookup {
+  channels rgb
+  lut {master {curve C 0.3495025635 s3 x0.1296822727 0.6532338858 x0.2818024457 0.8694030046 x0.5006420612 0.9718141556 x1 1}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup2
+  selected true
+  xpos 565
+  ypos 250
+ }
+ Shuffle {
+  alpha red
+  name Shuffle2
+  xpos 565
+  ypos 368
+ }
+ Noise {
+  inputs 0
+  output {-rgba.red rgba.green -rgba.blue rgba.alpha}
+  type turbulence
+  size 1.2
+  zoffset {{frame}}
+  octaves 3
+  nyquist false
+  gamma 0.385
+  center {1024 540}
+  name Noise3
+  xpos -25
+  ypos -186
+ }
+ ColorCorrect {
+  gamma 2.3
+  gain 0.026
+  name ColorCorrect3
+  xpos -25
+  ypos -146
+ }
+ Clamp {
+  name Clamp3
+  xpos -25
+  ypos -122
+ }
+ Blur {
+  size 1.3
+  name Blur3
+  xpos -25
+  ypos -84
+ }
+ Remove {
+  channels alpha
+  name Remove2
+  xpos -25
+  ypos -37
+ }
+push 0
+ Noise {
+  inputs 0
+  output {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  type turbulence
+  size 3.5
+  zoffset {{frame}}
+  octaves 3
+  nyquist false
+  lacunarity 1.11
+  gain 0.86
+  gamma 0.225
+  center {1024 540}
+  name Noise1
+  xpos -528
+  ypos -47
+ }
+ ColorCorrect {
+  gamma 2.3
+  gain 0.026
+  name ColorCorrect1
+  xpos -528
+  ypos -9
+ }
+ Clamp {
+  name Clamp1
+  xpos -528
+  ypos 17
+ }
+ Blur {
+  size 1.2
+  name Blur1
+  xpos -528
+  ypos 55
+ }
+ Remove {
+  channels alpha
+  name Remove3
+  xpos -528
+  ypos 107
+ }
+ Noise {
+  inputs 0
+  output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  type turbulence
+  size 2.5
+  zoffset {{frame}}
+  octaves 3
+  nyquist false
+  lacunarity 3
+  gain 0.485
+  gamma 0.38
+  center {1024 540}
+  name Noise2
+  xpos -288
+  ypos -149
+ }
+ ColorCorrect {
+  gamma 2.3
+  gain 0.026
+  name ColorCorrect2
+  xpos -288
+  ypos -111
+ }
+ Clamp {
+  name Clamp2
+  xpos -288
+  ypos -85
+ }
+ Blur {
+  size 1.3
+  name Blur2
+  xpos -288
+  ypos -47
+ }
+ Remove {
+  channels alpha
+  name Remove1
+  xpos -288
+  ypos 4
+ }
+ Merge2 {
+  inputs 3+1
+  operation plus
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  name Merge1
+  xpos -25
+  ypos 111
+ }
+set Nf1a17000 [stack 0]
+ Dot {
+  name Dot6
+  xpos 9
+  ypos 309
+ }
+set Nf1a16c00 [stack 0]
+ Dot {
+  name Dot5
+  xpos 9
+  ypos 439
+ }
+ ColorCorrect {
+  offset -0.008
+  name ColorCorrect5
+  xpos 368
+  ypos 435
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge5
+  xpos 565
+  ypos 435
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge7
+  xpos 691
+  ypos 435
+ }
+push $Ne996000
+push $Nf1047800
+ Dot {
+  name Dot3
+  xpos 469
+  ypos 38
+ }
+ ColorLookup {
+  channels rgb
+  lut {master {curve C 0 s3.299999952 x0.1327416301 0.3393293619 x0.2413712144 0.4933844805 x0.4885971546 0.6287660599 x1 0.6754493713 s0.05000000075}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup1
+  xpos 435
+  ypos 170
+ }
+ Shuffle {
+  alpha red
+  name Shuffle3
+  xpos 435
+  ypos 233
+ }
+push $Nf1a16c00
+ ColorCorrect {
+  saturation 0.5
+  gain 100
+  offset -0.5
+  name ColorCorrect4
+  xpos 119
+  ypos 306
+ }
+ ColorCorrect {
+  channels {rgba.red -rgba.green rgba.blue}
+  highlights.gain 0
+  lookup {shadow {}
+    midtone {}
+    highlight {curve x-0.108186394 0 s0 x0.8229426742 0.8390953541 s2.450000048}}
+  name ColorCorrect6
+  xpos 268
+  ypos 300
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge4
+  xpos 435
+  ypos 305
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge8
+  xpos 820
+  ypos 305
+ }
+push $Nf1a17000
+push $Ne996400
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy1
+  xpos 951
+  ypos 100
+ }
+ IDistort {
+  uv forward
+  uv_scale {{Merge3.mix*50}}
+  name IDistort1
+  xpos 951
+  ypos 213
+ }
+ Merge2 {
+  inputs 2
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  mix {{Merge3.mix/10}}
+  name Merge2
+  xpos 951
+  ypos 305
+ }
+ Merge2 {
+  inputs 2
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  mix {{NoOp1.iso/3200}}
+  name Merge3
+  xpos 951
+  ypos 435
+ }
+ Output {
+  name Output1
+  xpos 951
+  ypos 520
+ }
+end_group

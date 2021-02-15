@@ -1,0 +1,1261 @@
+set cut_paste_input [stack 0]
+version 11.2 v5
+push 0
+push 0
+push $cut_paste_input
+Group {
+ inputs 3
+ name ct_EdgeFlare
+ label -
+ note_font "Bitstream Vera Sans"
+ selected true
+ xpos -705
+ ypos 28
+ addUserKnob {20 EdgeFlare l "Edge Flare"}
+ addUserKnob {4 positionInput l "position input" M {user axis "" ""}}
+ addUserKnob {6 previewLight l "preview light" -STARTLINE}
+ addUserKnob {41 frameEdge l "frame edge" T Flare_Gen.frameEdge}
+ addUserKnob {41 lensDistortion T Flare_Gen.lensDistortion}
+ addUserKnob {22 analyzeDistortion l "analyze distortion" -STARTLINE T "dist = nuke.toNode('distortion_analysis').knob('go')\ndist.execute()"}
+ addUserKnob {22 clearAnalysis l "clear analysis" -STARTLINE T " \nnuke.animation(\"distortion_analysis.intensitydata.r\", \"clear\")\n \nnuke.animation(\"distortion_analysis.intensitydata.g\", \"clear\")\n\n \nnuke.animation(\"distortion_analysis.intensitydata.b\", \"clear\")"}
+ addUserKnob {22 toggleFrameBorders l "toggle frame borders" T "x = nuke.thisNode().knobs()\[\"flareVisualizeIn\"].visible()\nnuke.thisNode().knobs()\[\"flareVisualizeIn\"].setVisible(not x)\n\n\n\nx = nuke.thisNode().knobs()\[\"flareVisualizeOut\"].visible()\nnuke.thisNode().knobs()\[\"flareVisualizeOut\"].setVisible(not x)" +STARTLINE}
+ addUserKnob {22 toggleIntensityCurve l "toggle intensity curve" T "x = nuke.thisNode().knobs()\[\"flareIntensity\"].visible()\nnuke.thisNode().knobs()\[\"flareIntensity\"].setVisible(not x)" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 flareIntensity l "flare intensity" +HIDDEN T Flare_Gen.flareIntensity}
+ addUserKnob {12 flarePos l "flare pos"}
+ flarePos {2191.5 1015}
+ addUserKnob {6 anamorphic -STARTLINE}
+ anamorphic true
+ addUserKnob {30 offset}
+ addUserKnob {14 globalScale l "global scale" R 0 100}
+ globalScale 1
+ addUserKnob {26 ""}
+ addUserKnob {41 easing l "transition easing" T Flare_Gen.easing}
+ addUserKnob {41 inPoint l in T Flare_Gen.inPoint}
+ addUserKnob {41 outPoint l out T Flare_Gen.outPoint}
+ addUserKnob {41 flareVisualizeIn +HIDDEN T ctrl.flareVisualizeIn}
+ addUserKnob {41 flareVisualizeOut +HIDDEN T ctrl.flareVisualizeOut}
+ addUserKnob {7 cullEdge l "occlude edge" R 0 50}
+ cullEdge 5
+ addUserKnob {26 ""}
+ addUserKnob {41 flareSize l "light size" T Flare_Gen.flareSize}
+ addUserKnob {7 intensity R 0 4}
+ intensity 1
+ addUserKnob {41 flareSizeAspect l "light aspect" +INVISIBLE T Flare_Gen.flareSizeAspect}
+ addUserKnob {41 modulationAmp l "modulation amp" T Flare_Gen.modulationAmp}
+ addUserKnob {41 modulationWavelength l "modulation frequency" T Flare_Gen.modulationWavelength}
+ addUserKnob {7 skew R -1 1}
+ addUserKnob {26 ""}
+ addUserKnob {7 seed R 0 500}
+ seed 136
+ addUserKnob {7 maxLength l "max length" R 0 800}
+ maxLength 600
+ addUserKnob {7 minLength l "min length" R 0 500}
+ minLength 200
+ addUserKnob {7 maxRotationVariance l "max rotation variance" R 0 90}
+ maxRotationVariance 45
+ addUserKnob {7 residualRotationVariance l "residual rotation variance"}
+ residualRotationVariance 0.162
+ addUserKnob {7 rotationVariance +INVISIBLE}
+ rotationVariance {{(1-Flare_Gen.linearRamp)+residualRotationVariance}}
+ addUserKnob {7 starburstSpeed l "starburst speed"}
+ starburstSpeed 0.03
+ addUserKnob {26 ""}
+ addUserKnob {7 causticIntensity l "caustic intensity"}
+ causticIntensity 0.585
+ addUserKnob {7 causticSize l "caustic size"}
+ causticSize 10
+ addUserKnob {7 chromaSplit l "chroma split"}
+ chromaSplit 1
+ addUserKnob {41 causticScanSpeed l "caustic scan speed" T ctrl.causticScanSpeed}
+ addUserKnob {7 causticSpeed l "caustic evolution speed"}
+ causticSpeed 0.01
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {7 glowSize l "diffusion size" R 0 5}
+ glowSize 1
+ addUserKnob {7 gamma R 0.001 2}
+ gamma 1.3
+ addUserKnob {26 ""}
+ addUserKnob {26 credit l "" +STARTLINE T "written by Chris Turner"}
+}
+ Input {
+  inputs 0
+  name axis
+  note_font "Bitstream Vera Sans"
+  xpos -315
+  ypos 88
+ }
+ Input {
+  inputs 0
+  name cam
+  note_font "Bitstream Vera Sans"
+  xpos -487
+  ypos 88
+  number 1
+ }
+ Dot {
+  name Dot1
+  note_font "Bitstream Vera Sans"
+  xpos -453
+  ypos 259
+ }
+push 0
+ Reconcile3D {
+  inputs 3
+  calc_output true
+  name Reconcile3D1
+  note_font "Bitstream Vera Sans"
+  xpos -315
+  ypos 250
+ }
+ Input {
+  inputs 0
+  name dist
+  note_font "Bitstream Vera Sans"
+  xpos 194
+  ypos 84
+  number 2
+ }
+ Reformat {
+  name Reformat1
+  note_font "Bitstream Vera Sans"
+  xpos 194
+  ypos 152
+ }
+set N9ff1690 [stack 0]
+ Expression {
+  expr0 ((r-((x+0.5)/width))*width)
+  expr1 ((g-((y+0.5)/height))*height)
+  name expandUVs
+  note_font "Bitstream Vera Sans"
+  xpos 194
+  ypos 201
+ }
+ CurveTool {
+  ROI {{Flare_Gen.flarePos.x-2 x1030 1452.735294} {Flare_Gen.flarePos.y-2 x1030 1820.5} {Flare_Gen.flarePos.x+2 x1030 1457.599976} {Flare_Gen.flarePos.y+2 x1030 1823.735294}}
+  autocropdata {537 450 1612 1351}
+  intensitydata {{curve x1009 16.43326151 16.48232293 16.52745187 16.71179128 16.826105 16.95637357 17.09113157 17.25628889 17.40760577 17.5863471 17.7665422 17.94285226 18.14965868 18.40580201 18.67849112 18.93023181 19.11834407 19.25104308 19.35089219 19.37246132 19.32345819 19.1397531 18.90333831 18.48334062 17.94090164 17.23131144 16.5766654 15.9412818 15.27792931 14.58511853 13.96657062 13.32554817 12.84666753 12.42353225 12.0330112 11.63944674 11.23550224 10.86942577 10.56880164 10.27010012 10.06884855 10.00001997 9.978719115 9.920526803 9.932144463 9.904960752 9.916578293 9.883567572 9.825119317 9.750916302 9.662813306 9.592234612 9.494131923 9.384231329 9.272588551 9.207908809 9.12421906 9.05238682 9.048354089 9.009676814} {curve x1009 -14.30482215 -15.31381553 -16.31860006 -17.2593224 -18.18624973 -19.15700579 -20.10846281 -21.00389278 -21.93033016 -22.83913875 -23.69706368 -24.4981693 -25.23931551 -25.95351517 -26.65077186 -27.38051867 -28.11206508 -28.85476851 -29.59982133 -30.39845693 -31.2351352 -32.37668967 -33.76683855 -35.32756424 -37.02741051 -38.71748137 -39.45098782 -39.63119221 -39.81099129 -39.97467995 -40.10684586 -40.23836803 -40.3314085 -40.40925312 -40.47928143 -40.5416317 -40.61187649 -40.66665459 -40.71351051 -40.75923824 -40.43755317 -39.49204493 -38.43955183 -37.38644004 -36.33436942 -35.51755524 -34.6786418 -33.88706183 -33.24393868 -32.67885375 -32.23867774 -31.91668284 -31.5115484 -31.19036627 -30.87050629 -30.49457335 -30.25553727 -29.92253399 -29.66950166 -29.37470829} {curve x1009 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0} {curve}}
+  name distortion_analysis
+  note_font "Bitstream Vera Sans"
+  xpos 194
+  ypos 247
+ }
+ NoOp {
+  inputs 0
+  name ctrl
+  note_font "Bitstream Vera Sans"
+  xpos -283
+  ypos 466
+  addUserKnob {20 User}
+  addUserKnob {7 causticScanSpeed R -2 2}
+  causticScanSpeed 1.5
+  addUserKnob {7 rotationDivergence}
+  rotationDivergence {{(((pow((1-Flare_Gen.linearRamp),(1/0.5)))*parent.maxRotationVariance)*4)+parent.residualRotationVariance}}
+  addUserKnob {7 chromaRed}
+  chromaRed -0.01
+  addUserKnob {7 chromaGreen}
+  chromaGreen 0.06
+  addUserKnob {7 chromaBlue}
+  chromaBlue 0.098
+  addUserKnob {15 flareVisualizeIn}
+  flareVisualizeIn {{Flare_Gen.inPoint} {height-Flare_Gen.inPoint} {width-Flare_Gen.inPoint} {Flare_Gen.inPoint}}
+  addUserKnob {15 flareVisualizeOut}
+  flareVisualizeOut {{width-Flare_Gen.outPoint} {height-Flare_Gen.outPoint} {Flare_Gen.outPoint} {Flare_Gen.outPoint}}
+  addUserKnob {12 flarePos +INVISIBLE}
+  flarePos {{"(positionInput ? Reconcile3D1.output.x + (lensDistortion ? distortion_analysis.intensitydata.r : 0) : parent.flarePos.x)" x1042 1825} {"(positionInput ? Reconcile3D1.output.y + (lensDistortion ? distortion_analysis.intensitydata.g : 0) : parent.flarePos.y)" x1042 1864}}
+  addUserKnob {12 cutPos +INVISIBLE}
+  cutPos {{"flarePos.x > (width-inPoint) && flarePos.x < (width-Flare_Gen.outPoint) ? (flarePos.x-(width-Flare_Gen.inPoint)) / (Flare_Gen.inPoint-Flare_Gen.outPoint) : flarePos.x < Flare_Gen.inPoint && flarePos.x > Flare_Gen.outPoint ? ((flarePos.x*-1) + Flare_Gen.inPoint) / (Flare_Gen.inPoint-Flare_Gen.outPoint): 0 "} {"flarePos.y > (height-Flare_Gen.inPoint) && flarePos.y < (height-Flare_Gen.outPoint) ? (flarePos.y-(height-Flare_Gen.inPoint)) / (Flare_Gen.inPoint-Flare_Gen.outPoint) : flarePos.y < Flare_Gen.inPoint && flarePos.y > Flare_Gen.outPoint ? ((flarePos.y*-1) + Flare_Gen.inPoint) / (Flare_Gen.inPoint-Flare_Gen.outPoint): 0 "}}
+ }
+push $N9ff1690
+ Dot {
+  name Dot2
+  note_font "Bitstream Vera Sans"
+  xpos -28
+  ypos 155
+ }
+ Remove {
+  name Remove1
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 173
+ }
+ Dot {
+  name Dot3
+  note_font "Bitstream Vera Sans"
+  xpos -28
+  ypos 397
+ }
+set Na095f60 [stack 0]
+ Dot {
+  name Dot4
+  note_font "Bitstream Vera Sans"
+  xpos 259
+  ypos 397
+ }
+ Expression {
+  channel0 rgb
+  expr0 "clamp(size-sqrt(hypot( ((x-pos.x)*pixel_aspect) , (y-pos.y) )))"
+  channel1 {-rgba.red -rgba.green -rgba.blue none}
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  name preview_light_source
+  note_font "Bitstream Vera Sans"
+  xpos 225
+  ypos 494
+  addUserKnob {20 User}
+  addUserKnob {12 pos}
+  pos {{parent.ctrl.flarePos} {parent.ctrl.flarePos}}
+  addUserKnob {7 size}
+  size 4
+ }
+ Dot {
+  name Dot20
+  note_font "Bitstream Vera Sans"
+  xpos 259
+  ypos 3011
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1k"
+  name Reformat6
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 977
+ }
+ Dot {
+  name Dot23
+  note_font "Bitstream Vera Sans"
+  xpos -1776
+  ypos 1051
+ }
+set Na0c0e50 [stack 0]
+ Dot {
+  name Dot26
+  note_font "Bitstream Vera Sans"
+  xpos -1923
+  ypos 1051
+ }
+ Radial {
+  area {256 256 768 768}
+  name Radial3
+  note_font "Bitstream Vera Sans"
+  xpos -1957
+  ypos 1144
+ }
+ Grade {
+  blackpoint 0.5
+  whitepoint 0.5
+  white_clamp true
+  name Grade5
+  note_font "Bitstream Vera Sans"
+  xpos -1957
+  ypos 1168
+ }
+ Transform {
+  scale 0.2
+  center {512 512}
+  shutteroffset centred
+  name Transform6
+  note_font "Bitstream Vera Sans"
+  xpos -1957
+  ypos 1192
+ }
+push $Na0c0e50
+ Noise {
+  replace true
+  size 23
+  zoffset {{frame*speed}}
+  gain 0.78
+  gamma 0.13
+  center {512 512}
+  name Noise3
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 1146
+  addUserKnob {20 User}
+  addUserKnob {7 speed}
+  speed 0.031
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge11
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 1192
+ }
+ Grade {
+  white 10
+  name Grade9
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 1216
+ }
+set Na11a8c0 [stack 0]
+ Group {
+  name randomSpike9
+  note_font "Bitstream Vera Sans"
+  xpos -1220
+  ypos 1311
+  addUserKnob {20 User}
+  addUserKnob {7 randNum R 0 200}
+  randNum 163
+  addUserKnob {26 ""}
+  addUserKnob {7 seedLength}
+  seedLength {{((ctrl.flarePos.x+ctrl.flarePos.y)/2)*parent.starburstSpeed}}
+  addUserKnob {7 seed}
+  seed {{parent.seed}}
+  addUserKnob {7 maxLength}
+  maxLength {{parent.maxLength}}
+  addUserKnob {7 minLength}
+  minLength {{parent.minLength}}
+  addUserKnob {7 maxRotationVariance}
+  maxRotationVariance {{ctrl.rotationDivergence}}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -897
+   ypos 422
+  }
+  Dot {
+   name Dot2
+   note_font "Bitstream Vera Sans"
+   xpos -863
+   ypos 531
+  }
+  TimeOffset {
+   time_offset {{trunc((random(parent.randNum))*100)}}
+   time ""
+   name TimeOffset1
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 669
+  }
+  Blur {
+   channels rgba
+   size {0 {"(random(randNum+seed+seedLength) * (maxLength-minLength)) + minLength"}}
+   crop false
+   name Blur2
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 693
+  }
+  Transform {
+   rotate {{(((random(seed+(random(randNum+30))))*maxRotationVariance)-(maxRotationVariance/2))*parent.parent.rotationVariance}}
+   center {512 512}
+   shutteroffset centred
+   name Transform3
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 717
+  }
+  Output {
+   name Output1
+   xpos -897
+   ypos 934
+  }
+ end_group
+push $Na11a8c0
+ Group {
+  name randomSpike8
+  note_font "Bitstream Vera Sans"
+  xpos -1398
+  ypos 1307
+  addUserKnob {20 User}
+  addUserKnob {7 randNum R 0 200}
+  randNum 35
+  addUserKnob {26 ""}
+  addUserKnob {7 seedLength}
+  seedLength {{((ctrl.flarePos.x+ctrl.flarePos.y)/2)*parent.starburstSpeed}}
+  addUserKnob {7 seed}
+  seed {{parent.seed}}
+  addUserKnob {7 maxLength}
+  maxLength {{parent.maxLength}}
+  addUserKnob {7 minLength}
+  minLength {{parent.minLength}}
+  addUserKnob {7 maxRotationVariance}
+  maxRotationVariance {{ctrl.rotationDivergence}}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -897
+   ypos 422
+  }
+  Dot {
+   name Dot2
+   note_font "Bitstream Vera Sans"
+   xpos -863
+   ypos 531
+  }
+  TimeOffset {
+   time_offset {{trunc((random(parent.randNum))*100)}}
+   time ""
+   name TimeOffset1
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 669
+  }
+  Blur {
+   channels rgba
+   size {0 {"(random(randNum+seed+seedLength) * (maxLength-minLength)) + minLength"}}
+   crop false
+   name Blur2
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 693
+  }
+  Transform {
+   rotate {{(((random(seed+(random(randNum+30))))*maxRotationVariance)-(maxRotationVariance/2))*parent.parent.rotationVariance}}
+   center {512 512}
+   shutteroffset centred
+   name Transform3
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 717
+  }
+  Output {
+   name Output1
+   xpos -897
+   ypos 934
+  }
+ end_group
+push $Na11a8c0
+ Group {
+  name randomSpike1
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 1300
+  addUserKnob {20 User}
+  addUserKnob {7 randNum R 0 200}
+  randNum 29
+  addUserKnob {26 ""}
+  addUserKnob {7 seedLength}
+  seedLength {{((ctrl.flarePos.x+ctrl.flarePos.y)/2)*parent.starburstSpeed}}
+  addUserKnob {7 seed}
+  seed {{parent.seed}}
+  addUserKnob {7 maxLength}
+  maxLength {{parent.maxLength}}
+  addUserKnob {7 minLength}
+  minLength {{parent.minLength}}
+  addUserKnob {7 maxRotationVariance}
+  maxRotationVariance {{ctrl.rotationDivergence}}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -897
+   ypos 422
+  }
+  Dot {
+   name Dot2
+   note_font "Bitstream Vera Sans"
+   xpos -863
+   ypos 531
+  }
+  TimeOffset {
+   time_offset {{trunc((random(parent.randNum))*100)}}
+   time ""
+   name TimeOffset1
+   note_font "Bitstream Vera Sans"
+   selected true
+   xpos -897
+   ypos 669
+  }
+  Blur {
+   channels rgba
+   size {0 {"(random(randNum+seed+seedLength) * (maxLength-minLength)) + minLength"}}
+   crop false
+   name Blur2
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 693
+  }
+  Transform {
+   rotate {{(((random(seed+(random(randNum+30))))*maxRotationVariance)-(maxRotationVariance/2))*parent.parent.rotationVariance}}
+   center {512 512}
+   shutteroffset centred
+   name Transform3
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 717
+  }
+  Output {
+   name Output1
+   xpos -897
+   ypos 934
+  }
+ end_group
+push 0
+push $Na11a8c0
+ Group {
+  name randomSpike7
+  note_font "Bitstream Vera Sans"
+  xpos -1514
+  ypos 1308
+  addUserKnob {20 User}
+  addUserKnob {7 randNum R 0 200}
+  randNum 108
+  addUserKnob {26 ""}
+  addUserKnob {7 seedLength}
+  seedLength {{((ctrl.flarePos.x+ctrl.flarePos.y)/2)*parent.starburstSpeed}}
+  addUserKnob {7 seed}
+  seed {{parent.seed}}
+  addUserKnob {7 maxLength}
+  maxLength {{parent.maxLength}}
+  addUserKnob {7 minLength}
+  minLength {{parent.minLength}}
+  addUserKnob {7 maxRotationVariance}
+  maxRotationVariance {{ctrl.rotationDivergence}}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -897
+   ypos 422
+  }
+  Dot {
+   name Dot2
+   note_font "Bitstream Vera Sans"
+   xpos -863
+   ypos 531
+  }
+  TimeOffset {
+   time_offset {{trunc((random(parent.randNum))*100)}}
+   time ""
+   name TimeOffset1
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 669
+  }
+  Blur {
+   channels rgba
+   size {0 {"(random(randNum+seed+seedLength) * (maxLength-minLength)) + minLength"}}
+   crop false
+   name Blur2
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 693
+  }
+  Transform {
+   rotate {{(((random(seed+(random(randNum+30))))*maxRotationVariance)-(maxRotationVariance/2))*parent.parent.rotationVariance}}
+   center {512 512}
+   shutteroffset centred
+   name Transform3
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 717
+  }
+  Output {
+   name Output1
+   xpos -897
+   ypos 934
+  }
+ end_group
+push $Na11a8c0
+ Group {
+  name randomSpike6
+  note_font "Bitstream Vera Sans"
+  xpos -1669
+  ypos 1304
+  addUserKnob {20 User}
+  addUserKnob {7 randNum R 0 200}
+  randNum 98
+  addUserKnob {26 ""}
+  addUserKnob {7 seedLength}
+  seedLength {{((ctrl.flarePos.x+ctrl.flarePos.y)/2)*parent.starburstSpeed}}
+  addUserKnob {7 seed}
+  seed {{parent.seed}}
+  addUserKnob {7 maxLength}
+  maxLength {{parent.maxLength}}
+  addUserKnob {7 minLength}
+  minLength {{parent.minLength}}
+  addUserKnob {7 maxRotationVariance}
+  maxRotationVariance {{ctrl.rotationDivergence}}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -897
+   ypos 422
+  }
+  Dot {
+   name Dot2
+   note_font "Bitstream Vera Sans"
+   xpos -863
+   ypos 531
+  }
+  TimeOffset {
+   time_offset {{trunc((random(parent.randNum))*100)}}
+   time ""
+   name TimeOffset1
+   note_font "Bitstream Vera Sans"
+   selected true
+   xpos -897
+   ypos 669
+  }
+  Blur {
+   channels rgba
+   size {0 {"(random(randNum+seed+seedLength) * (maxLength-minLength)) + minLength"}}
+   crop false
+   name Blur2
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 693
+  }
+  Transform {
+   rotate {{(((random(seed+(random(randNum+30))))*maxRotationVariance)-(maxRotationVariance/2))*parent.parent.rotationVariance}}
+   center {512 512}
+   shutteroffset centred
+   name Transform3
+   note_font "Bitstream Vera Sans"
+   xpos -897
+   ypos 717
+  }
+  Output {
+   name Output1
+   xpos -897
+   ypos 934
+  }
+ end_group
+ Merge2 {
+  inputs 5+1
+  name Merge8
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 1391
+ }
+ Transform {
+  scale {0.5 1}
+  center {512 512}
+  shutteroffset centred
+  name Transform5
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 1485
+ }
+ Transform {
+  translate {-512 -512}
+  center {512 512}
+  shutteroffset centred
+  name Transform3
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 1541
+ }
+ Transform {
+  translate {{ctrl.flarePos} {ctrl.flarePos}}
+  rotate {{"(Flare_Gen.frameEdge ? ctrl.flarePos.x > (width/2) ? 90 : -90 : ctrl.flarePos.y > (height/2) ? 0 : 180) + (parent.skew*(360/6)) "}}
+  shutteroffset centred
+  name Transform4
+  note_font "Bitstream Vera Sans"
+  xpos -1810
+  ypos 1586
+ }
+set Na27dc20 [stack 0]
+ Blur {
+  channels rgba
+  size 30
+  name Blur2
+  note_font "Bitstream Vera Sans"
+  xpos -925
+  ypos 1586
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1k"
+  name Reformat5
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 449
+ }
+set Na298fe0 [stack 0]
+ Noise {
+  size {{parent.Noise1.size*3}}
+  zoffset {{(((ctrl.flarePos.x+ctrl.flarePos.y)/(width+height))*speed)+parent.seed}}
+  gamma 0.16
+  translate {{(-parent.ctrl.flarePos*ctrl.causticScanSpeed)*(1+parent.anamorphic)} {-parent.ctrl.flarePos*ctrl.causticScanSpeed}}
+  center {512 512}
+  name Noise4
+  note_font "Bitstream Vera Sans"
+  xpos -497
+  ypos 516
+  addUserKnob {20 User}
+  addUserKnob {7 scanSpeed}
+  scanSpeed {{parent.Noise1.scanSpeed}}
+  addUserKnob {7 speed}
+  speed {{20*parent.causticSpeed}}
+ }
+push 0
+push $Na298fe0
+ Noise {
+  size {{parent.causticSize}}
+  zoffset {{(((ctrl.flarePos.x+ctrl.flarePos.y)/(width+height))*speed)+parent.seed}}
+  gamma 0.16
+  translate {{(-parent.ctrl.flarePos*ctrl.causticScanSpeed)*(1+parent.anamorphic)} {(-parent.ctrl.flarePos)*ctrl.causticScanSpeed}}
+  center {512 512}
+  name Noise1
+  note_font "Bitstream Vera Sans"
+  xpos -781
+  ypos 514
+  addUserKnob {20 User}
+  addUserKnob {7 scanSpeed}
+  scanSpeed {{-1*parent.causticSpeed}}
+  addUserKnob {7 speed}
+  speed {{20*parent.causticSpeed}}
+ }
+push $Na298fe0
+ Noise {
+  size {{parent.Noise1.size*1.4}}
+  zoffset {{(((ctrl.flarePos.x+ctrl.flarePos.y)/(width+height))*speed)+parent.seed}}
+  gamma 0.16
+  translate {{(-parent.ctrl.flarePos*ctrl.causticScanSpeed)*(1+parent.anamorphic)} {-parent.ctrl.flarePos*ctrl.causticScanSpeed}}
+  center {512 512}
+  name Noise2
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 516
+  addUserKnob {20 User}
+  addUserKnob {7 scanSpeed}
+  scanSpeed {{parent.Noise1.scanSpeed}}
+  addUserKnob {7 speed}
+  speed {{20*parent.causticSpeed}}
+ }
+ Merge2 {
+  inputs 3+1
+  name Merge6
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 575
+ }
+ GodRays {
+  channels rgba
+  scale 0.96
+  center {{width/2} {height/2}}
+  steps 10
+  name GodRays2
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 637
+ }
+ GodRays {
+  channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  scale {{(ctrl.chromaRed*parent.chromaSplit)+1}}
+  center {{width/2} {height/2}}
+  name GodRays3
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 661
+ }
+ GodRays {
+  channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+  scale {{(ctrl.chromaGreen*parent.chromaSplit)+1}}
+  center {{width/2} {height/2}}
+  name GodRays4
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 697
+ }
+ GodRays {
+  channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  scale {{(ctrl.chromaBlue*parent.chromaSplit)+1}}
+  center {{width/2} {height/2}}
+  name GodRays5
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 733
+ }
+ Transform {
+  scale {{"Flare_Gen.frameEdge ? 1 : 0.5"} {"Flare_Gen.frameEdge ? 0.5 : 1"}}
+  center {512 512}
+  shutteroffset centred
+  name Transform7
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 769
+ }
+ Transform {
+  translate {{-width/2} {-height/2}}
+  center {512 512}
+  shutteroffset centred
+  name Transform8
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 793
+ }
+ Transform {
+  translate {{ctrl.flarePos} {ctrl.flarePos}}
+  shutteroffset centred
+  name Transform9
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 817
+ }
+ Saturation {
+  saturation 0.6
+  name Saturation3
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 841
+ }
+set Na35c8e0 [stack 0]
+ Blur {
+  channels rgba
+  size 6.15
+  name Blur3
+  note_font "Bitstream Vera Sans"
+  xpos -758
+  ypos 887
+ }
+ Grade {
+  white 3
+  name Grade11
+  note_font "Bitstream Vera Sans"
+  xpos -758
+  ypos 911
+ }
+push $Na35c8e0
+ Merge2 {
+  inputs 2
+  operation average
+  name Merge4
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 911
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  name Merge5
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 1586
+ }
+ Grade {
+  white 4
+  name Grade6
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 1610
+ }
+ Multiply {
+  value {{Flare_Gen.flareIntensity}}
+  name Multiply6
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 1867
+ }
+ Multiply {
+  value {{parent.causticIntensity}}
+  name Multiply7
+  note_font "Bitstream Vera Sans"
+  xpos -639
+  ypos 1903
+ }
+ Dot {
+  name Dot11
+  note_font "Bitstream Vera Sans"
+  xpos -605
+  ypos 2033
+ }
+push $Na27dc20
+ Dot {
+  name Dot6
+  note_font "Bitstream Vera Sans"
+  xpos -1776
+  ypos 1747
+ }
+ Grade {
+  white 2
+  name Grade7
+  note_font "Bitstream Vera Sans"
+  xpos -452
+  ypos 1744
+ }
+push $Na095f60
+ Expression {
+  expr0 "(pow( (clamp((flareSize-(sqrt(hypot( ((x-(ctrl.flarePos.x+offsetFlareX))*flareSizeAspect) , ((y-(ctrl.flarePos.y+offsetFlareY))/pixel_aspect) ))))/flareSize)) , (1/flareSizeFalloff) )) * flareSizeGain"
+  expr1 "(clamp( (1/sqrt(hypot( ((x-(ctrl.flarePos.x+offsetFlareX))*(pixel_aspect*aspect)) , ((y-(ctrl.flarePos.y+offsetFlareY))/(pixel_aspect*aspect)) ))) , 0 , 2))"
+  expr2 "(pow( (clamp(((sin( (atan( ((x-(ctrl.flarePos.x+offsetFlareX))*pixel_aspect) , (y-(ctrl.flarePos.y+offsetFlareY)) )) * wavelength + (frameEdge ? (ctrl.flarePos.x > (width/2) ? (-3.1+rotate) : (0+rotate)) : (ctrl.flarePos.y > (height/2) ? (-1.57+rotate) : -(-1.57+rotate) )))) -penembreAngle))*penembreGain), (1/penembreFalloff) ))"
+  expr3 "(frameEdge ? (ctrl.flarePos.x > (width/2) ? (-3+rotate) : (0+rotate)) : (ctrl.flarePos.y > (height/2) ? (-1.57+rotate) : -(-1.57+rotate) ))"
+  name Flare_Gen
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 492
+  addUserKnob {20 User}
+  addUserKnob {7 flareModulation}
+  flareModulation {{(noise(linearRamp*modulationWavelength))*modulationAmp}}
+  addUserKnob {7 modulationAmp}
+  modulationAmp 0.1
+  addUserKnob {7 modulationWavelength R 0 50}
+  modulationWavelength 10
+  addUserKnob {7 flareIntensity}
+  flareIntensity {{"(pow( ((linearRamp * (1-linearRamp) ) * 4), (easing) ) ) * (1 + flareModulation)"}}
+  addUserKnob {7 linearRamp}
+  linearRamp {{"rampBalance < 1 ? (1-(pow( (1-(max(ctrl.cutPos.x, ctrl.cutPos.y ))) , (rampBalance) ))): (pow( (max( ctrl.cutPos.x, ctrl.cutPos.y )) , (1/rampBalance) ))"}}
+  addUserKnob {7 rampBalance}
+  rampBalance 1
+  addUserKnob {4 frameEdge M {top/bottom left/right "" ""}}
+  frameEdge left/right
+  addUserKnob {7 flareSize R 0 30}
+  flareSize 20
+  addUserKnob {7 flareSizeFalloff}
+  flareSizeFalloff 0.5
+  addUserKnob {7 flareSizeGain}
+  flareSizeGain 1
+  addUserKnob {7 flareSizeAspect R 0 2}
+  flareSizeAspect 1
+  addUserKnob {7 penembreFalloff}
+  penembreFalloff 0.174
+  addUserKnob {7 penembreAngle}
+  penembreAngle {{(linearRamp*(1-linearRamp))*2}}
+  addUserKnob {7 penembreGain}
+  penembreGain 1.3
+  addUserKnob {7 aspect}
+  aspect {{(linearRamp*2)+1}}
+  addUserKnob {7 rotate R -45 45}
+  rotate {{skew}}
+  addUserKnob {7 inPoint R 0 100}
+  inPoint 32
+  addUserKnob {7 outPoint R -300 0}
+  outPoint -170
+  addUserKnob {7 easing R 1 10}
+  easing 9.35
+  addUserKnob {7 wavelength}
+  wavelength 1
+  addUserKnob {7 offsetFlareX}
+  offsetFlareX {{parent.offset.u}}
+  addUserKnob {7 offsetFlareY}
+  offsetFlareY {{parent.offset.v}}
+  addUserKnob {26 ""}
+  addUserKnob {6 lensDistortion +STARTLINE}
+  lensDistortion true
+ }
+ Crop {
+  box {{Flare_Gen.flarePos.x-(parent.boundingBoxSize/2)} {Flare_Gen.flarePos.y-parent.boundingBoxSize} {Flare_Gen.flarePos.x+(parent.boundingBoxSize/2)} {Flare_Gen.flarePos.y+parent.boundingBoxSize}}
+  intersect true
+  crop false
+  name Crop4
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 582
+  disable {{1-parent.enableBoundingBox}}
+ }
+ Expression {
+  channel0 rgb
+  expr0 (r*b)
+  channel1 {-rgba.red -rgba.green -rgba.blue none}
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  name combine
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 694
+ }
+ Multiply {
+  value {{Flare_Gen.flareIntensity}}
+  name Multiply1
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 767
+ }
+ Multiply {
+  value 5
+  name Multiply2
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 803
+ }
+ Grade {
+  white {{parent.intensity}}
+  name Grade1
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 869
+ }
+ Dot {
+  name Dot24
+  note_font "Bitstream Vera Sans"
+  xpos -28
+  ypos 1576
+ }
+set Na42e340 [stack 0]
+ Dot {
+  name Dot25
+  note_font "Bitstream Vera Sans"
+  xpos -191
+  ypos 1576
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge9
+  note_font "Bitstream Vera Sans"
+  xpos -225
+  ypos 1744
+ }
+ Multiply {
+  name Multiply4
+  note_font "Bitstream Vera Sans"
+  xpos -225
+  ypos 1768
+ }
+push $Na42e340
+ Grade {
+  white 1.5
+  gamma 0.52
+  name Grade3
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 1668
+ }
+ Merge2 {
+  inputs 2
+  name Merge3
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 1774
+ }
+ Grade {
+  white {0.81 1 1.4 1}
+  name Grade10
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 1863
+ }
+ Merge2 {
+  inputs 2
+  name Merge16
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 2030
+ }
+ Transform {
+  scale {{parent.globalScale}}
+  center {{ctrl.flarePos} {ctrl.flarePos}}
+  shutteroffset centred
+  name Transform1
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 2187
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  softness {{parent.cullEdge}}
+  intersect true
+  name Crop1
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 2324
+ }
+set Na4a0800 [stack 0]
+ Crop {
+  box {0 0 {width} {height}}
+  softness {{parent.cullEdge*3}}
+  intersect true
+  name Crop2
+  note_font "Bitstream Vera Sans"
+  xpos 81
+  ypos 2324
+ }
+ Dot {
+  name Dot7
+  note_font "Bitstream Vera Sans"
+  xpos 115
+  ypos 2357
+ }
+push $Na4a0800
+ Dissolve {
+  inputs 2
+  which 0.5
+  name Dissolve1
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 2348
+ }
+ Dot {
+  name Dot9
+  note_font "Bitstream Vera Sans"
+  xpos -28
+  ypos 2384
+ }
+set Na4c52b0 [stack 0]
+ Crop {
+  box {0 0 {width} {height}}
+  softness {{parent.cullEdge*5}}
+  intersect true
+  name Crop3
+  note_font "Bitstream Vera Sans"
+  xpos 82
+  ypos 2381
+ }
+ Dot {
+  name Dot8
+  note_font "Bitstream Vera Sans"
+  xpos 116
+  ypos 2411
+ }
+push $Na4c52b0
+ Dissolve {
+  inputs 2
+  which 0.5
+  name Dissolve2
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 2402
+ }
+ Dot {
+  name Dot10
+  note_font "Bitstream Vera Sans"
+  xpos -28
+  ypos 2526
+ }
+ Dot {
+  name Dot18
+  note_font "Bitstream Vera Sans"
+  xpos -138
+  ypos 2526
+ }
+set Nee6d4d50 [stack 0]
+ Blur {
+  channels rgba
+  size {{parent.Blur4.size*64}}
+  name Blur10
+  note_font "Bitstream Vera Sans"
+  xpos -172
+  ypos 2612
+ }
+push $Nee6d4d50
+ Dot {
+  name Dot16
+  note_font "Bitstream Vera Sans"
+  xpos -257
+  ypos 2526
+ }
+set N8cb9b680 [stack 0]
+ Blur {
+  channels rgba
+  size {{parent.Blur4.size*32}}
+  name Blur9
+  note_font "Bitstream Vera Sans"
+  xpos -291
+  ypos 2612
+ }
+push $N8cb9b680
+ Dot {
+  name Dot17
+  note_font "Bitstream Vera Sans"
+  xpos -367
+  ypos 2526
+ }
+set N394da530 [stack 0]
+ Blur {
+  channels rgba
+  size {{parent.Blur4.size*16}}
+  name Blur8
+  note_font "Bitstream Vera Sans"
+  xpos -401
+  ypos 2612
+ }
+push $N394da530
+ Dot {
+  name Dot15
+  note_font "Bitstream Vera Sans"
+  xpos -477
+  ypos 2526
+ }
+set Ndc200b10 [stack 0]
+ Blur {
+  channels rgba
+  size {{parent.Blur4.size*8}}
+  name Blur7
+  note_font "Bitstream Vera Sans"
+  xpos -511
+  ypos 2612
+ }
+push $Ndc200b10
+ Dot {
+  name Dot14
+  note_font "Bitstream Vera Sans"
+  xpos -587
+  ypos 2526
+ }
+set N78da5350 [stack 0]
+ Blur {
+  channels rgba
+  size {{parent.Blur4.size*4}}
+  name Blur6
+  note_font "Bitstream Vera Sans"
+  xpos -621
+  ypos 2612
+ }
+push 0
+push $N78da5350
+ Dot {
+  name Dot13
+  note_font "Bitstream Vera Sans"
+  xpos -697
+  ypos 2526
+ }
+set Nd45925f0 [stack 0]
+ Blur {
+  channels rgba
+  size {{parent.Blur4.size*2}}
+  name Blur5
+  note_font "Bitstream Vera Sans"
+  xpos -731
+  ypos 2612
+ }
+push $Nd45925f0
+ Dot {
+  name Dot12
+  note_font "Bitstream Vera Sans"
+  xpos -807
+  ypos 2526
+ }
+ Blur {
+  channels rgba
+  size {{parent.glowSize}}
+  name Blur4
+  note_font "Bitstream Vera Sans"
+  xpos -841
+  ypos 2612
+ }
+ Merge2 {
+  inputs 7+1
+  operation plus
+  name Merge7
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 2729
+ }
+ Grade {
+  white 0.1428571429
+  gamma {{parent.gamma}}
+  name Grade12
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 2753
+ }
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge1
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 3008
+  disable {{1-parent.previewLight}}
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop5
+  note_font "Bitstream Vera Sans"
+  xpos -62
+  ypos 3032
+ }
+ Output {
+  name Output1
+  xpos -62
+  ypos 3085
+ }
+end_group

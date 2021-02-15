@@ -1,0 +1,118 @@
+#! C:/Program Files/Nuke11.2v5/nuke-11.2.5.dll -nx
+version 11.2 v5
+Gizmo {
+ tile_color 0xffc400ff
+ note_font Verdana
+ lifetimeStart 1
+ lifetimeEnd 41
+ lock_connections true
+ addUserKnob {20 IBK_Stacking_Controls l IBK_Controls}
+ addUserKnob {41 Size l size T IBKColourV3_1.Size}
+ addUserKnob {41 off l darks T IBKColourV3_1.off}
+ addUserKnob {41 mult l lights T IBKColourV3_1.mult}
+ addUserKnob {41 erode T IBKColourV3_1.erode}
+ addUserKnob {41 multi l "patch black" T IBKColourV3_2.multi}
+}
+ Input {
+  inputs 0
+  name Denoised_Plate
+  xpos 114
+  ypos 152
+ }
+ Dot {
+  name Dot3
+  xpos 148
+  ypos 261
+ }
+set Na8e53880 [stack 0]
+ IBKColourV3 {
+  name IBKColourV3_1
+  xpos 114
+  ypos 377
+  screen_type green
+  Size 1
+  erode 1
+ }
+ IBKColourV3 {
+  name IBKColourV3_2
+  xpos 114
+  ypos 424
+  screen_type green
+  Size {{parent.IBKColourV3_1.Size}}
+  off {{parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off}}
+  mult {{parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult}}
+  multi 1
+ }
+ IBKColourV3 {
+  name IBKColourV3_3
+  xpos 114
+  ypos 466
+  screen_type green
+  Size {{parent.IBKColourV3_1.Size}}
+  off {{parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off}}
+  mult {{parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult}}
+  multi {{"parent.IBKColourV3_2.multi *2"}}
+ }
+ IBKColourV3 {
+  name IBKColourV3_4
+  xpos 114
+  ypos 517
+  screen_type green
+  Size {{parent.IBKColourV3_1.Size}}
+  off {{parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off}}
+  mult {{parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult}}
+  multi {{"parent.IBKColourV3_2.multi *4"}}
+ }
+ IBKColourV3 {
+  name IBKColourV3_5
+  xpos 114
+  ypos 558
+  screen_type green
+  Size {{parent.IBKColourV3_1.Size}}
+  off {{parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off}}
+  mult {{parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult}}
+  multi {{"parent.IBKColourV3_2.multi *6"}}
+ }
+ IBKColourV3 {
+  name IBKColourV3_6
+  xpos 114
+  ypos 600
+  screen_type green
+  Size {{parent.IBKColourV3_1.Size}}
+  off {{parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off} {parent.IBKColourV3_1.off}}
+  mult {{parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult} {parent.IBKColourV3_1.mult}}
+  multi {{"parent.IBKColourV3_2.multi *10"}}
+ }
+ Dot {
+  name Dot1
+  xpos 148
+  ypos 686
+ }
+push $Na8e53880
+ Dot {
+  name Dot2
+  xpos -151
+  ypos 261
+ }
+ IBKGizmoV3 {
+  inputs 2
+  name IBKGizmoV3_1
+  selected false
+  xpos -185
+  ypos 682
+  st C-green
+ }
+set Nf8ca9f80 [stack 0]
+ Output {
+  name Output1
+  xpos -185
+  ypos 825
+ }
+push $Nf8ca9f80
+ Viewer {
+  frame_range 0-41
+  name Viewer1
+  xpos -71
+  ypos 761
+ }
+end_group

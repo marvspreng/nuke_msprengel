@@ -1,0 +1,340 @@
+#! /Applications/Nuke9.0v6/Nuke9.0v6.app/Contents/MacOS/libnuke-9.0.6.dylib -nx
+version 9.0 v6
+Gizmo {
+ inputs 3
+ tile_color 0xff00ff
+ addUserKnob {20 User}
+ addUserKnob {41 SCREEN_COLOUR l "Screen Colour" T COLOUR_CONTROL.SCREEN_COLOUR}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 which l "Red Balance" t "Control Red balance with dissolve from screen colour channel and red channel" T RED_BALANCE.which}
+ addUserKnob {41 value l Gamma T Gamma1.value}
+ addUserKnob {41 white l gain T Grade1.white}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 Output l "Additive Output" +STARTLINE}
+ Output true
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 CREDITS l "" +STARTLINE T "Created by Matheus M Marques - 2018"}
+}
+ NoOp {
+  inputs 0
+  name COLOUR_CONTROL
+  xpos 551
+  ypos 80
+  addUserKnob {20 User}
+  addUserKnob {4 SCREEN_COLOUR l "Screen Colour" M {Green Blue}}
+  SCREEN_COLOUR Blue
+ }
+ Input {
+  inputs 0
+  name BG
+  xpos -121
+  ypos 37
+ }
+set N2477e650 [stack 0]
+ Input {
+  inputs 0
+  name CLEANPLATE
+  xpos 302
+  ypos 46
+  number 1
+ }
+ Dot {
+  name Dot15
+  xpos 336
+  ypos 89
+ }
+set N68370e90 [stack 0]
+ Dot {
+  name Dot6
+  xpos 35
+  ypos 89
+ }
+ Dot {
+  name Dot7
+  xpos 35
+  ypos 212
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge1
+  xpos -121
+  ypos 209
+ }
+push $N68370e90
+ Dot {
+  name Dot1
+  xpos 336
+  ypos 146
+ }
+set N62223920 [stack 0]
+ Shuffle {
+  red green
+  blue green
+  name GREEN
+  xpos 355
+  ypos 226
+ }
+set N6223b8a0 [stack 0]
+ Dot {
+  name Dot4
+  xpos 552
+  ypos 229
+ }
+push $N62223920
+ Shuffle {
+  red blue
+  green blue
+  name BLUE
+  xpos 234
+  ypos 223
+ }
+set N62225dc0 [stack 0]
+ Switch {
+  inputs 2
+  which {{parent.COLOUR_CONTROL.SCREEN_COLOUR()}}
+  name Switch4
+  xpos 518
+  ypos 441
+ }
+ Dot {
+  name Dot3
+  xpos 552
+  ypos 632
+ }
+push $N62223920
+ Shuffle {
+  green red
+  blue red
+  name RED
+  xpos 97
+  ypos 221
+ }
+ Dot {
+  name Dot2
+  xpos 131
+  ypos 418
+ }
+push $N62225dc0
+push $N6223b8a0
+ Switch {
+  inputs 2
+  which {{parent.COLOUR_CONTROL.SCREEN_COLOUR()}}
+  name Switch1
+  xpos 299
+  ypos 322
+ }
+ Dissolve {
+  inputs 2
+  which 0.5
+  name RED_BALANCE
+  xpos 299
+  ypos 411
+ }
+ set C6831b550 [stack 0]
+ Gamma {
+  value 0.95
+  name Gamma1
+  xpos 299
+  ypos 462
+ }
+ set C622b49f0 [stack 0]
+ Grade {
+  blackpoint 0.0001
+  white 0.95
+  name Grade1
+  xpos 299
+  ypos 527
+ }
+ set C68325280 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge2
+  xpos 299
+  ypos 629
+ }
+ Clamp {
+  maximum 20
+  name Clamp1
+  xpos 299
+  ypos 695
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge3
+  xpos -121
+  ypos 699
+ }
+ Input {
+  inputs 0
+  name PLATE
+  xpos 894
+  ypos 47
+  number 2
+ }
+ Dot {
+  name Dot8
+  xpos 928
+  ypos 111
+ }
+set N6830cee0 [stack 0]
+ Shuffle {
+  red green
+  blue green
+  name GREEN1
+  xpos 947
+  ypos 191
+ }
+set N683323b0 [stack 0]
+ Dot {
+  name Dot10
+  xpos 1144
+  ypos 194
+ }
+push $N6830cee0
+ Shuffle {
+  red blue
+  green blue
+  name BLUE1
+  xpos 826
+  ypos 188
+ }
+set N6830f4c0 [stack 0]
+ Dot {
+  name Dot9
+  xpos 1089
+  ypos 278
+ }
+ Switch {
+  inputs 2
+  which {{parent.COLOUR_CONTROL.SCREEN_COLOUR()}}
+  name Switch2
+  xpos 1110
+  ypos 394
+ }
+ Dot {
+  name Dot11
+  xpos 1144
+  ypos 597
+ }
+push $N6830cee0
+ Shuffle {
+  green red
+  blue red
+  name RED1
+  xpos 689
+  ypos 186
+ }
+ Dot {
+  name Dot12
+  xpos 723
+  ypos 383
+ }
+push $N6830f4c0
+push $N683323b0
+ Switch {
+  inputs 2
+  which {{parent.COLOUR_CONTROL.SCREEN_COLOUR()}}
+  name Switch5
+  xpos 891
+  ypos 310
+ }
+clone $C6831b550 {
+  inputs 2
+  xpos 891
+  ypos 376
+  selected false
+ }
+clone $C622b49f0 {
+  xpos 889
+  ypos 438
+  selected false
+ }
+clone $C68325280 {
+  xpos 891
+  ypos 508
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge4
+  xpos 891
+  ypos 594
+ }
+ Clamp {
+  maximum 20
+  name Clamp2
+  xpos 891
+  ypos 660
+ }
+ Dot {
+  name Dot13
+  xpos 925
+  ypos 873
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge5
+  xpos -121
+  ypos 870
+ }
+push $N6830cee0
+ Dot {
+  name Dot14
+  xpos 556
+  ypos 999
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge6
+  xpos -121
+  ypos 996
+ }
+set N6838e6d0 [stack 0]
+ Dot {
+  name Dot5
+  xpos -129
+  ypos 1083
+ }
+push $N2477e650
+ Dot {
+  name Dot16
+  xpos -229
+  ypos 40
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge7
+  selected true
+  xpos -263
+  ypos 1080
+ }
+push $N6838e6d0
+ Switch {
+  inputs 2
+  which {{parent.OUTPUT_CONTROL.OUTPUT_CONTROL}}
+  name Switch3
+  xpos -121
+  ypos 1232
+ }
+ Output {
+  name Output1
+  xpos -121
+  ypos 1354
+ }
+ NoOp {
+  inputs 0
+  name OUTPUT_CONTROL
+  xpos -413
+  ypos 815
+  addUserKnob {20 User}
+  addUserKnob {6 OUTPUT_CONTROL l "output additive" +STARTLINE}
+  OUTPUT_CONTROL {{parent.Output}}
+ }
+end_group

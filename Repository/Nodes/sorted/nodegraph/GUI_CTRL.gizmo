@@ -1,0 +1,34 @@
+set cut_paste_input [stack 0]
+version 10.0 v4
+Group {
+name GUI_CTRL
+inputs 0
+name GUI_CTRL
+help "Useful for globally controlling motionblur samples. Keeps Viewer (GUI) & Render samples seperate for the sake of speed."
+selected true
+xpos -146
+ypos -621
+addUserKnob {20 User}
+addUserKnob {26 ""}
+addUserKnob {3 guiSamples l "Global GUI Samples"}
+guiSamples 1
+addUserKnob {3 renderSamples l "Global Render Samples"}
+renderSamples 16
+addUserKnob {6 disableSamples l "Disable all motion blur" +STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {22 guiAdd l "Add \$gui expression" T "dict = \{'Transform':'motionblur', 'TransformMasked':'motionblur', 'Tracker4':'motionblur', 'CornerPin2D':'motionblur', 'Card3D':'motionblur', 'ScanlineRender':'samples'\}\n\n\nfor i in nuke.allNodes(group=nuke.root()):\n    for x in dict:\n        if i.Class() == x and i\[dict\[x]].isAnimated() != 1 and i\[dict\[x]].hasExpression() == 0:\n            nuke.toNode(i.name())\[dict\[x]].setExpression(\"GUI_CTRL.disableSamples==1?0:\$gui?GUI_CTRL.guiSamples:GUI_CTRL.renderSamples\")" +STARTLINE}
+addUserKnob {22 guiRmv l "Remove \$gui expression" -STARTLINE T "dict = \{'Transform':'motionblur', 'TransformMasked':'motionblur', 'Tracker4':'motionblur', 'CornerPin2D':'motionblur', 'Card3D':'motionblur', 'ScanlineRender':'samples'\}\nn = nuke.thisNode()\n\nfor i in n.dependent():\n    for x in dict:\n        if i.Class() == x:\n            nuke.toNode(i.name())\[dict\[x]].clearAnimated()\n\n"}
+addUserKnob {26 ""}
+addUserKnob {20 info l Info}
+addUserKnob {26 ""}
+addUserKnob {26 versionInfo l "" +STARTLINE T "\nCreated by Ben McEwan\nwww.benmcewan.com\n\nVersion 1.0\nLast Updated: September 19th, 2018\n"}
+addUserKnob {26 ""}
+}
+Output {
+inputs 0
+name Output1
+selected true
+xpos 0
+ypos 300
+}
+end_group

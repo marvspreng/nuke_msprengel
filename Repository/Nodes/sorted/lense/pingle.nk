@@ -1,0 +1,181 @@
+set cut_paste_input [stack 0]
+version 11.3 v4
+push $cut_paste_input
+Group {
+name Pingle1
+note_font_size 16
+selected true
+xpos -823
+ypos 1323
+addUserKnob {20 User}
+addUserKnob {41 size l Erode T FilterErode1.size}
+addUserKnob {41 size_1 l Blur T Blur2.size}
+addUserKnob {41 value l mult T Multiply1.value}
+addUserKnob {41 size_2 l sharpen T Sharpen1.size}
+addUserKnob {6 checkKey l "check key" +STARTLINE}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {26 t l "" +STARTLINE T "by sergeant compsley\n"}
+addUserKnob {20 key}
+addUserKnob {41 range T Keyer1.range}
+addUserKnob {41 gamma T Grade1.gamma}
+}
+Input {
+inputs 0
+name Input1
+note_font_size 16
+xpos -172
+ypos 970
+}
+Dot {
+name Dot4
+note_font_size 16
+xpos -138
+ypos 1010
+}
+set Nbc9c4000 [stack 0]
+Keyer {
+operation "luminance key"
+range {0.5681674706 0.8181611576 4 16}
+name Keyer1
+note_font_size 16
+xpos -375
+ypos 1036
+}
+set Nbca37c00 [stack 0]
+push $Nbc9c4000
+Clamp {
+channels rgba
+name Clamp1
+note_font_size 16
+xpos -44
+ypos 1070
+}
+Grade {
+inputs 1+1
+add {0.007 -0.73 -0.83 0}
+add_panelDropped true
+white_clamp true
+name Grade2
+note_font_size 16
+xpos -44
+ypos 1133
+}
+push $Nbca37c00
+Grade {
+channels alpha
+gamma 0.2
+name Grade1
+note_font_size 16
+xpos -474
+ypos 1089
+}
+Premult {
+name Premult1
+note_font_size 16
+xpos -474
+ypos 1138
+}
+set Nbca36c00 [stack 0]
+FilterErode {
+channels alpha
+size 0
+filter gaussian
+name FilterErode1
+note_font_size 16
+xpos -635
+ypos 1197
+}
+Blur {
+channels rgba
+name Blur2
+label "\[value size]"
+note_font_size 16
+xpos -635
+ypos 1253
+}
+push $Nbca36c00
+Merge2 {
+inputs 2
+operation mask
+name Merge2
+note_font_size 16
+xpos -474
+ypos 1261
+}
+push $Nbc9c4000
+Merge2 {
+inputs 2
+operation mask
+name Merge3
+note_font_size 16
+xpos -371
+ypos 1266
+}
+Multiply {
+channels rgba
+name Multiply1
+note_font_size 16
+xpos -371
+ypos 1294
+}
+Shuffle {
+alpha black
+name Shuffle1
+note_font_size 16
+xpos -371
+ypos 1322
+}
+Sharpen {
+size 0
+name Sharpen1
+note_font_size 16
+xpos -371
+ypos 1350
+addUserKnob {20 User}
+addUserKnob {41 size_1 l size T Sharpen1.size}
+}
+Expression {
+expr0 r<0?0:r
+expr1 g<0?0:g
+expr2 b<0?0:b
+name Expression1
+note_font_size 16
+xpos -371
+ypos 1394
+}
+push $Nbc9c4000
+Merge2 {
+inputs 2
+operation plus
+name Plus
+note_font_size 16
+xpos -175
+ypos 1451
+}
+Switch {
+inputs 2
+which {{Pingle1.checkKey}}
+name Switch1
+label "\[value which]"
+note_font_size 16
+selected true
+xpos -44
+ypos 1443
+}
+set Nbca68000 [stack 0]
+Output {
+name Output1
+note_font_size 16
+xpos -172
+ypos 1551
+}
+push $Nbca68000
+Viewer {
+frame_range 1001-1559
+fps 23.97602463
+name Viewer1
+note_font_size 16
+xpos -365
+ypos 1516
+}
+end_group

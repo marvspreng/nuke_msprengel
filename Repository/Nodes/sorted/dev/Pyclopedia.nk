@@ -1,0 +1,49 @@
+Group {
+ inputs 0
+ name Pyclopedia
+ onCreate "\ndef loadfield() :\n    thisGRP = nuke.thisGroup()\n\n    if thisGRP\['use_module'].getValue() == 1 :\n        immo = thisGRP\['module'].value()\n\n        if len( immo ) :\n            exec 'import \{0\}'.format( immo )\n\n    try :\n        fieldcount = 0\n        fieldknobs = \[]\n\n        for knob in thisGRP.knobs() :\n            if knob\[:6] == 'field_' :\n                fieldknobs.append( knob )\n\n                if int( knob.split('_')\[1] ) > fieldcount :\n                    fieldcount = int( knob.split('_')\[1] )\n\n        cline = thisGRP\['cmd_line'].value()\n\n        if fieldcount == 0 :\n            thisGRP\['basechk'].setValue( cline )\n\n        if thisGRP\['basechk'].value() == cline :\n            if len( fieldknobs ) :\n                fieldknobs.sort()\n                for knob in fieldknobs :\n                    cline = cline + '.' + thisGRP\[knob].value()\n\n            level = \[ i for i in eval( 'dir( \{0\} )'.format( cline ) ) if not i\[:2] == '__' and not i\[:1] == '_' ]\n\n            ### generate ###\n            if len( level ) :\n                newname = 'field_\{0\}'.format( str( fieldcount+1 ) )\n\n                mnode = nuke.nodes.NoOp(\n                        name = 'menu_\{0\}'.format( str( fieldcount+1 ) )\n                        )\n                nknob = nuke.Enumeration_Knob( newname , newname , level )\n                mnode.addKnob( nknob )\n\n                nknob = nuke.Link_Knob( newname )\n                nknob.setLink( 'menu_\{0\}.\{1\}'.format( str( fieldcount+1 ) , newname ) )\n                thisGRP.addKnob( nknob )\n            else :\n                nuke.message( 'no more sub-level' )\n        else :\n            thisGRP\['reset'].execute()\n            loadfield()\n\n    except AttributeError as err :\n        nuke.message( 'AttributeError : \{0\}'.format( err ) )\n"
+ tile_color 0x7f7f7fff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {22 get_next_level l "get next level" T loadfield() +STARTLINE}
+ addUserKnob {22 back_level l "back level" -STARTLINE T "thisGRP = nuke.thisGroup()\n\nfieldcount = 0\n\nfor knob in thisGRP.knobs() :\n\tif knob\[:6] == 'field_' :\n\t\tfieldknobs.append( knob )\n\n\t\tif int( knob.split('_')\[1] ) > fieldcount :\n\t\t\tfieldcount = int( knob.split('_')\[1] )\n\nif fieldcount :\n\twith thisGRP :\n\t\tfor node in nuke.allNodes() :\n\t\t\tnuke.delete( nuke.toNode('menu_\{0\}'.format( str(fieldcount) ) ) )\n\n\tthisGRP.removeKnob( thisGRP\['field_\{0\}'.format( str(fieldcount) ) ] )"}
+ addUserKnob {22 show_details l "show details" -STARTLINE T "import pydoc\n\nthisGRP = nuke.thisGroup()\n\nif thisGRP\['use_module'].getValue() == 1 :\n\timmo = thisGRP\['module'].value()\n\tif len( immo ) :\n\t\texec 'import \{0\}'.format( immo )\n\nfieldknobs = \[]\n\nfor knob in thisGRP.knobs() :\n\tif knob\[:6] == 'field_' :\n\t\tfieldknobs.append( knob )\n\ncline = thisGRP\['cmd_line'].value()\n\nif len( fieldknobs ) :\n\tfieldknobs.sort()\n\tfor knob in fieldknobs :\n\t\tcline = cline + '.' + thisGRP\[knob].value()\n\ncontent = pydoc.plain( pydoc.render_doc( eval( cline ) ) )\n\np = nuke.Panel( 'Help on : \{0\}'.format( cline ) )\np.addSingleLineInput( 'line' , cline )\np.addNotepad( '', content )\np.setWidth( 960 )\n\np.show()"}
+ addUserKnob {22 reset -STARTLINE T "thisGRP = nuke.thisGroup()\n\nwith thisGRP :\n\tfor node in nuke.allNodes() :\n\t\tif node.name()\[:5] == 'menu_' :\n\t\t\tnuke.delete( node )\n\nfor knob in thisGRP.knobs() :\n\tif knob\[:6] == 'field_' :\n\t\tthisGRP.removeKnob( thisGRP\[knob] )\n\nthisGRP\['basechk'].setValue('')"}
+ addUserKnob {1 basechk +HIDDEN}
+ addUserKnob {41 use_module l "use module" T m01.use_module}
+ addUserKnob {1 module +HIDDEN}
+ addUserKnob {1 cmd_line l "command line"}
+ cmd_line nuke
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -53
+  ypos -78
+  bdwidth 292
+  bdheight 146
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xaaaaaa00
+  label "Version\n1.0\n\nDate Modified\n2019-12-12\n\nChangelog\n1.0\n- python encyclopedia\n\nDeveloped by\nMark Joey Tang\nhttps://facebook.com/MJTLab"
+  note_font_size 42
+  selected true
+  xpos -700
+  ypos -77
+  bdwidth 606
+  bdheight 549
+ }
+ NoOp {
+  inputs 0
+  name m01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['use_module'].getValue() :\n    thisGRP\['module'].setVisible(True)\nelse :\n    thisGRP\['module'].setVisible(False)\n"
+  xpos 51
+  ypos 14
+  addUserKnob {20 User}
+  addUserKnob {6 use_module l "use module" +STARTLINE}
+ }
+end_group

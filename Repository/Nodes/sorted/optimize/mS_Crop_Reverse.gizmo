@@ -1,0 +1,60 @@
+#! C:/Program Files/Nuke10.0v6/nuke-10.0.6.dll -nx
+version 10.0 v6
+Gizmo {
+ inputs 2
+ tile_color 0xffff
+ addUserKnob {20 User}
+ addUserKnob {41 format l "output format" T Reformat1.format}
+ addUserKnob {41 filter T Reformat1.filter}
+}
+ Input {
+  inputs 0
+  name Crop_node
+  xpos 90
+  ypos -39
+ }
+ Transform {
+  translate {{this.parent.input.box.x} {this.parent.input.box.y}}
+  center {{Reformat1.width/2} {Reformat1.height/2}}
+  name Transform2
+  xpos 90
+  ypos 39
+ }
+ Input {
+  inputs 0
+  name Cropped_Plate
+  xpos -34
+  ypos -39
+  number 1
+ }
+ Transform {
+  translate {{parent.Transform2.translate} {parent.Transform2.translate}}
+  center {{parent.Transform2.center} {parent.Transform2.center}}
+  name Transform1
+  xpos -34
+  ypos 36
+ }
+ Reformat {
+  box_width 0
+  box_height 0
+  resize none
+  center false
+  filter Impulse
+  name Reformat1
+  xpos -34
+  ypos 99
+ }
+ Output {
+  name Output1
+  xpos -34
+  ypos 153
+ }
+ Viewer {
+  frame_range 1-100
+  fps 25
+  name Viewer1
+  selected true
+  xpos 322
+  ypos 116
+ }
+end_group

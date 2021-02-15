@@ -1,0 +1,166 @@
+#! C:/Program Files/Nuke5.2v2/Nuke5.2.exe -nx
+version 5.2200
+Gizmo {
+ help "Maps the input range to the output range using \"outMin+(((outMax-outMin) / (inMax - inMin)) * (inVal - inMin))\""
+ addUserKnob {20 User}
+ addUserKnob {20 descriptGroup l Description n 1}
+ descriptGroup 0
+ addUserKnob {26 nodeDescription l "" +STARTLINE T "This node will map the input value \nto the output range, e.g. a slider \nvalue between 0 and 1 to an angle \n(0-360) etc.\n\n---\n\nExample usage: \n- Link the \"Input Value\" to the field \n/ node that contains your reference \nvalue.\n- Adjust the \"Input Minimum\" and \n\"Input Maximum\" fields to match \nthe lowest and highest figures your \nreference field might submit (e.g. 0 \nand 1 for a slider).\n- Adjust the \"Output Minimum\" and \n\"Output Maximum\" to match the \nrange you want to map the reference \nvalue to (e.g. 0 to 360 for an angle).\n- Link your target to the \"Output Value\" \nof this node.\n\n---\n\nUpdate in v0.2:\n\"Exponential Mapping\" will apply a gamma \nfunction to the output range, resulting\nin an exponential output instead of a\nlinear one.\n\n---\n\nv1.1 - September 2011\ne-mail julian\[at]yellow-ant\[dot]net"}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {7 inVal l "Input Value" t "Link to input field, e.g. a slider, switch, transform etc" R -1000 1000}
+ addUserKnob {26 ""}
+ addUserKnob {7 inMin l "Input Minimum" t "Adjust to match the smalles value your input field may submit." R -1000 1000}
+ addUserKnob {7 inMax l "Input Maximum" R -1000 1000}
+ addUserKnob {26 ""}
+ addUserKnob {7 outMin l "Output Minimum" t "The lowest value you want to pass on." R -1000 1000}
+ addUserKnob {7 outMax l "Output Maximum" t "The highest value you want to pass on." R -1000 1000}
+ addUserKnob {26 ""}
+ addUserKnob {20 addSettings l "Additional Settings" n 1}
+ addUserKnob {6 expoCurve l "Exponential Mapping" t "Check this to interpolate between values exponentially instead of linearly. " +STARTLINE}
+ addUserKnob {7 gamExp l "Gamma Exponent" t "Values below 0 will result in the output value starting out slowly and then rushing towards the outMax. Above 0 will result in the outVal increasing rapidly, then easing slowly in to outMax." R -1 3}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {7 outVal l "Output Value" t "The result of the mapping calculation." R -1000 1000}
+ outVal {{"expoCurve ? gammaMapper.newVal : valueMapper.newVal"}}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -283
+  ypos 113
+ }
+ NoOp {
+  name valueMapper
+  selected true
+  xpos -283
+  ypos 173
+  addUserKnob {20 User}
+  addUserKnob {7 val l Value R 0 1000}
+  val {{parent.inVal i}}
+  addUserKnob {7 inMin l "Input Minimum" R 0 1000}
+  inMin {{parent.inMin i}}
+  addUserKnob {7 inMax l "Input Maximum" R 0 1000}
+  inMax {{parent.inMax i}}
+  addUserKnob {7 outMin l "Output Minimum" R 0 1000}
+  outMin {{parent.outMin i}}
+  addUserKnob {7 outMax l "Output Maximum" R 0 1000}
+  outMax {{parent.outMax i}}
+  addUserKnob {7 diffIn l "Input Difference" R 0 1000}
+  diffIn {{inMax-inMin i}}
+  addUserKnob {7 diffOut l "Output Difference" R 0 1000}
+  diffOut {{outMax-outMin i}}
+  addUserKnob {7 diffVal l "Value Difference" R 0 1000}
+  diffVal {{val-inMin i}}
+  addUserKnob {7 newVal l "Output Value" R 0 1000}
+  newVal {{outMin+((diffOut/diffIn)*diffVal) i x1 0}}
+ }
+ NoOp {
+  name posMapper
+  xpos -281
+  ypos 220
+  addUserKnob {20 User}
+  addUserKnob {7 val l Value R 0 1000}
+  val {{parent.inVal i}}
+  addUserKnob {7 inMin l "Input Minimum" R 0 1000}
+  inMin {{parent.inMin i}}
+  addUserKnob {7 inMax l "Input Maximum" R 0 1000}
+  inMax {{parent.inMax i}}
+  addUserKnob {7 outMin l "Output Minimum" R 0 1000}
+  addUserKnob {7 outMax l "Output Maximum" R 0 1000}
+  outMax 800
+  addUserKnob {7 diffIn l "Input Difference" R 0 1000}
+  diffIn {{inMax-inMin i}}
+  addUserKnob {7 diffOut l "Output Difference" R 0 1000}
+  diffOut {{outMax-outMin i}}
+  addUserKnob {7 diffVal l "Value Difference" R 0 1000}
+  diffVal {{val-inMin i}}
+  addUserKnob {7 newVal l "Output Value" R 0 1000}
+  newVal {{outMin+((diffOut/diffIn)*diffVal) i}}
+ }
+ NoOp {
+  name gammaMapper
+  xpos -281
+  ypos 246
+  addUserKnob {20 User}
+  addUserKnob {7 val l Value R 0 1000}
+  val {{"\[sample Gamma1 red 0.5 (posMapper.newVal+.5)]" i}}
+  addUserKnob {7 inMin l "Input Minimum" R 0 1000}
+  addUserKnob {7 inMax l "Input Maximum" R 0 1000}
+  inMax 1
+  addUserKnob {7 outMin l "Output Minimum" R 0 1000}
+  outMin {{parent.outMin i}}
+  addUserKnob {7 outMax l "Output Maximum" R 0 1000}
+  outMax {{parent.outMax i}}
+  addUserKnob {7 diffIn l "Input Difference" R 0 1000}
+  diffIn {{inMax-inMin i}}
+  addUserKnob {7 diffOut l "Output Difference" R 0 1000}
+  diffOut {{outMax-outMin i}}
+  addUserKnob {7 diffVal l "Value Difference" R 0 1000}
+  diffVal {{val-inMin i}}
+  addUserKnob {7 newVal l "Output Value" R 0 1000}
+  newVal {{outMin+((diffOut/diffIn)*diffVal) i}}
+ }
+ Output {
+  name Output1
+  xpos -281
+  ypos 307
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "800 800 0 0 800 800 1 "
+  name Constant1
+  xpos -123
+  ypos 64
+ }
+ Ramp {
+  p0 {100 0}
+  p1 {100 800}
+  name Ramp1
+  xpos -123
+  ypos 136
+ }
+ Rectangle {
+  area {0 0 800 1}
+  color 0
+  name Rectangle1
+  xpos -123
+  ypos 162
+ }
+ Rectangle {
+  area {0 799 800 800}
+  name Rectangle2
+  xpos -123
+  ypos 188
+ }
+ NoOp {
+  name gammaKnobMapper
+  xpos -123
+  ypos 214
+  addUserKnob {20 User}
+  addUserKnob {7 val l Value R 0 1000}
+  val {{parent.gamExp i}}
+  addUserKnob {7 inMin l "Input Minimum" R 0 1000}
+  inMin -1
+  addUserKnob {7 inMax l "Input Maximum" R 0 1000}
+  inMax 3
+  addUserKnob {7 outMin l "Output Minimum" R 0 1000}
+  addUserKnob {7 outMax l "Output Maximum" R 0 1000}
+  outMax 4
+  addUserKnob {7 diffIn l "Input Difference" R 0 1000}
+  diffIn {{inMax-inMin i}}
+  addUserKnob {7 diffOut l "Output Difference" R 0 1000}
+  diffOut {{outMax-outMin i}}
+  addUserKnob {7 diffVal l "Value Difference" R 0 1000}
+  diffVal {{val-inMin i}}
+  addUserKnob {7 newVal l "Output Value" R 0 1000}
+  newVal {{outMin+((diffOut/diffIn)*diffVal) i}}
+ }
+ Gamma {
+  value {{parent.gammaKnobMapper.newVal i}}
+  name Gamma1
+  xpos -123
+  ypos 240
+ }
+end_group

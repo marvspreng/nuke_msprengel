@@ -1,0 +1,354 @@
+set cut_paste_input [stack 0]
+version 10.0 v5
+push $cut_paste_input
+Group {
+name Exponential_Glow
+help "This gizmo is a port of Stuart Lashley's popular Exponential Glow macro from Shake. Will glow the highs on the input and create a nice falloff. Main dependency with Viewer has been removed so should be ok in stereo/mono views."
+knobChanged "node = nuke.thisNode()\nkc = nuke.thisKnob()\n\nif kc.name() in \[\"iterations\"]:\n    p = nuke.toNode('Merge1')\n    g = nuke.toNode('Grade')\n    m = nuke.toNode('Multiply1')\n    out = nuke.toNode('Crop1')\n    b =  nuke.toNode('Blur')\n    s = nuke.toNode('Switch1')\n    k= nuke.toNode('Keymix1')\n    \n    for n in nuke.allNodes():\n      if \"static\" not in n\['label'].getValue():\n          ###print \"i would delete\" + n\['name'].value()\n          nuke.delete(n)\n          s.setInput(0,p)\n        \n    slices = int(node\['iterations'].value())  \n    if slices > 1:  \n        for x in range(1,slices):  \n            b1 = nuke.nodes.Blur()\n            b1.setInput(0, g)\n            b1\['size'].setValue(1,1)\n            b1\['size'].setExpression('%s.size.w*2'%b.name(), 0)\n            b1\['size'].setExpression('%s.size.h*2'%b.name(), 1)\n            b1\['quality'].setExpression('%s.quality'%node.name()) \n            b1\['channels'].setValue('rgba')\n            \n            c = nuke.nodes.Crop()\n            c.setInput(0,b1)\n            c\['box'].setExpression('input.width', 2)\n            c\['box'].setExpression('input.height', 3)\n          \n            m1 = nuke.nodes.Multiply()\n            m1.setInput(0,c)\n            m1\['value'].setExpression('%s.value/ExpoGlow.falloff'%m.name())  \n            \n            p1 = nuke.nodes.Merge()\n            p1\['operation'].setValue('plus')\n            p1.setInput(0,m1)\n            p1.setInput(1,p)\n            k.setInput(1,p1)\n            s.setInput(0,p1)\n            \n            for n in \[b1,m1,p1]:\n                nuke.autoplace(n)\n            \n            p = p1\n            m = m1\n            b = b1\n            \nif nuke.thisNode().input(1):\n    if nuke.thisNode()\['maskChannel'].value() == 'none':\n        nuke.thisNode()\['maskChannel'].setValue(\"rgba.alpha\")\n    else:\n        pass\nelse:\n    nuke.thisNode()\['maskChannel'].setValue(\"none\")            \n           "
+tile_color 0xffdb00ff
+selected true
+xpos 15256
+ypos 16090
+addUserKnob {20 User l "Exponential Glow"}
+addUserKnob {26 title l "" +STARTLINE T "<b><font size=3>Exponential glow</font></b><font size=1> v1.0</font><br>\n<font size=1>Iterations control</font>"}
+addUserKnob {26 ""}
+addUserKnob {3 iterations}
+iterations 10
+addUserKnob {26 iterations_1 l "" -STARTLINE T "<i>Iterations is the number of blur node added.<br><b>10</b> is the standard node value.</i>"}
+addUserKnob {26 ""}
+addUserKnob {41 add_source l "Add Source" T ExpoGlow.add_source}
+addUserKnob {6 cropformat l "Crop to format" -STARTLINE}
+cropformat true
+addUserKnob {26 ""}
+addUserKnob {20 range n 1}
+range 0
+addUserKnob {41 range_1 l "" +STARTLINE T Keyer1.range}
+addUserKnob {20 endGroup n -1}
+addUserKnob {26 ""}
+addUserKnob {41 falloff T ExpoGlow.falloff}
+addUserKnob {7 intensity R 0 10}
+intensity 1.5
+addUserKnob {41 blur_amount l size T ExpoGlow.blur_amount}
+addUserKnob {7 squeeze R 0 5}
+squeeze 1
+addUserKnob {26 ""}
+addUserKnob {7 quality R 1 15}
+quality 6
+addUserKnob {26 qualityinfo l "" +STARTLINE T "<i><br><b>15</b> is the standard blur quality.</i>"}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannel l mask T Keymix1.maskChannel}
+addUserKnob {41 invertMask l invert -STARTLINE T Keymix1.invertMask}
+addUserKnob {26 ""}
+addUserKnob {26 info l INVISIBLE +INVISIBLE T "Brad-f exponential glow based, iterations + quality modified by Olivier-B"}
+}
+Input {
+inputs 0
+name mask
+label static
+xpos -1
+ypos 570
+number 1
+}
+Input {
+inputs 0
+name Input1
+label static
+xpos -371
+ypos -734
+}
+NoOp {
+name ExpoGlow
+label static
+xpos -371
+ypos -610
+addUserKnob {20 User}
+addUserKnob {7 falloff l Falloff R 0 3}
+falloff 1.5
+addUserKnob {7 intensity l Intensity R 0 5}
+intensity {{parent.intensity*10}}
+addUserKnob {7 blur_amount l Size R 0 5}
+blur_amount 1
+addUserKnob {6 add_source l "Add Source" +STARTLINE}
+add_source true
+addUserKnob {6 add_bbox l "Add original bbox" +STARTLINE}
+}
+set N1e1ebd80 [stack 0]
+push $N1e1ebd80
+Dot {
+name Dot11
+label static
+xpos 55
+ypos -600
+}
+Keyer {
+operation "luminance key"
+name Keyer1
+label static
+xpos 21
+ypos -469
+}
+Premult {
+name Premult1
+label static
+xpos 21
+ypos -409
+}
+Remove {
+operation keep
+channels rgb
+name Remove1
+label static
+xpos 21
+ypos -371
+}
+Grade {
+white {{ExpoGlow.intensity/100}}
+name Grade
+label static
+xpos 21
+ypos -336
+}
+set N2635560 [stack 0]
+Blur {
+size {{width/3*(ExpoGlow.blur_amount/100)*squeeze x1001 6.826666667e+10} {width/3*(ExpoGlow.blur_amount/100) x1001 6.826666667e+10}}
+quality {{Exponential_Glow.quality}}
+crop false
+name Blur
+label static
+xpos 21
+ypos -298
+addUserKnob {20 User}
+addUserKnob {7 xpercent l xPercent R 0 100}
+xpercent {{ExpoGlow.blur_amount}}
+addUserKnob {7 ypercent l yPercent R 0 100}
+ypercent {{xpercent/format.pixel_aspect/height*width}}
+}
+Multiply {
+name Multiply1
+label static
+xpos 21
+ypos -248
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge1
+label static
+xpos 21
+ypos -198
+disable {{!ExpoGlow.add_source}}
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur.size.w*2} {Blur.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur1
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop2
+}
+Multiply {
+value {{Multiply1.value/ExpoGlow.falloff}}
+name Multiply2
+}
+Merge {
+inputs 2
+operation plus
+name Merge2
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur1.size.w*2} {Blur1.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur2
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop3
+}
+Multiply {
+value {{Multiply2.value/ExpoGlow.falloff}}
+name Multiply3
+}
+Merge {
+inputs 2
+operation plus
+name Merge3
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur2.size.w*2} {Blur2.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur3
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop4
+}
+Multiply {
+value {{Multiply3.value/ExpoGlow.falloff}}
+name Multiply4
+}
+Merge {
+inputs 2
+operation plus
+name Merge4
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur3.size.w*2} {Blur3.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur4
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop5
+}
+Multiply {
+value {{Multiply4.value/ExpoGlow.falloff}}
+name Multiply5
+}
+Merge {
+inputs 2
+operation plus
+name Merge5
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur4.size.w*2} {Blur4.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur5
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop6
+}
+Multiply {
+value {{Multiply5.value/ExpoGlow.falloff}}
+name Multiply6
+}
+Merge {
+inputs 2
+operation plus
+name Merge6
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur5.size.w*2} {Blur5.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur6
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop7
+}
+Multiply {
+value {{Multiply6.value/ExpoGlow.falloff}}
+name Multiply7
+}
+Merge {
+inputs 2
+operation plus
+name Merge7
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur6.size.w*2} {Blur6.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur7
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop8
+}
+Multiply {
+value {{Multiply7.value/ExpoGlow.falloff}}
+name Multiply8
+}
+Merge {
+inputs 2
+operation plus
+name Merge8
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur7.size.w*2} {Blur7.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur8
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop9
+}
+Multiply {
+value {{Multiply8.value/ExpoGlow.falloff}}
+name Multiply9
+}
+Merge {
+inputs 2
+operation plus
+name Merge9
+}
+push $N2635560
+Blur {
+channels rgba
+size {{Blur8.size.w*2} {Blur8.size.h*2}}
+quality {{Exponential_Glow.quality}}
+name Blur9
+}
+Crop {
+box {0 0 {input.width} {input.height}}
+name Crop10
+}
+Multiply {
+value {{Multiply9.value/ExpoGlow.falloff}}
+name Multiply10
+}
+Merge {
+inputs 2
+operation plus
+name Merge10
+}
+set Ndb9ee270 [stack 0]
+push $N1e1ebd80
+Keymix {
+inputs 3
+maskChannel none
+name Keymix1
+label static
+xpos -226
+ypos 564
+}
+push $Ndb9ee270
+Switch {
+inputs 2
+which {{Keymix1.maskChannel}}
+name Switch1
+label static
+xpos -371
+ypos 570
+}
+Crop {
+box {0 0 {width} {height}}
+name Crop1
+label static
+xpos -371
+ypos 741
+disable {{!(parent.cropformat)}}
+}
+Output {
+name Output1
+label static
+xpos -371
+ypos 853
+}
+end_group

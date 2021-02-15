@@ -1,0 +1,68 @@
+#this node created by Mohamed Abd El-aziz
+# -nx
+#write_info Write file:"[python nuke.toNode('NoOp1').knob('l').getValue()]/Check_Point/[python (datetime.datetime.now().strftime('%d'))]_[python (datetime.datetime.now().strftime('%m'))]_[python (datetime.datetime.now().strftime('%y'))]/[python nuke.toNode('NoOp1').knob('u').getValue()]/[python {os.path.basename(nuke.root().name()).split(".")[0]+""}]_V_[python nuke.toNode('NoOp1').knob('v').getValue()].mov" format:"2048 1556 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"sRGB" datatype:"unknown" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 10.5 v4
+Gizmo {
+ tile_color 0xc1b200ff
+ lock_connections true
+ addUserKnob {20 CP l "Check Point"}
+ addUserKnob {26 c l "Check Point"}
+ addUserKnob {41 l l location T NoOp1.l}
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {41 u l user T NoOp1.u}
+ addUserKnob {41 v l version -STARTLINE T NoOp1.v}
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {41 run T NoOp1.run}
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 263
+  ypos -453
+ }
+ Write {
+  file "\[python nuke.toNode('NoOp1').knob('l').getValue()]/Check_Point/\[python (datetime.datetime.now().strftime('%d'))]_\[python (datetime.datetime.now().strftime('%m'))]_\[python (datetime.datetime.now().strftime('%y'))]/\[python nuke.toNode('NoOp1').knob('u').getValue()]/\[python \{os.path.basename(nuke.root().name()).split(\".\")\[0]+\"\"\}]_V_\[python nuke.toNode('NoOp1').knob('v').getValue()].mov"
+  colorspace sRGB
+  file_type mov
+  meta_codec ap4h
+  mov32_pixel_format {{0} "default (YCbCrA 8-bit 444 Biased (r408))" "RGBA  8-bit" "YCbCrA 8-bit 444 Biased (r408)" "YCbCr  8-bit 422 (2vuy)"}
+  mov64_codec ap4h
+  mov64_fps {{root.fps}}
+  mov64_bitrate 20000
+  mov64_bitrate_tolerance 40000000
+  mov64_quality_min 2
+  mov64_quality_max 31
+  mov64_gop_size 12
+  mov64_b_frames 0
+  checkHashOnRead false
+  version 77
+  name Write
+  xpos 263
+  ypos -354
+ }
+ Output {
+  name Output1
+  xpos 263
+  ypos -166
+ }
+ NoOp {
+  inputs 0
+  name NoOp1
+  label "\n\[python \{os.path.basename(nuke.root().name()).split(\".\")\[0]+\".mov\"\}]\n\n"
+  xpos 397
+  ypos -355
+  addUserKnob {20 User}
+  addUserKnob {26 c l Check_Point}
+  addUserKnob {2 l l location}
+  addUserKnob {1 u l user}
+  u user
+  addUserKnob {1 v l version -STARTLINE}
+  v 01
+  addUserKnob {22 run T "import datetime\n\nimport os\n\nnukescripts.render_panel((nuke.toNode('Write'),), True)" +STARTLINE}
+ }
+end_group
+

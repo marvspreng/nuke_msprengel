@@ -1,0 +1,553 @@
+#! C:/Program Files/Nuke10.5v4/nuke-10.5.4.dll -nx
+version 10.5 v4
+Gizmo {
+ tile_color 0xff1919ff
+ addUserKnob {20 PhotographicExposure l "Redshift Tone Mappers"}
+ addUserKnob {26 ""}
+ addUserKnob {26 redshifttonemappers l "<FONT COLOR = \"#FF0000\">Redshift Tone Mappers v1.2</FONT>"}
+ addUserKnob {26 ""}
+ addUserKnob {41 tonemappers l "Tone Mapping Method" T Switch1.tonemappers}
+ addUserKnob {26 ""}
+ addUserKnob {20 filmSettings l "Film Settings" n 1}
+ addUserKnob {26 ""}
+ addUserKnob {41 iso l ISO T rsPE.iso}
+ addUserKnob {41 fStop l F-Stop T rsPE.fStop}
+ addUserKnob {41 shutterRatio l "Shutter Ratio" T rsPE.shutterRatio}
+ addUserKnob {41 whitePointColor l "White Point Color" T rsPE.whitePointColor}
+ addUserKnob {41 saturation l Saturation T rsPE.saturation}
+ addUserKnob {26 ""}
+ addUserKnob {41 useVignetting l "Enable Vignetting" T rsPE.useVignetting}
+ addUserKnob {41 vignetteAmount l Vignetting T rsPE.vignetteAmount}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 tonemappercontrols l "<FONT COLOR = \"#FF0000\">Tone Mapper Controls</FONT>"}
+ addUserKnob {26 ""}
+ addUserKnob {20 toneMapping l "Redshift Photographic Exposure" n 1}
+ toneMapping 0
+ addUserKnob {26 ""}
+ addUserKnob {41 useOver l "Use Overexposure Desaturation" T rsPE.useOver}
+ addUserKnob {41 overDesat l "Overexposure Saturation" T rsPE.overDesat}
+ addUserKnob {26 ""}
+ addUserKnob {41 reinhardFactor l "Allowed Overexposure" T rsPE.reinhardFactor}
+ addUserKnob {41 blackCrushThresh l "Black Crush Threshold" T rsPE.blackCrushThresh}
+ addUserKnob {41 blackCrushAmount l "Black Crush Amount" T rsPE.blackCrushAmount}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {20 filmicgroup l "Filmic Tone Mapping" n 1}
+ filmicgroup 0
+ addUserKnob {7 lift l INVISIBLE +INVISIBLE R 0 0.1}
+ addUserKnob {6 lift_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 shoulderStr l "Shoulder strength" T Expression_Filmic.shoulderStr}
+ addUserKnob {41 linStr l "Linear strength" T Expression_Filmic.linStr}
+ addUserKnob {41 linAngle l "Linear angle" T Expression_Filmic.linAngle}
+ addUserKnob {41 toeStr l "Toe strength" T Expression_Filmic.toeStr}
+ addUserKnob {41 toeNum l INVISIBLE +INVISIBLE T Expression_Filmic.toeNum}
+ addUserKnob {41 toeDen l INVISIBLE +INVISIBLE T Expression_Filmic.toeDen}
+ addUserKnob {41 whitepoint l INVISIBLE +INVISIBLE T Expression_Filmic.whitepoint}
+ addUserKnob {41 whitepointExp l INVISIBLE +INVISIBLE T Expression_Filmic.whitepointExp}
+ addUserKnob {20 endGroup_9 l endGroup n -1}
+ addUserKnob {20 HighlightCompression l "Highlight Compression" n 1}
+ HighlightCompression 0
+ addUserKnob {41 compression l "Highlight Compression" T Expression_Compression.compression}
+ addUserKnob {20 endGroup_8 l endGroup n -1}
+ addUserKnob {20 sceneSettings l "Scene Settings" n 1}
+ addUserKnob {26 ""}
+ addUserKnob {41 fov l "Camera Angle" T rsPE.fov}
+ addUserKnob {41 cdm2 l "Candela / Meter Squared" T rsPE.cdm2}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 overall l "<FONT COLOR = \"#FF0000\">Effect Amount</FONT>"}
+ addUserKnob {41 mix -STARTLINE T rsPE.mix}
+ addUserKnob {20 help_1 l INVISIBLE +INVISIBLE}
+ addUserKnob {26 helpWorkflow l INVISIBLE +INVISIBLE T "In order to properly recreate the beauty from AOVs,\nthe \"Apply Color Processing\" option should be disabled on all\nAOVs that have an \"Apply Color Processing\" option."}
+ addUserKnob {26 differencesText l INVISIBLE +INVISIBLE T "The Max Subsample Intensity and Max Secondary Ray Intensity values \nwill clamp the intensity of the pixels in order to better filter the resulting render.\nThe Photographic Exposure Shader in 3D works on non clamped data while \nthe Photographic Exposure Gizmo uses already clamped (rendered) data. \nOutputting non clamped data from the 3d render will result in fireflies and jagged edges.\n\nFor this reason there are small differences between the result of applying the \nphotographic exposure shader in 3D and reconstructing it in compositing.\nThe photographic exposure shader will keep the superwhites while this node will tend \nto tone them down due to differences in incoming clamped data. \nThere are also small differences in edges around superwhites but the most visible \ndifferences are on the way vignetting is affecting the superwhites."}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {20 controlsHelp l INVISIBLE +INVISIBLE n 1}
+ addUserKnob {20 mixeGroup l INVISIBLE +INVISIBLE n 1}
+ mixeGroup 0
+ addUserKnob {26 mixText l INVISIBLE +INVISIBLE T "This is the mix between the effect and the original input. "}
+ addUserKnob {20 endGroup_7 l INVISIBLE +INVISIBLE n -1}
+ addUserKnob {20 filmSettingsGroup l INVISIBLE +INVISIBLE n 1}
+ filmSettingsGroup 0
+ addUserKnob {26 filmSpeedText l INVISIBLE +INVISIBLE T "The “Film Speed” parameter controls the sensitivity of the film.\nIn real-life high ISOs mean that the film is very sensitive and \nwill capture a lot of light in a short amount of time, but the image \ncan be grainy. Low ISOs mean that the shutter has to be open for \nlonger for the film to capture enough light (otherwise the image \nwill be too dark) but the final result will be cleaner. \nPlease note that Redshift does not simulate the chemical properties\n of film so there won’t be any grain issues at high ISO settings!"}
+ addUserKnob {26 shutterTimeText l INVISIBLE +INVISIBLE T "The “Shutter Time Ratio” parameter controls the duration the \ncamera’s shutter will stay open. \nA value of 30 means 1/30, i.e. a 30th of a second. \nTherefore, the smaller the value, the longer the shutter stays \nopen and the brighter the image (and vice-versa)."}
+ addUserKnob {26 fStopText l INVISIBLE +INVISIBLE T "The “F-Stop” parameter is a divider of the aperture of the camera\n (the hole through which light come onto the film). \nSo if the aperture of the camera is 1.0, an F-stop of 2.0 means 1.0/2.0. \nAn F-Stop of 16.0 means 1.0/16.0. So the larger the F-Stop \nthe smaller the aperture. Smaller apertures mean that less light \nenters the camera and lands on the film, so the image is brighter. \nSo the larger the F-Stop, the dimmer the image.\nRedshift combines all the three parameters together to control how\ndark or how bright an image is. Users that have some experience \nwith photography will find them more intuitive than a simple \nmagic “image brightness” control. \nUsers that are not familiar with camera/film properties can simply \npick any of the three controls and adjust that to get the desired \nresult (i.e. how bright or how dark the final image should be)"}
+ addUserKnob {26 whitePointText l INVISIBLE +INVISIBLE T "This parameter controls what is considered “white” in the image. \nImages that are lit by colored light sources can never achieve a \nproper white (1.0, 1.0, 1.0) color. \nAn indoor scene, for example, might be lit by incandescent lights \nwhich are yellow/orange compared to pure white light.\nIf you scene has such an overall tint (because of lighting) you have two choices:\nEither adjust each and every light and make it more white. \nThis can be extremely tedious though!\nAdjust the Whitepoint parameter explained here which \nwill re-tint the entire image as a post process\nThe color you choose for “Whitepoint” is the color that will be removed from the image. \nSo if you image is slightly reddish you should make “Whitepoint” a bit red \n(for example (1.0, 0.9, 0.9)) in order to remove the red tint."}
+ addUserKnob {26 vignettingText l INVISIBLE +INVISIBLE T "In real-life, just light reaches the film it goes through the camera lens. \nLenses are often imperfect and, depending on the angle of the lighting, \nthey might absorb or reflect away some light so less of it eventually \nreaches the camera. The result is darkening around the edges of the image. \nThis imperfection, however, can sometimes be visually pleasing and \n‘focuses’ the viewer towards the center of the image.\nThe higher the Vignetting value, the more darkening there will be \naround the edges of the image\n\n- will use a user defined Camera Angle to create a vignetting effect"}
+ addUserKnob {20 endGroup_5 l endGroup n -1}
+ addUserKnob {20 helpToneMapping l INVISIBLE +INVISIBLE n 1}
+ helpToneMapping 0
+ addUserKnob {26 helpReinrahdFactor l INVISIBLE +INVISIBLE T "This parameter controls what happens to high-intensity pixel values.\nIt works by ‘squashing’ the high intensities into lower intensities in \norder to preserve fidelity that would normally be washed out white \n(because of these high intensities). A setting of 0.0 is the most aggressive setting. \nIt means that lights have to be extremely bright in order for the final pixels \nto approach the pure white (1.0, 1.0, 1.0) display color.\nLarger ‘allowed overexposure’ values are less aggressive and\nleave the original intensities more unaffected.\nThe above can be seen on the graph, too. Lower allowed overexposure\nsettings make high input intensities come out as lower intensities.\nFrom the graph one can see that a setting of 0.0 for allowed overexposure \nmeans that almost nothing will ever come out as pure white as the curve \napproaches the 1.0 level (horizontal gray line) but never truly reaches it."}
+ addUserKnob {26 blackCrushThresholdText l INVISIBLE +INVISIBLE T "Similar to how ‘allowed overexposure’ controls what happens to brightly lit areas, \n‘black crush’ controls what happens in the dimmer parts of the image. \nIt effectively squashes the darker colors in order to provide more contrast \nfor images that have too much ambient lighting.\nThe ‘black crush amount’ controls how much of the effect should be applied. \nA value of 0.0 means ‘no crushing’. A value of 1.0 means ‘maximum crushing’.\nThe ‘black crush threshold’ controls at which parts of the input intensity range \nthe crushing should happen. \nLow numbers mean ‘only crush very dark intensities’ while higher values allow \nmore of the input intensity range to be black-crushed.\nThe effect of both of these parameters on the pixel intensities can be seen on the graph.\nBelow we demonstrate a few different settings. \nThe black crush threshold was set to 0.25 so that only the darker\nparts of the image are affected by it."}
+ addUserKnob {26 saturationText l INVISIBLE +INVISIBLE T "This controls the color saturation. \nThe lower this value, the more grayscale the image. \nThe neutral value is 1.0. If you set it to values higher \nthan 1.0, the colors will appear more saturated."}
+ addUserKnob {20 endGroup_4 l INVISIBLE +INVISIBLE n -1}
+ addUserKnob {20 endGroup_6 l INVISIBLE +INVISIBLE n -1}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x8e8e3800
+  label "Film Settings"
+  note_font_size 42
+  xpos -244
+  ypos 240
+  bdwidth 293
+  bdheight 156
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x662020ff
+  label "RS Tone Mapping"
+  note_font_size 42
+  xpos -966
+  ypos 459
+  bdwidth 372
+  bdheight 480
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0xaaaaaa00
+  label Vignetting
+  note_font_size 42
+  xpos -323
+  ypos -76
+  bdwidth 331
+  bdheight 302
+ }
+ BackdropNode {
+  inputs 0
+  name Corona
+  tile_color 0x9e4b1cff
+  label "Highlight Compression"
+  note_font_size 40
+  xpos -572
+  ypos 648
+  bdwidth 435
+  bdheight 159
+ }
+ BackdropNode {
+  inputs 0
+  name Filmic
+  label Filmic
+  note_font_size 40
+  xpos -66
+  ypos 488
+  bdwidth 384
+  bdheight 175
+ }
+ BackdropNode {
+  inputs 0
+  name Luma_modo
+  tile_color 0x5f4cadff
+  gl_color 0x5c37c6ff
+  label "Exponential Luma"
+  note_font_size 45
+  xpos 385
+  ypos 290
+  bdwidth 409
+  bdheight 230
+ }
+ BackdropNode {
+  inputs 0
+  name Notes
+  label "Filmic tone mapping based\non John Hable's work http://filmicgames.com/archives/75\n\nExponential luma operator is based on\nmodo's built-in tone mapper.\n\nReinhard operator is Reinhard global. \nhttps://www.cs.utah.edu/~reinhard/cdrom/\n\nHighlight Compression is based on the 3ds Max plugin render engine Corona.\n\nCredits to Adrian Cruceru for building the foundation to the Redshift Photographic Node, \nSimon Lundberg and Martin Geupel who helped convert Filmic and \nother tone mappers used for this modified Nuke script. Modified by Saul Espinosa."
+  note_font_size 25
+  xpos 865
+  ypos -13
+  bdwidth 989
+  bdheight 436
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -139
+  ypos -159
+ }
+ Dot {
+  name Dot8
+  xpos -105
+  ypos -9
+ }
+set N7708c00 [stack 0]
+ Dot {
+  name Dot9
+  xpos -234
+  ypos -9
+ }
+ Expression {
+  temp_name0 xpos
+  temp_expr0 "2*x/width -1"
+  temp_name1 ypos
+  temp_expr1 2*y/height-1
+  temp_name2 distance
+  temp_expr2 1/tan(radians(rsPE.fov/2))
+  temp_name3 alpha
+  temp_expr3 atan2(hypot(xpos,ypos),distance)
+  expr0 "r*min(pow(cos(alpha), rsPE.vignetteAmount), 1.0)"
+  expr1 "g*min(pow(cos(alpha), rsPE.vignetteAmount), 1.0)"
+  expr2 "b*min(pow(cos(alpha), rsPE.vignetteAmount), 1.0)"
+  name vignettingCamerAngle
+  xpos -268
+  ypos 37
+ }
+ Dot {
+  name Dot11
+  xpos -234
+  ypos 142
+ }
+push $N7708c00
+ Switch {
+  inputs 2
+  which {{rsPE.useVignetting x1 0}}
+  name vignettingSwitch
+  xpos -139
+  ypos 138
+ }
+ Dot {
+  name Dot7
+  xpos -105
+  ypos 199
+ }
+ Dot {
+  name Dot4
+  xpos -105
+  ypos 311
+ }
+ Expression {
+  temp_name0 factor
+  temp_expr0 "rsPE.cdm2*(18.0 / 106.0) * (rsPE.iso * (1.0/ rsPE.shutterRatio)) / (15.4* rsPE.fStop * rsPE.fStop)"
+  temp_name1 whitePointAdjustment.r
+  temp_expr1 "rsPE.whitePointColor.r > 0 ? 1/rsPE.whitePointColor.r : 1"
+  temp_name2 whitePointAdjustment.g
+  temp_expr2 "rsPE.whitePointColor.g > 0 ? 1/rsPE.whitePointColor.g : 1"
+  temp_name3 whitePointAdjustment.b
+  temp_expr3 "rsPE.whitePointColor.b > 0 ? 1/rsPE.whitePointColor.b : 1"
+  expr0 r*factor*whitePointAdjustment.r/(whitePointAdjustment.r*0.2126+whitePointAdjustment.g*0.7152+whitePointAdjustment.b*0.0722)
+  expr1 g*factor*whitePointAdjustment.g/(whitePointAdjustment.r*0.2126+whitePointAdjustment.g*0.7152+whitePointAdjustment.b*0.0722)
+  expr2 b*factor*whitePointAdjustment.b/(whitePointAdjustment.r*0.2126+whitePointAdjustment.g*0.7152+whitePointAdjustment.b*0.0722)
+  name whitePoint
+  xpos -139
+  ypos 348
+ }
+ Dot {
+  name Dot16
+  xpos -105
+  ypos 416
+ }
+set N772b000 [stack 0]
+ Dot {
+  name Dot1
+  xpos -105
+  ypos 551
+ }
+set N772ac00 [stack 0]
+ Dot {
+  name Dot14
+  xpos -105
+  ypos 593
+ }
+set N772a800 [stack 0]
+ Dot {
+  name Dot12
+  xpos -499
+  ypos 593
+ }
+ Expression {
+  expr0 r*(1+r/(compression**2))/(1+r)
+  expr1 g*(1+g/(compression**2))/(1+g)
+  expr2 b*(1+b/(compression**2))/(1+b)
+  name Expression_Compression
+  xpos -533
+  ypos 769
+  addUserKnob {20 User}
+  addUserKnob {7 compression l "Highlight Compression" R 1 10}
+  compression 1
+ }
+ Dot {
+  name Dot13
+  xpos -499
+  ypos 828
+ }
+ Dot {
+  name Dot15
+  xpos 485
+  ypos 828
+ }
+push $N772b000
+ Dot {
+  name Dot2
+  xpos 405
+  ypos 416
+ }
+set N774f400 [stack 0]
+ Dot {
+  name Dot3
+  xpos 405
+  ypos 483
+ }
+push $N774f400
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos 448
+  ypos 412
+ }
+ Add {
+  value 1
+  name Add1
+  xpos 552
+  ypos 406
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  Bchannels rgb
+  name Merge2
+  xpos 552
+  ypos 479
+ }
+push $N772a800
+ EXPTool {
+  mode Stops
+  red 1.8
+  green 1.8
+  blue 1.8
+  name EXPTool2
+  xpos -36
+  ypos 589
+ }
+set N774e000 [stack 0]
+ Expression {
+  temp_name0 luma
+  temp_expr0 "0.2126*r + 0.7152*b + 0.0722*g"
+  temp_name1 val
+  temp_expr1 "max(r, g, b)"
+  temp_name2 a1
+  temp_expr2 "clamp(1-luma, 0, 1)**InvLumaExponent*clamp(luma, 0, 1)**LumaExponent"
+  temp_name3 a2
+  temp_expr3 "clamp((1-luma), 0, 1)**10"
+  expr3 a2
+  name MaxLift
+  xpos -36
+  ypos 619
+  addUserKnob {20 User}
+  addUserKnob {7 InvLumaExponent l "Inverted Luma Exponent" R 1 30}
+  InvLumaExponent 20
+  addUserKnob {7 LumaExponent l "Luma Exponent" R 0.1 2}
+  LumaExponent 0.15
+ }
+push $N774e000
+ Grade {
+  inputs 1+1
+  black {{parent.lift} {parent.lift} {parent.lift} {parent.lift}}
+  name Grade1
+  xpos 87
+  ypos 589
+  addUserKnob {20 User}
+ }
+ Expression {
+  temp_name0 tNtD
+  temp_expr0 toeNum/toeDen
+  temp_name1 tStD
+  temp_expr1 toeStr*toeDen
+  temp_name2 tStN
+  temp_expr2 toeStr*toeNum
+  temp_name3 lAlS
+  temp_expr3 linAngle*linStr
+  expr0 ((r*(shoulderStr*r+lAlS)+tStN)/(r*(shoulderStr*r+linStr)+tStD))-tNtD
+  expr1 ((g*(shoulderStr*g+lAlS)+tStN)/(g*(shoulderStr*g+linStr)+tStD))-tNtD
+  expr2 ((b*(shoulderStr*b+lAlS)+tStN)/(b*(shoulderStr*b+linStr)+tStD))-tNtD
+  name Expression_Filmic
+  xpos 183
+  ypos 589
+  addUserKnob {20 User}
+  addUserKnob {7 shoulderStr l "Shoulder strength"}
+  shoulderStr 0.35
+  addUserKnob {7 linStr l "Linear strength"}
+  linStr 0.25
+  addUserKnob {7 linAngle l "Linear angle"}
+  linAngle 0.25
+  addUserKnob {7 toeStr l "Toe strength"}
+  toeStr 0.35
+  addUserKnob {7 toeNum l "Toe numerator" R 0 0.1}
+  toeNum 0.1
+  addUserKnob {7 toeDen l "Toe denominator"}
+  toeDen 1
+  addUserKnob {7 whitepoint l "White point" R 0 50}
+  addUserKnob {7 whitepointExp}
+  whitepointExp {{((whitepoint*(shoulderStr*whitepoint+linAngle*linStr)+toeStr*toeNum)/(whitepoint*(shoulderStr*whitepoint+linStr)+toeStr*toeDen))-(toeNum/toeDen)}}
+ }
+push $N772ac00
+ Expression {
+  temp_name0 X
+  temp_expr0 "r * 0.4124 + g * 0.3576 + b * 0.1805"
+  temp_name1 Y
+  temp_expr1 "r * 0.2126 + g * 0.7152 + b * 0.0722"
+  temp_name2 Z
+  temp_expr2 "r * 0.0193 + g * 0.1192 + b * 0.9505"
+  temp_name3 L
+  temp_expr3 "X + Y + Z"
+  expr0 "L!=0 ? X/L : 0"
+  expr1 "L!=0 ? Y/L : 0"
+  expr2 Y
+  name rgb2xyY
+  xpos -830
+  ypos 547
+ }
+ Dot {
+  name Dot5
+  xpos -796
+  ypos 593
+ }
+ Expression {
+  temp_name0 luminance
+  temp_expr0 "b * (1.0 + (b * max(rsPE.reinhardFactor, 0.1))) / (1.0+ b) "
+  temp_name1 luma
+  temp_expr1 "luminance < rsPE.blackCrushThresh ?  pow(luminance, min(rsPE.blackCrushAmount*2+1, 3)) *  (1- luminance /rsPE.blackCrushThresh) + luminance*luminance/rsPE.blackCrushThresh : luminance"
+  expr0 r
+  expr1 g
+  expr2 luma
+  name blackCrush
+  xpos -830
+  ypos 633
+ }
+ Expression {
+  expr0 "r*(b/g) *  3.2406 + b * -1.5372 + (b/g)*(1-r-g) * -0.4986"
+  expr1 "r*(b/g) * -0.9689 + b *  1.8758 + (b/g)*(1-r-g) *  0.0415"
+  expr2 "r*(b/g) *  0.0557 + b * -0.2040 + (b/g)*(1-r-g) *  1.0570"
+  name xyY2RGB
+  xpos -830
+  ypos 688
+ }
+ Dot {
+  name Dot6
+  xpos -796
+  ypos 741
+ }
+set N3cb00c00 [stack 0]
+ Keyer {
+  operation "luminance key"
+  range {0.5 1 1 1}
+  name Keyer1
+  xpos -941
+  ypos 731
+ }
+push $N3cb00c00
+ ColorCorrect {
+  inputs 1+1
+  saturation {{rsPE.overDesat}}
+  name ColorCorrect1
+  xpos -941
+  ypos 796
+ }
+push $N3cb00c00
+ Switch {
+  inputs 2
+  which {{rsPE.useOver x1 1}}
+  name overexposureSwitch
+  xpos -830
+  ypos 850
+ }
+ Switch {
+  inputs 4
+  which {{tonemappers}}
+  name Switch1
+  xpos 552
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {4 tonemappers l "Tone Mappers" t "Choose between tone mappers.\n\nRedshift Photographic Exposure: This method uses Reinhard tone mapping which is used by V-Ray and Redshift. Desaturates bright colors. \n\nFilmic: Used by many video games. Offers a greater degree of control over the look. Tends to crush dark colors. Maintains saturation and has increased contrast.\n\nExponential Luma Tone Mapping: Used by Maxwell and MODO. Maintains saturation and hue of bright colors.\n\nHighlight Compression: Similar tone mapping method to Reinhard except it compresses the highlights. Similar to what is found in Corona." M {"Redshift Photographic Exposure" "Filmic Tone Mapping" "Exponential Luma Tone Mapping" "Highlight Compression"}}
+ }
+ Expression {
+  channel0 {rgba.red -rgba.green -rgba.blue none}
+  expr0 "max(r*rsPE.saturation + (r*0.2126+ g*0.7152+ b*0.0722) * (1-rsPE.saturation), 0.0)"
+  channel1 {-rgba.red rgba.green -rgba.blue none}
+  expr1 "max(g*rsPE.saturation + (r*0.2126+ g*0.7152+ b*0.0722) * (1-rsPE.saturation), 0.0)"
+  channel2 {-rgba.red -rgba.green rgba.blue none}
+  expr2 "max(b*rsPE.saturation + (r*0.2126+ g*0.7152+ b*0.0722) * (1-rsPE.saturation), 0.0)"
+  name saturation
+  xpos 552
+  ypos 908
+ }
+push $N7708c00
+ Dot {
+  name Dot10
+  xpos 761
+  ypos -9
+ }
+ MergeExpression {
+  inputs 2
+  expr0 Ar*rsPE.mix+Br*(1-rsPE.mix)
+  expr1 Ag*rsPE.mix+Bg*(1-rsPE.mix)
+  expr2 Ab*rsPE.mix+Bb*(1-rsPE.mix)
+  name mixWithOriginal
+  xpos 727
+  ypos 1278
+ }
+ NoOp {
+  name rsPE
+  selected true
+  xpos 727
+  ypos 1429
+  addUserKnob {20 PhotographicExposure l "Photographic Exposure"}
+  addUserKnob {26 ""}
+  addUserKnob {20 endGroup_2 l endGroup n -1}
+  addUserKnob {20 filmSettings l "Film Settings" n 1}
+  addUserKnob {26 ""}
+  addUserKnob {3 iso l ISO}
+  iso 100
+  addUserKnob {7 fStop l F-Stop R 1 64}
+  fStop 9
+  addUserKnob {7 shutterRatio l "Shutter Ratio" R 0.002 8000}
+  shutterRatio 100
+  addUserKnob {18 whitePointColor l "White Point Color"}
+  whitePointColor {1 1 1}
+  addUserKnob {6 whitePointColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 saturation l Saturation}
+  saturation 1
+  addUserKnob {26 ""}
+  addUserKnob {6 useVignetting l "Enable Vignetting" +STARTLINE}
+  useVignetting true
+  addUserKnob {7 vignetteAmount l Vignetting R 0 25}
+  vignetteAmount 1
+  addUserKnob {26 ""}
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {20 toneMapping l "Redshift Photographic Exposure" n 1}
+  addUserKnob {26 ""}
+  addUserKnob {6 useOver l "Use Overexposure Desaturation" +STARTLINE}
+  addUserKnob {7 overDesat l "Overexposure Desaturation"}
+  addUserKnob {26 ""}
+  addUserKnob {7 reinhardFactor l "Allowed Overexposure" R 0.1 1}
+  reinhardFactor 0.25
+  addUserKnob {7 blackCrushThresh l "Black Crush Threshold"}
+  blackCrushThresh 0.25
+  addUserKnob {7 blackCrushAmount l "Black Crush Amount"}
+  addUserKnob {26 ""}
+  addUserKnob {20 Corona l "Corona Highlight Compression" n 1}
+  addUserKnob {26 ""}
+  addUserKnob {7 highlightcompression l "Highlight Compression" R 1 10}
+  highlightcompression 1
+  addUserKnob {20 endGroup_1 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {7 fov l "Camera Angle" R 0 180}
+  fov 54.43
+  addUserKnob {7 cdm2 l "Candela / Meter Squared" R 0 10000}
+  cdm2 10000
+  addUserKnob {26 ""}
+  addUserKnob {7 mix}
+  mix 1
+ }
+ Output {
+  name Output
+  xpos 727
+  ypos 1495
+ }
+ Viewer {
+  inputs 0
+  frame_range 1-100
+  name Viewer1
+  xpos 1273
+  ypos -8
+ }
+end_group
