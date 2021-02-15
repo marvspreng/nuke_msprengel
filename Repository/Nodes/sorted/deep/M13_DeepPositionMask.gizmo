@@ -1,0 +1,850 @@
+#! C:/Program Files/Nuke11.0v2/nuke-11.0.2.dll -nx
+version 11.0 v2
+Gizmo {
+ inputs 3
+ knobChanged "k = nuke.thisKnob()\ng = nuke.thisNode()\n\nknobList = \['pickerPos_Point','lockSelection_Point','worldPosition_Point','radius_Point','scaleSelection_Point','gamma_Point']\n\n\nfor i in range(1,6):\n    if (k.name() ==\"pickerPos_Point\"+str(i)) and (g\['lockSelection_Point'+str(i)].value() == False):\n        g\['worldPosition_Point'+str(i)].setValue(g.sample(\"P.X\",g\['pickerPos_Point'+str(i)].value(0),g\['pickerPos_Point'+str(i)].value(1)),0)\n        g\['worldPosition_Point'+str(i)].setValue(g.sample(\"P.Y\",g\['pickerPos_Point'+str(i)].value(0),g\['pickerPos_Point'+str(i)].value(1)),1)\n        g\['worldPosition_Point'+str(i)].setValue(g.sample(\"P.Z\",g\['pickerPos_Point'+str(i)].value(0),g\['pickerPos_Point'+str(i)].value(1)),2)\n\n        \nif k.name() ==\"NumberOPoints\":\n    for myKnob in knobList:\n        for i in range(1,6):\n            if  str(i) <= g\['NumberOPoints'].value():\n                g\[myKnob+str(i)].setVisible(True)\n            else:\n                g\[myKnob+str(i)].setVisible(False)\n\n    \n    \nif k.name() ==\"Method\":\n    if g\['Method'].value() == \"Deep\":\n        g\['in'].setEnabled(False)\n    if g\['Method'].value() == \"PositionPass\":\n        g\['in'].setEnabled(True)         \n\n        \n        \n        \n"
+ tile_color 0x7fff
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_color 0xffff00ff
+ addUserKnob {20 Controls}
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {4 Method M {Deep PositionPass}}
+ addUserKnob {6 Use_Deep_On_Farm_Render -STARTLINE}
+ addUserKnob {6 lock t "if checked this node will not be affected by the GLOBAL deep switch!" -STARTLINE}
+ addUserKnob {41 in l PositionChannel T ShufflePositionChannel.in}
+ addUserKnob {26 ""}
+ addUserKnob {4 NumberOPoints l "Num of Points" M {1 2 3 4 5}}
+ addUserKnob {26 ""}
+ addUserKnob {12 pickerPos_Point1}
+ pickerPos_Point1 {150 150}
+ addUserKnob {6 lockSelection_Point1 -STARTLINE}
+ addUserKnob {18 worldPosition_Point1}
+ worldPosition_Point1 {0 0 0}
+ addUserKnob {6 worldPosition_Point1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 worldPosition_Point1_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 radius_Point1 R 0 20}
+ radius_Point1 10
+ addUserKnob {13 scaleSelection_Point1}
+ scaleSelection_Point1 {1 1 1}
+ addUserKnob {7 gamma_Point1 R 0.05 5}
+ gamma_Point1 1
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {12 pickerPos_Point2 +HIDDEN}
+ addUserKnob {6 lockSelection_Point2 -STARTLINE +HIDDEN}
+ addUserKnob {18 worldPosition_Point2 +HIDDEN}
+ addUserKnob {6 worldPosition_Point2_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 worldPosition_Point2_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 radius_Point2 +HIDDEN R 0 20}
+ addUserKnob {13 scaleSelection_Point2 +HIDDEN}
+ addUserKnob {7 gamma_Point2 +HIDDEN R 0.05 5}
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {12 pickerPos_Point3 +HIDDEN}
+ addUserKnob {6 lockSelection_Point3 -STARTLINE +HIDDEN}
+ addUserKnob {18 worldPosition_Point3 +HIDDEN}
+ addUserKnob {6 worldPosition_Point3_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 worldPosition_Point3_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 radius_Point3 +HIDDEN R 0 20}
+ addUserKnob {13 scaleSelection_Point3 +HIDDEN}
+ addUserKnob {7 gamma_Point3 +HIDDEN R 0.05 5}
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {12 pickerPos_Point4 +HIDDEN}
+ addUserKnob {6 lockSelection_Point4 -STARTLINE +HIDDEN}
+ addUserKnob {18 worldPosition_Point4 +HIDDEN}
+ addUserKnob {6 worldPosition_Point4_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 worldPosition_Point4_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 radius_Point4 +HIDDEN R 0 20}
+ addUserKnob {13 scaleSelection_Point4 +HIDDEN}
+ addUserKnob {7 gamma_Point4 +HIDDEN R 0.05 5}
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {12 pickerPos_Point5 +HIDDEN}
+ addUserKnob {6 lockSelection_Point5 -STARTLINE +HIDDEN}
+ addUserKnob {18 worldPosition_Point5 +HIDDEN}
+ addUserKnob {6 worldPosition_Point5_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 worldPosition_Point5_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 radius_Point5 +HIDDEN R 0 20}
+ addUserKnob {13 scaleSelection_Point5 +HIDDEN}
+ addUserKnob {7 gamma_Point5 +HIDDEN R 0.05 5}
+ addUserKnob {26 ""}
+ addUserKnob {20 StereoOptions}
+ addUserKnob {1 LeftViewName}
+ LeftViewName Left
+ addUserKnob {1 RightViewName}
+ RightViewName Right
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x388e8e00
+  label calulation
+  note_font_size 42
+  xpos -725
+  ypos 857
+  bdwidth 226
+  bdheight 279
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x71c67100
+  label "Deep to Position"
+  note_font_size 42
+  xpos -872
+  ypos 221
+  bdwidth 299
+  bdheight 452
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant1
+  xpos -896
+  ypos 119
+  postage_stamp false
+ }
+ Input {
+  inputs 0
+  name InputDeep
+  xpos -745
+  ypos -46
+  number 1
+ }
+ DeepRecolor {
+  inputs 2
+  name DeepRecolor1
+  xpos -745
+  ypos 119
+ }
+ Dot {
+  name Dot4
+  xpos -711
+  ypos 280
+ }
+ DeepExpression {
+  temp_name0 width
+  temp_expr0 "\[value width]"
+  temp_name1 height
+  temp_expr1 "\[value height]"
+  chans1 deep
+  rgba.red (((x/width)*2)-1)
+  rgba.green (((y/height)*2)-1)*(height/width)
+  rgba.blue deep.front
+  rgba.alpha 1
+  deep.back rgba.alpha
+  name DeepExpression8
+  label "to screenspace -1...1"
+  xpos -745
+  ypos 308
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red "rgba.red+\[value Axis_ValueHolder.cameraWindowXoffset]"
+  name DeepExpression5
+  label "cam window x offset"
+  xpos -745
+  ypos 376
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red "rgba.red/\[value Axis_ValueHolder.projectionValue]"
+  rgba.green "rgba.green/\[value Axis_ValueHolder.projectionValue]"
+  rgba.blue -1
+  rgba.alpha -rgba.blue
+  name DeepExpression9
+  label "inverted projection matrix"
+  xpos -745
+  ypos 436
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red "(rgba.red*-deep.front) / rgba.blue"
+  rgba.green "(rgba.green*-deep.front) / rgba.blue"
+  rgba.blue -deep.front
+  rgba.alpha 1
+  name DeepExpression3
+  label normalize
+  xpos -745
+  ypos 510
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red "\[value Axis_ValueHolder.world_matrix_00]*rgba.red + \[value Axis_ValueHolder.world_matrix_01]*rgba.green + \[value Axis_ValueHolder.world_matrix_02] * rgba.blue + \[value Axis_ValueHolder.world_matrix_03] * rgba.alpha"
+  rgba.green "\[value Axis_ValueHolder.world_matrix_04]*rgba.red + \[value Axis_ValueHolder.world_matrix_05]*rgba.green + \[value Axis_ValueHolder.world_matrix_06] * rgba.blue + \[value Axis_ValueHolder.world_matrix_07] * rgba.alpha"
+  rgba.blue "\[value Axis_ValueHolder.world_matrix_08]*rgba.red + \[value Axis_ValueHolder.world_matrix_09]*rgba.green + \[value Axis_ValueHolder.world_matrix_10] * rgba.blue + \[value Axis_ValueHolder.world_matrix_11] * rgba.alpha"
+  rgba.alpha "\[value Axis_ValueHolder.world_matrix_12]*rgba.red + \[value Axis_ValueHolder.world_matrix_13]*rgba.green + \[value Axis_ValueHolder.world_matrix_14] * rgba.blue + \[value Axis_ValueHolder.world_matrix_15] * rgba.alpha"
+  name DeepExpression1
+  label "cam to World"
+  xpos -745
+  ypos 598
+ }
+ Dot {
+  name Dot6
+  xpos -711
+  ypos 711
+ }
+set N4a92fc00 [stack 0]
+ DeepExpression {
+  chans1 deep
+  rgba.red rgba.red*deep.back
+  rgba.green rgba.green*deep.back
+  rgba.blue rgba.blue*deep.back
+  rgba.alpha deep.back
+  name DeepExpression6
+  label "setting the alpha back in place"
+  xpos -1037
+  ypos 702
+ }
+ DeepToImage {
+  name DeepToImage1
+  xpos -1037
+  ypos 1509
+ }
+set N4a92f500 [stack 0]
+ Expression {
+  temp_name0 factor
+  temp_expr0 .2
+  temp_name1 mult
+  temp_expr1 .15
+  channel0 {-rgba.red -rgba.green -rgba.blue none}
+  expr1 "((sin(g*factor)/2)+0.5)*mult + ((sin(r*factor)/2)+0.5)*mult"
+  expr2 ((sin(b*factor)/2)+0.5)*mult
+  name ExpressionPvis
+  xpos -914
+  ypos 1567
+ }
+push $N4a92f500
+push $N4a92fc00
+ DeepExpression {
+  chans1 deep
+  rgba.alpha deep.back
+  name DeepExpression4
+  xpos -745
+  ypos 780
+ }
+ Dot {
+  name Dot2
+  xpos -711
+  ypos 832
+ }
+set N4a92e700 [stack 0]
+ DeepExpression {
+  chans1 deep
+  rgba.red "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point5.0])/\[value parent.scaleSelection_Point5.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point5.1])/\[value parent.scaleSelection_Point5.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point5.2])/\[value parent.scaleSelection_Point5.2]))))/ \[value parent.radius_Point5] "
+  deep.back "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point5.0])/\[value parent.scaleSelection_Point5.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point5.1])/\[value parent.scaleSelection_Point5.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point5.2])/\[value parent.scaleSelection_Point5.2]))))/ \[value parent.radius_Point5] "
+  name DeepExpression11
+  label "5 Points"
+  xpos -349
+  ypos 890
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (1-rgba.red)
+  name DeepExpression21
+  xpos -349
+  ypos 928
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (rgba.red<0?0:rgba.red)*rgba.alpha
+  name DeepExpression22
+  xpos -349
+  ypos 967
+ }
+ DeepToImage {
+  name DeepToImage6
+  xpos -349
+  ypos 990
+ }
+ Grade {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  gamma {{parent.gamma_Point5}}
+  name Grade12
+  xpos -349
+  ypos 1033
+ }
+push $N4a92e700
+ DeepExpression {
+  chans1 deep
+  rgba.red "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point4.0])/\[value parent.scaleSelection_Point4.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point4.1])/\[value parent.scaleSelection_Point4.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point4.2])/\[value parent.scaleSelection_Point4.2]))))/ \[value parent.radius_Point4] "
+  deep.back "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point4.0])/\[value parent.scaleSelection_Point4.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point4.1])/\[value parent.scaleSelection_Point4.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point4.2])/\[value parent.scaleSelection_Point4.2]))))/ \[value parent.radius_Point4] "
+  name DeepExpression10
+  label "4 Points"
+  xpos -491
+  ypos 898
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (1-rgba.red)
+  name DeepExpression19
+  xpos -491
+  ypos 936
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (rgba.red<0?0:rgba.red)*rgba.alpha
+  name DeepExpression20
+  xpos -491
+  ypos 975
+ }
+ DeepToImage {
+  name DeepToImage5
+  xpos -491
+  ypos 998
+ }
+ Grade {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  gamma {{parent.gamma_Point4}}
+  name Grade11
+  xpos -491
+  ypos 1038
+ }
+push $N4a92e700
+ DeepExpression {
+  chans1 deep
+  rgba.red "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point3.0])/\[value parent.scaleSelection_Point3.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point3.1])/\[value parent.scaleSelection_Point3.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point3.2])/\[value parent.scaleSelection_Point3.2]))))/ \[value parent.radius_Point3] "
+  deep.back "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point3.0])/\[value parent.scaleSelection_Point3.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point3.1])/\[value parent.scaleSelection_Point3.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point3.2])/\[value parent.scaleSelection_Point3.2]))))/ \[value parent.radius_Point3] "
+  name DeepExpression7
+  label "3 Points"
+  xpos -619
+  ypos 900
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (1-rgba.red)
+  name DeepExpression16
+  xpos -619
+  ypos 938
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (rgba.red<0?0:rgba.red)*rgba.alpha
+  name DeepExpression17
+  xpos -619
+  ypos 977
+ }
+ DeepToImage {
+  name DeepToImage4
+  xpos -619
+  ypos 1000
+ }
+ Grade {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  gamma {{parent.gamma_Point3}}
+  name Grade10
+  xpos -619
+  ypos 1039
+ }
+push $N4a92e700
+ DeepExpression {
+  chans1 deep
+  rgba.red "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point2.0])/\[value parent.scaleSelection_Point2.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point2.1])/\[value parent.scaleSelection_Point2.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point2.2])/\[value parent.scaleSelection_Point2.2]))))/ \[value parent.radius_Point2] "
+  deep.back "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point2.0])/\[value parent.scaleSelection_Point2.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point2.1])/\[value parent.scaleSelection_Point2.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point2.2])/\[value parent.scaleSelection_Point2.2]))))/ \[value parent.radius_Point2] "
+  name DeepExpression2
+  label "2 Points"
+  xpos -747
+  ypos 895
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (1-rgba.red)
+  name DeepExpression12
+  xpos -747
+  ypos 933
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (rgba.red<0?0:rgba.red)*rgba.alpha
+  name DeepExpression13
+  xpos -747
+  ypos 972
+ }
+ DeepToImage {
+  name DeepToImage3
+  xpos -747
+  ypos 995
+ }
+ Grade {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  gamma {{parent.gamma_Point2}}
+  name Grade9
+  xpos -747
+  ypos 1038
+ }
+push $N4a92e700
+ DeepExpression {
+  chans1 deep
+  rgba.red "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point1.0])/\[value parent.scaleSelection_Point1.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point1.1])/\[value parent.scaleSelection_Point1.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point1.2])/\[value parent.scaleSelection_Point1.2]))))/ \[value parent.radius_Point1] "
+  deep.back "abs(sqrt(pow2(((rgba.red - \[value parent.worldPosition_Point1.0])/\[value parent.scaleSelection_Point1.0])) + pow2(((rgba.green - \[value parent.worldPosition_Point1.1])/\[value parent.scaleSelection_Point1.1])) + pow2(((rgba.blue - \[value parent.worldPosition_Point1.2])/\[value parent.scaleSelection_Point1.2]))))/ \[value parent.radius_Point1] "
+  name DeepExpression14
+  label "1 Point"
+  xpos -866
+  ypos 876
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (1-rgba.red)
+  name DeepExpression15
+  xpos -866
+  ypos 924
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red (rgba.red<0?0:rgba.red)*rgba.alpha
+  name DeepExpression18
+  xpos -866
+  ypos 963
+ }
+ DeepToImage {
+  name DeepToImage2
+  selected true
+  xpos -866
+  ypos 1005
+ }
+ Grade {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  gamma {{parent.gamma_Point1}}
+  name Grade3
+  xpos -866
+  ypos 1037
+ }
+ Dot {
+  name Dot25
+  xpos -832
+  ypos 1087
+ }
+set N4a9cdc00 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge5
+  xpos -745
+  ypos 1084
+ }
+ Dot {
+  name Dot26
+  xpos -711
+  ypos 1138
+ }
+set N4a9cd500 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge6
+  xpos -619
+  ypos 1135
+ }
+ Dot {
+  name Dot27
+  xpos -585
+  ypos 1182
+ }
+set N4a9cce00 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge7
+  xpos -491
+  ypos 1168
+ }
+ Dot {
+  name Dot28
+  xpos -457
+  ypos 1234
+ }
+set N4a9cc700 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge8
+  xpos -349
+  ypos 1280
+ }
+push $N4a9cc700
+push $N4a9cce00
+push $N4a9cd500
+push $N4a9cdc00
+ Dot {
+  name Dot29
+  xpos -832
+  ypos 1304
+ }
+ Switch {
+  inputs 5
+  which {{parent.NumberOPoints}}
+  name Switch4
+  xpos -745
+  ypos 1301
+ }
+ Clamp {
+  channels rgba
+  name Clamp1
+  xpos -745
+  ypos 1455
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle1
+  xpos -745
+  ypos 1479
+ }
+add_layer {P P.X P.Y P.Z P.red P.green P.blue P.alpha}
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black red
+  white green
+  red2 blue
+  green2 black
+  out2 {P.X P.Y P.Z -P.red}
+  name ShuffleCopy1
+  label "Calculated P to P channel"
+  xpos -745
+  ypos 1503
+ }
+ ShuffleCopy {
+  inputs 2
+  green green
+  blue blue
+  alpha alpha2
+  name ShuffleCopy2
+  xpos -745
+  ypos 1567
+ }
+ Dot {
+  name Dot5
+  xpos -711
+  ypos 1640
+ }
+set N4a9fca80 [stack 0]
+ Dot {
+  name Dot9
+  xpos -711
+  ypos 1744
+ }
+ Input {
+  inputs 0
+  name InputPositionPass
+  xpos 1456
+  ypos -33
+  number 2
+ }
+ Shuffle {
+  name ShufflePositionChannel
+  xpos 1456
+  ypos 91
+ }
+ Dot {
+  name Dot1
+  xpos 1482
+  ypos 580
+ }
+set N4aa2bc00 [stack 0]
+ Dot {
+  name Dot3
+  xpos 1266
+  ypos 580
+ }
+ Dot {
+  name Dot8
+  xpos 1274
+  ypos 1288
+ }
+set N4aa2b500 [stack 0]
+ Expression {
+  temp_name0 factor
+  temp_expr0 .2
+  temp_name1 mult
+  temp_expr1 .15
+  channel0 {-rgba.red -rgba.green -rgba.blue none}
+  expr1 "((sin(g*factor)/2)+0.5)*mult + ((sin(r*factor)/2)+0.5)*mult"
+  expr2 ((sin(b*factor)/2)+0.5)*mult
+  name ExpressionPvis1
+  xpos 1240
+  ypos 1417
+ }
+push $N4aa2b500
+push $N4aa2bc00
+ Expression {
+  expr3 "clamp(1-abs(sqrt(pow2(((r - \[value parent.worldPosition_Point5.0])/\[value parent.scaleSelection_Point5.0])) + pow2(((g - \[value parent.worldPosition_Point5.1])/\[value parent.scaleSelection_Point5.1])) + pow2(((b - \[value parent.worldPosition_Point5.2])/\[value parent.scaleSelection_Point5.2]))))/ \[value parent.radius_Point5] )"
+  name Expression5
+  label 5points
+  xpos 1852
+  ypos 770
+ }
+ Grade {
+  channels alpha
+  gamma {{parent.gamma_Point5}}
+  name Grade8
+  xpos 1852
+  ypos 829
+ }
+ Dot {
+  name Dot19
+  xpos 1886
+  ypos 882
+ }
+push $N4aa2bc00
+ Expression {
+  expr3 "clamp(1-abs(sqrt(pow2(((r - \[value parent.worldPosition_Point4.0])/\[value parent.scaleSelection_Point4.0])) + pow2(((g - \[value parent.worldPosition_Point4.1])/\[value parent.scaleSelection_Point4.1])) + pow2(((b - \[value parent.worldPosition_Point4.2])/\[value parent.scaleSelection_Point4.2]))))/ \[value parent.radius_Point4] )"
+  name Expression4
+  label 4points
+  xpos 1710
+  ypos 773
+ }
+ Grade {
+  channels alpha
+  gamma {{parent.gamma_Point4}}
+  name Grade7
+  xpos 1710
+  ypos 825
+ }
+ Dot {
+  name Dot17
+  xpos 1744
+  ypos 882
+ }
+push $N4aa2bc00
+ Expression {
+  expr3 "clamp(1-abs(sqrt(pow2(((r - \[value parent.worldPosition_Point3.0])/\[value parent.scaleSelection_Point3.0])) + pow2(((g - \[value parent.worldPosition_Point3.1])/\[value parent.scaleSelection_Point3.1])) + pow2(((b - \[value parent.worldPosition_Point3.2])/\[value parent.scaleSelection_Point3.2]))))/ \[value parent.radius_Point3] )"
+  name Expression3
+  label 3points
+  xpos 1582
+  ypos 771
+ }
+ Grade {
+  channels alpha
+  gamma {{parent.gamma_Point3}}
+  name Grade6
+  xpos 1582
+  ypos 832
+ }
+ Dot {
+  name Dot16
+  xpos 1616
+  ypos 884
+ }
+push $N4aa2bc00
+ Expression {
+  expr3 "clamp(1-abs(sqrt(pow2(((r - \[value parent.worldPosition_Point2.0])/\[value parent.scaleSelection_Point2.0])) + pow2(((g - \[value parent.worldPosition_Point2.1])/\[value parent.scaleSelection_Point2.1])) + pow2(((b - \[value parent.worldPosition_Point2.2])/\[value parent.scaleSelection_Point2.2]))))/ \[value parent.radius_Point2] )"
+  name Expression2
+  label 2points
+  xpos 1456
+  ypos 770
+ }
+ Grade {
+  channels alpha
+  gamma {{parent.gamma_Point2}}
+  name Grade5
+  xpos 1456
+  ypos 831
+ }
+ Dot {
+  name Dot15
+  xpos 1490
+  ypos 874
+ }
+push $N4aa2bc00
+ Expression {
+  expr3 "clamp(1-abs(sqrt(pow2(((r - \[value parent.worldPosition_Point1.0])/\[value parent.scaleSelection_Point1.0])) + pow2(((g - \[value parent.worldPosition_Point1.1])/\[value parent.scaleSelection_Point1.1])) + pow2(((b - \[value parent.worldPosition_Point1.2])/\[value parent.scaleSelection_Point1.2]))))/ \[value parent.radius_Point1] )"
+  name Expression1
+  label 1point
+  xpos 1335
+  ypos 771
+ }
+ Grade {
+  channels alpha
+  gamma {{parent.gamma_Point1}}
+  name Grade4
+  xpos 1335
+  ypos 831
+ }
+ Dot {
+  name Dot18
+  xpos 1369
+  ypos 880
+ }
+ Dot {
+  name Dot11
+  xpos 1369
+  ypos 915
+ }
+set N4aa78380 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge1
+  xpos 1456
+  ypos 912
+ }
+ Dot {
+  name Dot12
+  xpos 1490
+  ypos 966
+ }
+set N4aaabc00 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos 1582
+  ypos 963
+ }
+ Dot {
+  name Dot13
+  xpos 1616
+  ypos 1010
+ }
+set N4aaab500 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge3
+  xpos 1710
+  ypos 996
+ }
+ Dot {
+  name Dot14
+  xpos 1744
+  ypos 1062
+ }
+set N4aaaae00 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos 1852
+  ypos 1108
+ }
+push $N4aaaae00
+push $N4aaab500
+push $N4aaabc00
+push $N4aa78380
+ Dot {
+  name Dot10
+  xpos 1369
+  ypos 1132
+ }
+ Switch {
+  inputs 5
+  which {{parent.NumberOPoints}}
+  name Switch3
+  xpos 1456
+  ypos 1129
+ }
+ Clamp {
+  name Clamp2
+  xpos 1456
+  ypos 1179
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle3
+  xpos 1456
+  ypos 1229
+ }
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black red
+  white green
+  red2 blue
+  green2 black
+  out2 {P.X P.Y P.Z -P.red}
+  name ShuffleCopy4
+  label "Calculated P to P channel"
+  xpos 1456
+  ypos 1279
+ }
+ ShuffleCopy {
+  inputs 2
+  green green
+  blue blue
+  alpha alpha2
+  name ShuffleCopy3
+  xpos 1456
+  ypos 1417
+ }
+ Dot {
+  name Dot7
+  xpos 1490
+  ypos 1640
+ }
+push $N4a9fca80
+ Switch {
+  inputs 2
+  which {{parent.Method}}
+  name Switch1
+  xpos 930
+  ypos 1637
+ }
+ Switch {
+  inputs 2
+  which {{"(parent.Use_Deep_On_Farm_Render * (1-\$gui))"}}
+  name SwitchDeepOnRenderFarm
+  xpos 930
+  ypos 1741
+ }
+ Output {
+  name Output1
+  xpos 930
+  ypos 1936
+ }
+ Input {
+  inputs 0
+  name InputCamera
+  xpos -1204
+  ypos -29
+ }
+ Axis2 {
+  name Axis_ValueHolder
+  label "\[value \[topnode this.parent.input].focal]\n\[value \[topnode this.parent.input].name]\n"
+  xpos -1194
+  ypos 271
+  addUserKnob {20 User}
+  addUserKnob {7 world_matrix_00}
+  world_matrix_00 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.0]\}]"}}
+  addUserKnob {7 world_matrix_01}
+  world_matrix_01 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.1]\}]"}}
+  addUserKnob {7 world_matrix_02}
+  world_matrix_02 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.2]\}]"}}
+  addUserKnob {7 world_matrix_03}
+  world_matrix_03 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.3]\}]"}}
+  addUserKnob {7 world_matrix_04}
+  world_matrix_04 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.4]\}]"}}
+  addUserKnob {7 world_matrix_05}
+  world_matrix_05 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.5]\}]"}}
+  addUserKnob {7 world_matrix_06}
+  world_matrix_06 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.6]\}]"}}
+  addUserKnob {7 world_matrix_07}
+  world_matrix_07 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.7]\}]"}}
+  addUserKnob {7 world_matrix_08}
+  world_matrix_08 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.8]\}]"}}
+  addUserKnob {7 world_matrix_09}
+  world_matrix_09 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.9]\}]"}}
+  addUserKnob {7 world_matrix_10}
+  world_matrix_10 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.10]\}]"}}
+  addUserKnob {7 world_matrix_11}
+  world_matrix_11 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.11]\}]"}}
+  addUserKnob {7 world_matrix_12}
+  world_matrix_12 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.12]\}]"}}
+  addUserKnob {7 world_matrix_13}
+  world_matrix_13 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.13]\}]"}}
+  addUserKnob {7 world_matrix_14}
+  world_matrix_14 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.14]\}]"}}
+  addUserKnob {7 world_matrix_15}
+  world_matrix_15 {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].world_matrix.15]\}]"}}
+  addUserKnob {26 ""}
+  addUserKnob {7 projectionValue}
+  projectionValue {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return 2*\[value \[topnode this.parent.input].focal]/\[value \[topnode this.parent.input].haperture]\}]"}}
+  addUserKnob {7 cameraWindowXoffset R -1 1}
+  cameraWindowXoffset {{"\[if \{\[python \{nuke.thisGroup().input(0) == None\}]\} \{return 0\} \{return \[value \[regsub -all \"§§§VIEW§§§\" \"\[regsub -all \"\[value parent.RightViewName]\" \"\[regsub -all \"\[value parent.LeftViewName]\" \"\[value \[topnode this.parent.input].name]\" \"§§§VIEW§§§\" ]\" \"§§§VIEW§§§\" ]\" \"\[view]\" ].win_translate.0]\}]"}}
+ }
+end_group

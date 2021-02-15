@@ -1,0 +1,1157 @@
+Group {
+ name mtPixelFixer
+ inputs 2
+ knobChanged "knobA = nuke.thisKnob()\nif knobA.name() == \"alphaMethod\":\n    \n    nodeA = nuke.thisNode()\n    currentIndexA = knobA.getValue()\n\n    # set visibility\n    nodeA.knob(\"value\").setVisible(currentIndexA == 0)\n    nodeA.knob(\"difTolerance\").setVisible(currentIndexA == 4)\n    nodeA.knob(\"value2\").setVisible(currentIndexA == 1)\n    nodeA.knob(\"pickerAlpha\").setVisible(currentIndexA == 2)\n    nodeA.knob(\"control\").setVisible(currentIndexA == 3)\nknobB = nuke.thisKnob()\nif knobB.name() == \"fixMethod\":\n    \n    nodeB = nuke.thisNode()\n    currentIndexB = knobB.getValue()\n\n    # set visibility\n    nodeB.knob(\"expandSize\").setVisible(currentIndexB == 1)\n    nodeB.knob(\"matrixtipe\").setVisible(currentIndexB == 2)\n    nodeB.knob(\"sizeM\").setVisible(currentIndexB == 4)\n    nodeB.knob(\"medianTipe\").setVisible(currentIndexB == 4)\n    nodeB.knob(\"colorPick\").setVisible(currentIndexB == 5)"
+ tile_color 0xffbf00ff
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 12
+ addUserKnob {20 PixelFixer}
+ addUserKnob {52 pulldown +STARTLINE}
+ addUserKnob {4 alphaMethod l "Alpha Method" t "Change the way the alpha to fix is extracted." M {Absolute Relative Picker Average Difference Nan/Inf "" "" "" ""}}
+ addUserKnob {6 red l "<font color=' red'> red</font>" -STARTLINE}
+ red true
+ addUserKnob {6 green l "<font color='green'>green</font>" -STARTLINE}
+ addUserKnob {6 blue l "<font color='blue'>blue</font>" -STARTLINE}
+ addUserKnob {26 space0 l " " T " "}
+ addUserKnob {19 pickerAlpha l Color +HIDDEN}
+ pickerAlpha {0 0 0 0}
+ addUserKnob {6 pickerAlpha_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 value l Tolerance R 0 3}
+ value 1
+ addUserKnob {7 value2 l "Rel Tolerance" +HIDDEN R 1 4}
+ value2 2
+ addUserKnob {7 control l "Avg Tolerance" +HIDDEN}
+ addUserKnob {7 difTolerance l "Dif Tolerance" +HIDDEN}
+ difTolerance 0.1
+ addUserKnob {26 space1 l "   " T "   "}
+ addUserKnob {7 expand R 0 3}
+ addUserKnob {7 soft R 0 3}
+ addUserKnob {6 Log2Lin l "Push with Log2Lin" +STARTLINE}
+ addUserKnob {6 checkAlpha l "Check Alpha" -STARTLINE}
+ addUserKnob {6 replaceAlpha l "Replace Alpha" t "Replace Input Alpha with new alpha" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 space3 l "  " T "  "}
+ addUserKnob {4 fixMethod l "Fix Method" M {None Expand Matrix Blend Median Color "" "" "" "" ""}}
+ fixMethod Median
+ addUserKnob {7 expandSize l "Expand Size" +HIDDEN R 0 10}
+ expandSize 2
+ addUserKnob {7 sizeM l Size R 0 3}
+ sizeM 0.5
+ addUserKnob {6 medianTipe l "Alternative Median" +STARTLINE}
+ medianTipe true
+ addUserKnob {6 matrixtipe l "alternative Matrix" +HIDDEN +STARTLINE}
+ addUserKnob {19 colorPick l "Color Pick" +HIDDEN}
+ colorPick {0 0 0 0}
+ addUserKnob {6 colorPick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 name_1 l "" +STARTLINE T "<span style=\"color:#665\"><br/><b>mtPixelFixer</b> - <span style=\"color:#665\">Miguel Torija</a>"}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 878
+  ypos -701
+ }
+ Dot {
+  name Dot4
+  xpos 912
+  ypos -627
+ }
+set Nde507800 [stack 0]
+ Dot {
+  name Dot5
+  tile_color 0x1fff00ff
+  xpos 768
+  ypos -627
+ }
+ Dot {
+  name Dot10
+  tile_color 0x1fff00ff
+  xpos 979
+  ypos 2735
+  hide_input true
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 945
+  ypos 2797
+  disable {{"\[string first \".a\" \[channels \[input this 0]]]>-1"}}
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 478
+  ypos 2084
+  number 1
+ }
+ Invert {
+  name Invert2
+  xpos 478
+  ypos 2185
+ }
+set Ndce5d400 [stack 0]
+push $Nde507800
+ Log2Lin {
+  name Log2Lin1
+  xpos 878
+  ypos -558
+  disable {{Log2Lin?0:1}}
+ }
+ Shuffle {
+  alpha black
+  name Shuffle2
+  xpos 878
+  ypos -479
+ }
+set Ndb373800 [stack 0]
+ PostageStamp {
+  name PostageStamp1
+  xpos 956
+  ypos 1941
+  hide_input true
+  postage_stamp true
+ }
+set Ndc3ae000 [stack 0]
+ Dot {
+  name Dot29
+  xpos 990
+  ypos 2194
+ }
+push $Ndb373800
+ Dot {
+  name Dot31
+  xpos 912
+  ypos -287
+ }
+set N57fd4000 [stack 0]
+ Dot {
+  name Dot32
+  xpos 1657
+  ypos -287
+ }
+set Ndd1bf000 [stack 0]
+ Dot {
+  name Dot21
+  xpos 2283
+  ypos -287
+ }
+set Nd9a8c400 [stack 0]
+ Dot {
+  name Dot45
+  xpos 2890
+  ypos -287
+ }
+set Ndce5d800 [stack 0]
+ Dot {
+  name Dot47
+  xpos 3019
+  ypos -287
+ }
+set Ndd1bf800 [stack 0]
+ Dot {
+  name Dot46
+  xpos 3155
+  ypos -287
+ }
+set Ne28aa400 [stack 0]
+ Expression {
+  expr3 (isnan(b)||isinf(b))?1:0
+  name Expression15
+  xpos 3121
+  ypos -152
+  disable {{blue?0:1}}
+ }
+ Dot {
+  name Dot48
+  xpos 3155
+  ypos 64
+ }
+push $Ndd1bf800
+ Expression {
+  expr3 (isnan(g)||isinf(g))?1:0
+  name Expression14
+  xpos 2985
+  ypos -154
+  disable {{green?0:1}}
+ }
+ Dot {
+  name Dot49
+  xpos 3019
+  ypos -32
+ }
+push $Ndce5d800
+ Expression {
+  expr3 (isnan(r)||isinf(r))?1:0
+  name Expression13
+  xpos 2856
+  ypos -150
+  disable {{red?0:1}}
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge9
+  xpos 2856
+  ypos -47
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge10
+  xpos 2856
+  ypos 49
+ }
+ Dot {
+  name Dot50
+  xpos 2890
+  ypos 418
+ }
+ Dot {
+  name Dot51
+  xpos 882
+  ypos 418
+ }
+push $Ne28aa400
+ Dot {
+  name Dot61
+  xpos 3320
+  ypos -287
+ }
+set N4d25bc00 [stack 0]
+ Dot {
+  name Dot78
+  xpos 3447
+  ypos -287
+ }
+set Nd9a8dc00 [stack 0]
+ Dot {
+  name Dot81
+  xpos 3670
+  ypos -287
+ }
+set Ndd686c00 [stack 0]
+ Dot {
+  name Dot79
+  xpos 3955
+  ypos -287
+ }
+ Shuffle {
+  red black
+  green black
+  alpha black
+  name Shuffle14
+  xpos 3921
+  ypos -180
+ }
+set N551b9400 [stack 0]
+ Median {
+  size 2
+  ignore_top_line false
+  name Median5
+  xpos 4034
+  ypos -128
+  disable {{blue?0:1}}
+ }
+push $N551b9400
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge29
+  xpos 3921
+  ypos -75
+ }
+ Shuffle {
+  alpha blue
+  name Shuffle20
+  xpos 3921
+  ypos -37
+ }
+ Dot {
+  name Dot82
+  xpos 3955
+  ypos 123
+ }
+push $Ndd686c00
+ Shuffle {
+  red black
+  blue black
+  alpha black
+  name Shuffle13
+  xpos 3636
+  ypos -180
+ }
+set Ndc4bdc00 [stack 0]
+ Median {
+  size 2
+  ignore_top_line false
+  name Median6
+  xpos 3741
+  ypos -129
+  disable {{green?0:1}}
+ }
+push $Ndc4bdc00
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge27
+  xpos 3636
+  ypos -86
+ }
+ Shuffle {
+  alpha green
+  name Shuffle19
+  xpos 3636
+  ypos -48
+ }
+ Dot {
+  name Dot83
+  xpos 3670
+  ypos 27
+ }
+push $Nd9a8dc00
+ Shuffle {
+  green black
+  blue black
+  alpha black
+  name Shuffle12
+  xpos 3413
+  ypos -178
+ }
+set Ndd267800 [stack 0]
+push $Ndd267800
+ Median {
+  size 0.1
+  ignore_top_line false
+  name Median7
+  xpos 3510
+  ypos -135
+  disable {{red?0:1}}
+ }
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge26
+  xpos 3413
+  ypos -87
+ }
+ Shuffle {
+  alpha red
+  name Shuffle17
+  xpos 3413
+  ypos -50
+ }
+ ChannelMerge {
+  inputs 2
+  name ChannelMerge11
+  xpos 3413
+  ypos 10
+ }
+ ChannelMerge {
+  inputs 2
+  name ChannelMerge12
+  xpos 3413
+  ypos 106
+ }
+ Grade {
+  channels alpha
+  blackpoint {{difTolerance}}
+  whitepoint {{blackpoint x1040 0.2}}
+  name Grade32
+  xpos 3413
+  ypos 201
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  name Shuffle6
+  xpos 3413
+  ypos 321
+ }
+push $N4d25bc00
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 3286
+  ypos 315
+ }
+ Dot {
+  name Dot59
+  xpos 3320
+  ypos 572
+ }
+ Dot {
+  name Dot60
+  xpos 854
+  ypos 572
+ }
+push $Nd9a8c400
+ Dot {
+  name Dot27
+  xpos 2283
+  ypos -179
+ }
+set Ndcb69400 [stack 0]
+ Dot {
+  name Dot39
+  xpos 2406
+  ypos -179
+ }
+set Ndd735000 [stack 0]
+ Dot {
+  name Dot40
+  xpos 2536
+  ypos -179
+ }
+ Expression {
+  temp_name0 average
+  temp_expr0 (r+g+b)/3
+  expr3 b>=(average+control)?1:0
+  name Expression12
+  xpos 2502
+  ypos -113
+  disable {{blue?0:1}}
+ }
+ Dot {
+  name Dot41
+  xpos 2536
+  ypos 70
+ }
+push $Ndd735000
+ Expression {
+  temp_name0 average
+  temp_expr0 (r+g+b)/3
+  expr3 g>=(average+control)?1:0
+  name Expression11
+  xpos 2372
+  ypos -117
+  disable {{green?0:1}}
+ }
+ Dot {
+  name Dot42
+  xpos 2406
+  ypos -26
+ }
+push $Ndcb69400
+ Expression {
+  temp_name0 average
+  temp_expr0 (r+g+b)/3
+  expr3 r>=(average+control)?1:0
+  name Expression10
+  xpos 2249
+  ypos -122
+  disable {{red?0:1}}
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge7
+  xpos 2249
+  ypos -41
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge8
+  xpos 2249
+  ypos 55
+ }
+ Dot {
+  name Dot43
+  xpos 2283
+  ypos 323
+ }
+ Dot {
+  name Dot52
+  xpos 942
+  ypos 323
+ }
+push $Ndd1bf000
+ Dot {
+  name Dot33
+  xpos 1657
+  ypos -180
+ }
+set Ndc4bc000 [stack 0]
+ Dot {
+  name Dot35
+  xpos 1790
+  ypos -180
+ }
+ Expression {
+  temp_name0 myr
+  temp_expr0 pickerAlpha.r
+  temp_name1 myg
+  temp_expr1 pickerAlpha.g
+  temp_name2 myb
+  temp_expr2 pickerAlpha.b
+  expr3 b>=myb?1:0
+  name Expression9
+  tile_color 0x9fffff
+  xpos 1756
+  ypos -119
+  disable {{blue?0:1}}
+ }
+push $Ndc4bc000
+ Expression {
+  temp_name0 myr
+  temp_expr0 pickerAlpha.r
+  temp_name1 myg
+  temp_expr1 pickerAlpha.g
+  temp_name2 myb
+  temp_expr2 pickerAlpha.b
+  expr3 g>=myg?1:0
+  name Expression8
+  tile_color 0x6aff55ff
+  xpos 1623
+  ypos -120
+  disable {{green?0:1}}
+ }
+push $Ndc4bc000
+ Dot {
+  name Dot34
+  xpos 1520
+  ypos -180
+ }
+ Expression {
+  temp_name0 myr
+  temp_expr0 pickerAlpha.r
+  temp_name1 myg
+  temp_expr1 pickerAlpha.g
+  temp_name2 myb
+  temp_expr2 pickerAlpha.b
+  expr3 r>=myr?1:0
+  name Expression7
+  tile_color 0xff5555ff
+  xpos 1486
+  ypos -122
+  disable {{red?0:1}}
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge5
+  xpos 1486
+  ypos -36
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge6
+  xpos 1486
+  ypos 60
+ }
+ Dot {
+  name Dot36
+  xpos 1520
+  ypos 196
+ }
+push $N57fd4000
+ Dot {
+  name Dot13
+  xpos 912
+  ypos -203
+ }
+set N62dda000 [stack 0]
+ Dot {
+  name Dot14
+  xpos 1045
+  ypos -203
+ }
+ Expression {
+  temp_name0 rel
+  temp_expr0 (g+r)/value2
+  expr3 b>=rel?1:0
+  name Expression3
+  tile_color 0x557fffff
+  xpos 1011
+  ypos -144
+  disable {{blue?0:1}}
+ }
+push $N62dda000
+ Expression {
+  temp_name0 rel
+  temp_expr0 (b+r)/value2
+  expr3 g>=rel?1:0
+  name Expression4
+  tile_color 0xaaff55ff
+  xpos 878
+  ypos -147
+  disable {{green?0:1}}
+ }
+push $N62dda000
+ Dot {
+  name Dot15
+  xpos 775
+  ypos -203
+ }
+ Expression {
+  temp_name0 rel
+  temp_expr0 (b+g)/value2
+  expr3 r>=rel?1:0
+  name Expression6
+  tile_color 0xff5555ff
+  xpos 741
+  ypos -144
+  disable {{red?0:1}}
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge3
+  xpos 741
+  ypos -70
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge4
+  xpos 742
+  ypos 23
+ }
+push $N57fd4000
+ Dot {
+  name Dot8
+  xpos 239
+  ypos -287
+ }
+ Dot {
+  name Dot1
+  xpos 239
+  ypos -213
+ }
+set N5a451400 [stack 0]
+ Dot {
+  name Dot3
+  xpos 372
+  ypos -213
+ }
+ Expression {
+  expr3 b>=value?1:0
+  name Expression2
+  tile_color 0x557fffff
+  xpos 338
+  ypos -146
+  disable {{blue?0:1}}
+ }
+push $N5a451400
+ Expression {
+  expr3 g>=value?1:0
+  name Expression1
+  tile_color 0xaaff55ff
+  xpos 205
+  ypos -149
+  disable {{green?0:1}}
+ }
+push $N5a451400
+ Dot {
+  name Dot2
+  xpos 102
+  ypos -213
+ }
+ Expression {
+  expr3 r>=value?1:0
+  name Expression5
+  tile_color 0xff5555ff
+  xpos 68
+  ypos -153
+  disable {{red?0:1}}
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge1
+  xpos 68
+  ypos -80
+ }
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge2
+  xpos 68
+  ypos 16
+ }
+ Dot {
+  name Dot9
+  xpos 102
+  ypos 179
+ }
+ Switch {
+  inputs 6
+  which {{alphaMethod}}
+  name Switch5
+  xpos 742
+  ypos 175
+ }
+ Dot {
+  name Dot6
+  xpos 776
+  ypos 883
+ }
+ FilterErode {
+  size {{expand*-1 x69 1}}
+  name FilterErode1
+  xpos 742
+  ypos 958
+ }
+ Blur {
+  channels alpha
+  size {{soft x51 6.8}}
+  name Blur1
+  xpos 742
+  ypos 1016
+ }
+ Dot {
+  name Dot17
+  xpos 776
+  ypos 1172
+ }
+set N576a8000 [stack 0]
+ Dot {
+  name Dot19
+  xpos 411
+  ypos 1172
+ }
+set N5c4fa800 [stack 0]
+ Dot {
+  name Dot23
+  xpos 150
+  ypos 1172
+ }
+ Dot {
+  name Dot22
+  xpos 150
+  ypos 1968
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{colorPick.r} {colorPick.g} {colorPick.b} {colorPick.a}}
+  name Constant2
+  xpos 3075
+  ypos 1164
+ }
+ Dot {
+  name Dot38
+  xpos 3109
+  ypos 1727
+ }
+push $N576a8000
+ Dot {
+  name Dot20
+  xpos 1339
+  ypos 1172
+ }
+set N58fe9c00 [stack 0]
+ Dot {
+  name Dot26
+  xpos 1937
+  ypos 1172
+ }
+set N446fe800 [stack 0]
+ Dot {
+  name Dot57
+  xpos 2328
+  ypos 1172
+ }
+set N54852400 [stack 0]
+ Median {
+  size {{sizeM}}
+  ignore_top_line false
+  name Median4
+  xpos 2294
+  ypos 1329
+ }
+ Dot {
+  name Dot58
+  xpos 2328
+  ypos 1558
+ }
+push $N54852400
+ Dot {
+  name Dot56
+  xpos 2501
+  ypos 1172
+ }
+set N5bb87800 [stack 0]
+ Dot {
+  name Dot37
+  xpos 2692
+  ypos 1172
+ }
+set N5bb86800 [stack 0]
+ Dot {
+  name Dot55
+  xpos 2865
+  ypos 1172
+ }
+ Shuffle {
+  red black
+  green black
+  name Shuffle5
+  xpos 2831
+  ypos 1269
+ }
+ Median {
+  size {{sizeM}}
+  ignore_top_line false
+  name Median3
+  xpos 2831
+  ypos 1339
+  disable {{blue?0:1}}
+ }
+ Dot {
+  name Dot53
+  xpos 2865
+  ypos 1482
+ }
+push $N5bb86800
+ Shuffle {
+  red black
+  blue black
+  name Shuffle4
+  xpos 2658
+  ypos 1274
+ }
+ Median {
+  size {{sizeM}}
+  ignore_top_line false
+  name Median2
+  xpos 2658
+  ypos 1339
+  disable {{green?0:1}}
+ }
+ Dot {
+  name Dot54
+  xpos 2692
+  ypos 1419
+ }
+push $N5bb87800
+ Shuffle {
+  green black
+  blue black
+  name Shuffle3
+  xpos 2467
+  ypos 1279
+ }
+ Median {
+  size {{sizeM}}
+  ignore_top_line false
+  name Median1
+  xpos 2467
+  ypos 1336
+  disable {{red?0:1}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge3
+  xpos 2467
+  ypos 1415
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos 2467
+  ypos 1478
+ }
+ Switch {
+  inputs 2
+  which {{medianTipe}}
+  name Switch6
+  xpos 2467
+  ypos 1562
+ }
+ Dot {
+  name Dot18
+  xpos 2501
+  ypos 1634
+ }
+push $N446fe800
+ Dot {
+  name Dot25
+  xpos 1937
+  ypos 1329
+ }
+set Ncfcfc400 [stack 0]
+ TimeOffset {
+  time_offset 2
+  time ""
+  name TimeOffset2
+  xpos 1996
+  ypos 1428
+ }
+push 0
+push $Ncfcfc400
+ TimeOffset {
+  time_offset -2
+  time ""
+  name TimeOffset1
+  xpos 1805
+  ypos 1427
+ }
+push $Ncfcfc400
+ Merge2 {
+  inputs 3+1
+  operation min
+  name Merge1
+  xpos 1903
+  ypos 1506
+ }
+push $N58fe9c00
+ Dot {
+  name Dot30
+  xpos 1339
+  ypos 1242
+ }
+set Ncfcfdc00 [stack 0]
+ Dot {
+  name Dot24
+  xpos 1229
+  ypos 1242
+ }
+set N9e63a800 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 0}
+      {1 0 1}
+      {0 1 0}
+    }
+  normalize true
+  name Matrix1
+  xpos 1247
+  ypos 1368
+ }
+push $N9e63a800
+ Matrix {
+  matrix {
+      {1 0 1}
+      {0 0 0}
+      {1 0 1}
+    }
+  normalize true
+  name Matrixdiagonal
+  xpos 1126
+  ypos 1368
+ }
+ Switch {
+  inputs 2
+  which {{matrixtipe}}
+  name Switch2
+  xpos 1203
+  ypos 1511
+ }
+push $Ncfcfdc00
+ Dot {
+  name Dot28
+  xpos 1474
+  ypos 1242
+ }
+set Nca9d0800 [stack 0]
+ Matrix {
+  matrix {
+      {0.25 0.5 1 0.5 0.25}
+      {0.5 0 0 0 0.5}
+      {1 0 0 0 1}
+      {0.5 0 0 0 0.5}
+      {0.25 0.5 1 0.5 0.25}
+    }
+  normalize true
+  name Matrix3
+  xpos 1490
+  ypos 1372
+ }
+push $Nca9d0800
+ Matrix {
+  matrix {
+      {1 0.5 0.25 0.5 1}
+      {0.5 0 0 0 0.5}
+      {0.25 0 0 0 0.25}
+      {0.5 0 0 0 0.5}
+      {1 0.5 0.25 0.5 1}
+    }
+  normalize true
+  name Matrix2diagonal
+  xpos 1392
+  ypos 1367
+ }
+ Switch {
+  inputs 2
+  which {{Switch2.which}}
+  name Switch4
+  xpos 1431
+  ypos 1514
+ }
+ Switch {
+  inputs 2
+  which {{expand>0?0:1}}
+  name Switch3
+  xpos 1314
+  ypos 1565
+ }
+push $N576a8000
+ Invert {
+  channels alpha
+  name Invert1
+  xpos 741
+  ypos 1230
+ }
+ Premult {
+  name Premult1
+  xpos 741
+  ypos 1276
+ }
+ Blur {
+  size {{expandSize}}
+  maskChannelInput rgba.alpha
+  invert_mask true
+  name Blur2
+  xpos 741
+  ypos 1302
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 741
+  ypos 1340
+ }
+ Premult {
+  name Premult2
+  xpos 741
+  ypos 1399
+ }
+ Blur {
+  size {{expandSize}}
+  maskChannelInput rgba.alpha
+  invert_mask true
+  name Blur3
+  xpos 741
+  ypos 1423
+ }
+ Unpremult {
+  name Unpremult2
+  xpos 741
+  ypos 1459
+ }
+ Premult {
+  name Premult3
+  xpos 741
+  ypos 1500
+ }
+ Blur {
+  size {{expandSize}}
+  maskChannelInput rgba.alpha
+  invert_mask true
+  name Blur4
+  xpos 741
+  ypos 1526
+ }
+ Unpremult {
+  name Unpremult3
+  xpos 741
+  ypos 1583
+ }
+push $N5c4fa800
+ Dot {
+  name Dot7
+  xpos 411
+  ypos 1726
+ }
+ Switch {
+  inputs 6
+  which {{fixMethod}}
+  name Switch1
+  xpos 741
+  ypos 1723
+ }
+push $Ndc3ae000
+ Keymix {
+  inputs 3
+  name Keymix2
+  xpos 741
+  ypos 1958
+ }
+ Keymix {
+  inputs 3
+  name Keymix3
+  xpos 741
+  ypos 2185
+ }
+ Dot {
+  name Dot11
+  xpos 775
+  ypos 2462
+ }
+set N59ec3c00 [stack 0]
+ Dot {
+  name Dot12
+  xpos 597
+  ypos 2462
+ }
+ Dot {
+  name Dot16
+  xpos 597
+  ypos 2615
+ }
+push $Ndce5d400
+ Dot {
+  name Dot44
+  xpos 986
+  ypos 2453
+  hide_input true
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {3 0 0 1}
+  color_panelDropped true
+  name Constant1
+  xpos 1113
+  ypos 2588
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge2
+  xpos 952
+  ypos 2612
+ }
+push $N59ec3c00
+ Grade {
+  multiply 0.7
+  name Grade1
+  xpos 741
+  ypos 2531
+  disable {{checkAlpha?0:1}}
+ }
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos 741
+  ypos 2606
+  disable {{checkAlpha?0:1 x66 1}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 741
+  ypos 2791
+  disable {{replaceAlpha?1:0}}
+ }
+ Log2Lin {
+  operation lin2log
+  name Log2Lin2
+  xpos 741
+  ypos 2916
+  disable {{Log2Lin?0:1}}
+ }
+ Output {
+  name Output1
+  xpos 741
+  ypos 3023
+ }
+end_group

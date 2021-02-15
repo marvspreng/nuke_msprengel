@@ -1,0 +1,283 @@
+#! C:/_pxo/rez_local_cache/ext/nuke/11.3.2-pxo.1/platform-windows/nuke-11.3.2.dll -nx
+version 11.3 v2
+Group {
+name RolloffLuminance
+ inputs 2
+ addUserKnob {20 luminance l Luminance}
+ addUserKnob {41 contrast T RolloffContrast8.contrast}
+ addUserKnob {41 inlogspace l "In Log Space" t "Use the logspace to avoid clamping from the RolloffContrast." T Controller.inlogspace}
+ addUserKnob {41 disable_1 l "Turn off contrast" -STARTLINE T RolloffContrast8.disable}
+ addUserKnob {41 center T RolloffContrast8.center}
+ addUserKnob {41 soft_clip l "soft clip" T RolloffContrast8.soft_clip}
+ addUserKnob {4 merge_method l "merge method" M {copy min max "" "" "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask t "This mask just works with the maskinput and not with channels coming from the main stream." -STARTLINE T Merge3.maskChannelMask}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge3.invert_mask}
+ addUserKnob {41 mix T Merge3.mix}
+ addUserKnob {26 ""}
+ addUserKnob {41 output l Output T Controller.output}
+ addUserKnob {26 copyright l "" -STARTLINE T "         © Marcel Pichert, 2019"}
+}
+ NoOp {
+  inputs 0
+  name Controller
+  xpos 692
+  ypos 1518
+  addUserKnob {20 User}
+  addUserKnob {4 output l Output M {Image Luminance}}
+  addUserKnob {6 inlogspace l "In Log Space" +STARTLINE}
+  inlogspace true
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 317
+  ypos -946
+ }
+ Colorspace {
+  colorspace_out AlexaV3LogC
+  name Colorspace1
+  xpos 317
+  ypos -829
+  disable {{!Controller.inlogspace x1057 1}}
+ }
+ Dot {
+  name Dot661
+  xpos 351
+  ypos -697
+ }
+set N95e9d000 [stack 0]
+ Colorspace {
+  colorspace_out HSL
+  name Colorspace12
+  label "\[value colorspace_in] to \[value colorspace_out]"
+  xpos 317
+  ypos -636
+ }
+ Dot {
+  name Dot662
+  xpos 351
+  ypos -560
+ }
+set N54378400 [stack 0]
+ Dot {
+  name Dot663
+  xpos 68
+  ypos -560
+ }
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Shuffle127
+  label "b -> rgba"
+  xpos 34
+  ypos -479
+ }
+ RolloffContrast {
+  channels rgb
+  slope_mag_low1 0.8000000119
+  black_low 1
+  slope_mag_high2 0.8000000119
+  white_high 1
+  name RolloffContrast8
+  xpos 34
+  ypos -383
+ }
+ Dot {
+  name Dot664
+  xpos 68
+  ypos -248
+ }
+set N426be000 [stack 0]
+ Dot {
+  name Dot1
+  xpos 68
+  ypos 1525
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 1488
+  ypos 129
+  number 1
+ }
+ Dot {
+  name Dot4
+  xpos 1522
+  ypos 297
+ }
+ Dot {
+  name Dot12
+  xpos 1316
+  ypos 297
+ }
+set N2c519c00 [stack 0]
+ Dot {
+  name Dot13
+  xpos 1316
+  ypos 782
+ }
+push $N426be000
+push $N54378400
+ ShuffleCopy {
+  inputs 2
+  blue blue
+  alpha alpha2
+  name ShuffleCopy14
+  label "b -> rgba"
+  xpos 317
+  ypos -258
+ }
+ Colorspace {
+  colorspace_in HSL
+  name Colorspace13
+  label "\[value colorspace_in] to \[value colorspace_out]"
+  xpos 317
+  ypos -134
+ }
+ Dot {
+  name Dot8
+  xpos 351
+  ypos 10
+ }
+set N12a9e400 [stack 0]
+ Dot {
+  name Dot10
+  xpos 691
+  ypos 10
+ }
+set Nfeff3c00 [stack 0]
+ Dot {
+  name Dot6
+  xpos 1139
+  ypos 10
+ }
+push $N95e9d000
+ Dot {
+  name Dot665
+  xpos -148
+  ypos -697
+ }
+ Dot {
+  name Dot666
+  xpos -148
+  ypos 538
+ }
+set Nbb66e400 [stack 0]
+ Dot {
+  name Dot11
+  xpos -148
+  ypos 647
+ }
+set Nfeff2000 [stack 0]
+ Dot {
+  name Dot14
+  xpos -148
+  ypos 782
+ }
+ Merge2 {
+  inputs 2+1
+  operation max
+  bbox B
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  maskChannelMask {{{parent.Merge3.maskChannelMask}}}
+  maskChannelInput {{{parent.Merge3.maskChannelInput}}}
+  invert_mask {{parent.Merge3.invert_mask}}
+  mix {{parent.Merge3.mix}}
+  name Merge2
+  label "\[if \{\[value mix]<1\} \{ value mix \}]"
+  xpos 1105
+  ypos 778
+ }
+ Dot {
+  name Dot15
+  xpos 1139
+  ypos 1063
+ }
+push $N2c519c00
+ Dot {
+  name Dot9
+  xpos 868
+  ypos 297
+ }
+set N913d6c00 [stack 0]
+ Dot {
+  name Dot7
+  xpos 868
+  ypos 647
+ }
+push $Nfeff3c00
+push $Nfeff2000
+ Merge2 {
+  inputs 2+1
+  operation min
+  bbox B
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  maskChannelMask {{{parent.Merge3.maskChannelMask}}}
+  maskChannelInput {{{parent.Merge3.maskChannelInput}}}
+  invert_mask {{parent.Merge3.invert_mask x1038 1}}
+  mix {{parent.Merge3.mix}}
+  name Merge1
+  label "\[if \{\[value mix]<1\} \{ value mix \}]"
+  xpos 657
+  ypos 643
+ }
+ Dot {
+  name Dot16
+  xpos 691
+  ypos 901
+ }
+push $N913d6c00
+ Dot {
+  name Dot5
+  xpos 517
+  ypos 297
+ }
+ Dot {
+  name Dot659
+  xpos 517
+  ypos 538
+ }
+push $N12a9e400
+push $Nbb66e400
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge3
+  label "\[if \{\[value mix]<1\} \{ value mix \}]"
+  xpos 317
+  ypos 534
+ }
+ Switch {
+  inputs 3
+  which {{parent.merge_method}}
+  name Switch3
+  label "\[value which]"
+  xpos 317
+  ypos 1053
+ }
+ Colorspace {
+  colorspace_in AlexaV3LogC
+  name Colorspace2
+  xpos 317
+  ypos 1330
+  disable {{!Controller.inlogspace}}
+ }
+ Switch {
+  inputs 2
+  which {{Controller.output}}
+  name Switch1
+  label "\[value which]"
+  xpos 317
+  ypos 1515
+ }
+ Output {
+  name Output1
+  selected true
+  xpos 317
+  ypos 1733
+ }
+end_group

@@ -1,0 +1,79 @@
+Gizmo {
+ inputs 2
+ addUserKnob {20 ctrl}
+ addUserKnob {7 sigma_d l "sigma d" t "A threshold to the maximum spread when determining the extrema colours. It is used to remove outliers eg. caused by noise."}
+ sigma_d 0.7
+ addUserKnob {7 edge_str l "edge factor" t "Adjust the intentisy of the edges that are used to control the area of effect."}
+ edge_str 0.7
+ addUserKnob {6 edge_vis l "Show Edges" t "Display the detected edges" +STARTLINE}
+ addUserKnob {6 use_gpu l "Use GPU if Available" +STARTLINE}
+ use_gpu true
+ addUserKnob {26 d l "" +STARTLINE}
+ addUserKnob {26 n l "" +STARTLINE T "-- <i>Martin Kenzel 2018</i> --"}
+}
+ Input {
+  inputs 0
+  name src
+  xpos 569
+  ypos -262
+  number 1
+ }
+ Input {
+  inputs 0
+  name tgt
+  selected true
+  xpos 457
+  ypos -262
+ }
+ Group {
+  inputs 2
+  name AA_Recovery
+  xpos 509
+  ypos -185
+  addUserKnob {20 AA_Recovery}
+  addUserKnob {41 "Local GPU: " T BlinkScript2.gpuName}
+  addUserKnob {41 "Use GPU if Available" T BlinkScript2.useGPUIfAvailable}
+  addUserKnob {26 ""}
+  addUserKnob {41 "sigma d" T "BlinkScript2.AA_Recovery_sigma d"}
+  addUserKnob {41 "edge threshold" T "BlinkScript2.AA_Recovery_edge threshold"}
+  addUserKnob {41 "Show Edges" T "BlinkScript2.AA_Recovery_Show Edges"}
+ }
+  Input {
+   inputs 0
+   name Input2
+   xpos 413
+   ypos -293
+   number 1
+  }
+  Input {
+   inputs 0
+   name Input1
+   xpos 413
+   ypos -293
+  }
+  BlinkScript {
+   inputs 2
+   ProgramGroup 1
+   KernelDescription "2 \"AA_Recovery\" iterate pixelWise ec0f246cc31c059fd41e81c9c75ef5187062f79f9e18f5a409bc651aa588f9fd 3 \"filter\" Read Ranged2D \"orig\" Read Ranged2D \"dst\" Write Point 3 \"sigma d\" Float 1 zczMPQ== \"edge threshold\" Float 1 bxKDOg== \"Show Edges\" Bool 1 AA== 3 \"varTol\" 1 1 \"edgeThres\" 1 1 \"edgeDisplay\" 1 1 4 \"filterrangeMin\" Int 2 1 AAAAAAAAAAA= \"filterrangeMax\" Int 2 1 AAAAAAAAAAA= \"origrangeMin\" Int 2 1 AAAAAAAAAAA= \"origrangeMax\" Int 2 1 AAAAAAAAAAA="
+   kernelSource "float step(float valA, float valB)\n\{\n  if(valA > valB) \{return valA;\} else \{return valB;\}\n\}\n\nfloat projectDist2(float3 color, float3 vCenter, float3 vDir, float& t)\n\{\n\tfloat3 v = color - vCenter;\n\tt = dot(vDir, v);\n\tfloat3 vDist = color - (vCenter + vDir * t);\n\treturn dot(vDist, vDist);\n\}\n\nfloat aliasDetectSobelArray(float3 vNeib\[9])\n\{\n  float3 gx, gy, h1, h2, h3, v1, v2, v3;\n\n  h1 = float3(vNeib\[1].x, vNeib\[1].y, vNeib\[1].z) + float3(vNeib\[2].x, vNeib\[2].y, vNeib\[2].z)*2 + float3(vNeib\[3].x, vNeib\[3].y, vNeib\[3].z);\n  h2 = float3(vNeib\[8].x, vNeib\[8].y, vNeib\[8].z) + float3(vNeib\[0].x, vNeib\[0].y, vNeib\[0].z)*2 + float3(vNeib\[4].x, vNeib\[4].y, vNeib\[4].z);\n  h3 = float3(vNeib\[7].x, vNeib\[7].y, vNeib\[7].z) + float3(vNeib\[6].x, vNeib\[6].y, vNeib\[6].z)*2 + float3(vNeib\[5].x, vNeib\[5].y, vNeib\[5].z);\n\n  v1 = float3(vNeib\[1].x, vNeib\[1].y, vNeib\[1].z) + float3(vNeib\[8].x, vNeib\[8].y, vNeib\[8].z)*2 + float3(vNeib\[7].x, vNeib\[7].y, vNeib\[7].z);\n  v2 = float3(vNeib\[2].x, vNeib\[2].y, vNeib\[2].z) + float3(vNeib\[0].x, vNeib\[0].y, vNeib\[0].z)*2 + float3(vNeib\[6].x, vNeib\[6].y, vNeib\[6].z);\n  v3 = float3(vNeib\[3].x, vNeib\[3].y, vNeib\[3].z) + float3(vNeib\[4].x, vNeib\[4].y, vNeib\[4].z)*2 + float3(vNeib\[5].x, vNeib\[5].y, vNeib\[5].z);\n\n  gx = ( fabs(h2-h1) + fabs(h3-h2) );\n  gy = ( fabs(v2-v1) + fabs(v3-v2) );\n  gx /= 8.f;\n  gy /= 8.f;\n\treturn dot(gx, gx) + dot(gy, gy);\n\}\n\nbool selectExtrema(float3 vNeib\[9], float3 vDir, float varTol, int& idmin, int& idmax)\n\{\n  float tmin1 = 1.f, tmax1 = -1.f;\n  int idmin1 = 0, idmax1 = 0;\n  for(int i = 1; i < 9; ++i)\n  \{\n    float3 ani = float3(vNeib\[i].x, vNeib\[i].y, vNeib\[i].z);\n    float3 anc = float3(vNeib\[0].x, vNeib\[0].y, vNeib\[0].z); \n    float t;\n    float dist2 = projectDist2(ani, anc, vDir, t); \n    if(dist2 > 9*varTol)\n      \{\n        continue;\n      \}\n    if( t < tmin1)\n    \{\n      tmin1 = t;\n      idmin1 = i;\n    \}\n    if(t > tmax1)\n    \{\n      tmax1 = t;\n      idmax1 = i;\n    \}\n  \}\n  idmin = idmin1;\n  idmax = idmax1;\n  if(tmin1 > 0 || tmax1 < 0 || fabs(tmin1-tmax1) < 0.0001)\n  \{\n    return false;\n  \}\n  else\n  \{\n    return true;\n  \}\n\}\n\nfloat linearCombinability(float3 c1, float3 c2, float3 c, float varTol, float& t)\n\{\n\tfloat3 c2c1 = c2 - c1;\n\tfloat c2c1len = length(c2c1);\n\tfloat3 c2c1norm = c2c1 / c2c1len;\n\tt = dot(c-c1, c2c1norm) / c2c1len;\n\tfloat3 distVec = c - (t * c2c1) - c1;\n\tfloat dist2 = dot(distVec, distVec);\n\n\tif(t < 0)\n\t\{\n\t\tfloat3 vToEndPt1 = c-c1;\n\t\tdist2 = max(dist2, dot(vToEndPt1, vToEndPt1));\n\t\}\n\tif(t > 1)\n\t\{\n\t\tfloat3 vToEndPt2 = c-c2;\n\t\tdist2 = max(dist2, dot(vToEndPt2, vToEndPt2));\n\t\}\n\tt = max(0.f, min(t, 1.f));\n\n\tfloat linComb = exp(-dist2 * 0.5f / varTol) ;\n\treturn linComb;\n\}\n\n\nkernel AA_Recovery : public ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRanged2D, eEdgeClamped> filter;\n  Image<eRead, eAccessRanged2D, eEdgeClamped> orig;\n  Image<eWrite, eAccessPoint> dst;\n  \n  param:\n    float  varTol;\n    float edgeThres;\n    bool edgeDisplay;\n\n  local:\n\n  void define() \n  \{\n    defineParam(varTol, \"sigma d\", 0.1f);\n    defineParam(edgeThres, \"edge threshold\", 0.001f);\n    defineParam(edgeDisplay, \"Show Edges\", false);\n  \}\n\n  void init()\n  \{\n    orig.setRange(-1,-1, 1, 1);\n    filter.setRange(-1,-1, 1, 1);\n  \}\n\n  void process(int2 pos) \n  \{\n    const int nNeib = 9;\n    const int2 NeibOffset\[nNeib] = \{\n      int2( 0, 0), int2(-1, 1), int2( 0, 1), \n      int2( 1, 1), int2( 1, 0), int2( 1,-1), \n      int2( 0,-1), int2(-1,-1), int2(-1, 0) \n    \};\n\n    float3 vNeib\[nNeib], vNeibMean\[nNeib], fNeib\[nNeib];\n    float3 vCenter, vDir;\n\n    //Load original and filtered image into array and prepare for PCA with EM\n    for(int i = 0; i < nNeib; i++)\n    \{\n      vNeib\[i].x = orig(NeibOffset\[i].x, NeibOffset\[i].y, 0);\n      vNeib\[i].y = orig(NeibOffset\[i].x, NeibOffset\[i].y, 1);\n      vNeib\[i].z = orig(NeibOffset\[i].x, NeibOffset\[i].y, 2);\n      \n      fNeib\[i].x = filter(NeibOffset\[i].x, NeibOffset\[i].y, 0);\n      fNeib\[i].y = filter(NeibOffset\[i].x, NeibOffset\[i].y, 1);\n      fNeib\[i].z = filter(NeibOffset\[i].x, NeibOffset\[i].y, 2);\n      \n      vCenter += float3(vNeib\[i].x, vNeib\[i].y, vNeib\[i].z);\n    \}\n    vCenter /= nNeib;\n\n    for(int i = 0; i < nNeib; i++)\n    \{\n        vNeibMean\[i].x = vNeib\[i].x - vCenter.x;\n        vNeibMean\[i].y = vNeib\[i].y - vCenter.y;\n        vNeibMean\[i].z = vNeib\[i].z - vCenter.z;\n    \}\n      \n    //EM iterations\n    const int NITER = 4;\n\n    float3 p = normalize(vCenter + 0.001);\n    for(int iter = 0; iter < NITER; ++iter)\n    \{\n      float3 t = float3(0.0001,0.0001,0.0001);\n      for(int i = 0; i < nNeib; ++i)\n      \{\n        float3 vnm = float3(vNeibMean\[i].x, vNeibMean\[i].y, vNeibMean\[i].z);\n        t += vnm * dot(vnm,  p);\n      \}\n      p = normalize(t);\n    \}\n    vDir = p;\n\n    \n    //do kernel things\n    float3 res = 0.f;\n    int idmin, idmax;\n    float prob;\n    float t = 0.f;\n    float edge, edgeVis;\n    \n    \n    if(selectExtrema(vNeib, vDir, varTol, idmin, idmax))\n    \{\n      float3 c = float3(vNeib\[0].x, vNeib\[0].y, vNeib\[0].z), c1 = float3(vNeib\[idmin].x, vNeib\[idmin].y, vNeib\[idmin].z), c2 = float3(vNeib\[idmax].x, vNeib\[idmax].y, vNeib\[idmax].z);\n      prob = linearCombinability(c1,c2, c, varTol, t);\n      res = float3(fNeib\[idmin].x, fNeib\[idmin].y, fNeib\[idmin].z) * (1-t) + float3(fNeib\[idmax].x, fNeib\[idmax].y, fNeib\[idmax].z) * t;\n    \}\n    else\n    \{\n      prob = 0.f;\n    \}\n    \n    //edge detection\n    edge = aliasDetectSobelArray(vNeib);\n    edge *= aliasDetectSobelArray(fNeib);\n    edgeVis = 1 - exp(-edge*edge / edgeThres);\n    \n    prob *= step(0.01f, edgeVis);\n \n    \n    prob *= edgeVis;\n    res = prob * res + (1-prob) * float3(fNeib\[0].x, fNeib\[0].y, fNeib\[0].z);\n    \n    if(not edgeDisplay)\n    \{\n      //dst() = float4(vDir.x, vDir.y, vDir.z, 1.f);\n      dst() = float4(res.x, res.y, res.z, orig(0, 0, 3));\n    \}\n    else\n    \{\n      dst() = float4(edgeVis, edgeVis, edgeVis, 1.f);\n      //dst() = float4(edge, edge, edge, 0.0f);\n    \}\n\n  \}\n\};"
+   useGPUIfAvailable {{use_gpu}}
+   rebuild ""
+   "AA_Recovery_sigma d" {{"pow(sigma_d, 10)"}}
+   "AA_Recovery_edge threshold" {{"pow(1-edge_str, 10)"}}
+   "AA_Recovery_Show Edges" {{edge_vis}}
+   name BlinkScript2
+   xpos 413
+   ypos -253
+  }
+  Output {
+   name Output1
+   xpos 413
+   ypos -153
+  }
+ end_group
+ Output {
+  name out
+  xpos 509
+  ypos -104
+ }
+end_group

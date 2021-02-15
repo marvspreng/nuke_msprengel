@@ -1,0 +1,690 @@
+#! C:/Program Files/Nuke10.0v3/nuke-10.0.3.dll -nx
+version 10.0 v3
+Gizmo {
+ inputs 3
+ tile_color 0x38720cff
+ gl_color 0x840000ff
+ label "\[value Zdefocus]\n\n\n\n\n\n"
+ note_font "MS Sans Serif"
+ note_font_size 8
+ addUserKnob {20 User l "LCA Zdepth"}
+ addUserKnob {4 RefDepth l INVISIBLE +INVISIBLE M {"Depth normalize" Depth ""}}
+ addUserKnob {4 channel l " Channel Depth Source" -STARTLINE M {Depth Alpha "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {26 txt_intro l "" -STARTLINE T "                      LC Art  Zdepth tool V2.4"}
+ addUserKnob {6 test_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {4 zdepth l "" t "Result: final result with the zdefocus \nZdepth BW; Show your zdepth in gray value\nZ alpha foreground, to check if the new fonction\nz foreground is correct." -STARTLINE M {Result "Depth Normalized" "Z Alpha foreground" Depth "Z Alpha Background" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {22 ResultB l Result -STARTLINE T "a= nuke.thisNode()\n\na\['zdepth'].setValue(0)\na\['ResultB'].setEnabled(True)\na\['DepthN'].setEnabled(True)\na\['DepthB'].setEnabled(True)\na\['AlphaF'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['ZfpEasy'].setEnabled(True)\na\['Z_focus_picker'].setEnabled(True)\na\['center'].setEnabled(True)\na\['AlphaB'].setEnabled(True)"}
+ addUserKnob {22 DepthN l "Z Normalize " -STARTLINE T "a= nuke.thisNode()\nb = nuke.toNode('Premult3')\n\na\['RefDepth'].setValue(0)\na\['zdepth'].setValue(1)\na\['ResultB'].setEnabled(True)\na\['DepthN'].setEnabled(True)\na\['DepthB'].setEnabled(True)\na\['AlphaF'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['ZfpEasy'].setEnabled(True)\na\['Z_focus_picker'].setEnabled(True)\na\['center'].setEnabled(True)\na\['AlphaB'].setEnabled(True)\n\nb\['disable'].setValue(1)"}
+ addUserKnob {22 DepthB l "Z true Value" -STARTLINE T "a= nuke.thisNode()\nb = nuke.toNode('Premult3')\n\nb\['disable'].setValue(1)\na\['zdepth'].setValue(3)\na\['RefDepth'].setValue(1)\na\['ResultB'].setEnabled(True)\na\['DepthN'].setEnabled(True)\na\['DepthB'].setEnabled(True)\na\['AlphaF'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['ZfpEasy'].setEnabled(True)\na\['Z_focus_picker'].setEnabled(True)\na\['center'].setEnabled(True)\na\['AlphaB'].setEnabled(True)"}
+ addUserKnob {22 AlphaF l "FG Defocus Mask" -STARTLINE T "a= nuke.thisNode()\nb = nuke.toNode('Premult3')\n\nb\['disable'].setValue(1)\n\na\['zdepth'].setValue(2)\na\['ResultB'].setEnabled(True)\na\['DepthN'].setEnabled(True)\na\['DepthB'].setEnabled(True)\na\['AlphaF'].setEnabled(True)\na\['AlphaB'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['ZfpEasy'].setEnabled(True)\na\['Z_focus_picker'].setEnabled(True)\na\['center'].setEnabled(False)"}
+ addUserKnob {22 AlphaB l "BG Defocus Mask" -STARTLINE T "a= nuke.thisNode()\nb = nuke.toNode('Premult3')\n\nb\['disable'].setValue(1)\n\na\['zdepth'].setValue(4)\na\['ResultB'].setEnabled(True)\na\['DepthN'].setEnabled(True)\na\['DepthB'].setEnabled(True)\na\['AlphaF'].setEnabled(True)\na\['AlphaB'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['ZfpEasy'].setEnabled(True)\na\['Z_focus_picker'].setEnabled(True)\na\['center'].setEnabled(False)"}
+ addUserKnob {22 result l INVISIBLE t "Result Globale shortcut" -STARTLINE +INVISIBLE T "a = nuke.thisNode()\na\['zdepth'].setValue(0)\na\['viewing_option'].setValue(0)"}
+ addUserKnob {22 focalplane l INVISIBLE t "Focal plane setup Viewing shortcut" -STARTLINE +INVISIBLE T "a = nuke.thisNode()\na\['zdepth'].setValue(0)\na\['viewing_option'].setValue(1)"}
+ addUserKnob {41 viewing_option l INVISIBLE t "Result\nFocal plane setup\nLayer\nFilter shape" -STARTLINE +INVISIBLE T ZDefocus2.output}
+ addUserKnob {26 ""}
+ addUserKnob {20 Zdefocus_1 l "Z Defocus" n 1}
+ addUserKnob {41 AnalizeZdepth l INVISIBLE t "Scan your Z file to determine the near point and the far point\n\nYou can choose the frame range , Normally it s a fast processing, but if you shot don t have a camera movement you can just anlyse one  frame. ( the frame where you the more far object.)" -STARTLINE +INVISIBLE T Zdepth_Pixel2.go}
+ addUserKnob {22 SetZdepthValue l "  Z animated " t "Set the value you have got with the Analize Zdepth, it would be set the value on each frame \nnot necessary if you don t have a camera movement" -STARTLINE T "a = nuke.thisNode()\nb = a\['minvalue']\nc = a\['maxvalue']\nd = a\['depth_near_point']\ne = nuke.toNode('Zdepth_Pixel')\n\ne\['go'].execute()\n\na\['depth_near_point'].setExpression('Zdepth_Pixel.minlumapixvalue')\na\['depth_far_point'].setExpression('Zdepth_Pixel.maxlumapixvalue')\n\na\['depth_near_point'].setEnabled(True)\na\['depth_far_point'].setEnabled(True)\na\['ZfpEasy'].setEnabled(False)\na\['Zfp'].setEnabled(True)\na\['MZF'].setEnabled(True)\n\na\['center'].setExpression('Z_focus_picker')\na\['center'].setEnabled(False)\n\ndef bakeExpressionKnobs( node, first, last, inc, views ):\n    '''bake all knobs in node that carry expressions'''\n\n\n    # BAKE ALL CURVES\n    for c in b:\n        bakeCurve( c, first, last, inc )\n"}
+ addUserKnob {22 ReferenceFrame l " Z Reference Frame" t "Set the value you got from the analize Zdepht button but  only on the frame reference (in fact the frame where you are ) use this only when you don t have a camera movement." -STARTLINE T "a = nuke.thisNode()\na\['depth_near_point'].clearAnimated()\na\['depth_far_point'].clearAnimated()\n\ne = nuke.toNode('Zdepth_Pixel')\n\ne\['go'].execute()\n\nb = a\['minvalue'].getValue()\nc = a\['maxvalue'].getValue()\n\na\['depth_near_point'].setEnabled(True)\na\['depth_far_point'].setEnabled(True)\n\na\['depth_near_point'].setValue(b)\na\['depth_far_point'].setValue(c)\n"}
+ addUserKnob {22 ResetTool l "Reset Z Parameter" t "Reset all the tool, do that if you think something going wrong with thsi tool it woul be made restore all the default parameter and remove some key." -STARTLINE T "a = nuke.thisNode()\na\['depth_near_point'].clearAnimated()\na\['depth_far_point'].clearAnimated()\na\['center'].clearAnimated()\n\na\['depth_near_point'].setEnabled(True)\na\['depth_far_point'].setEnabled(True)\na\['depth_near_point'].setValue(0)\na\['depth_far_point'].setValue(1000)"}
+ addUserKnob {26 Depth_values l "Depth Values"}
+ addUserKnob {41 depth_near_point l "Depth near point" t "You can set this value with the Analize Zdepth and the Set Zdepht value button.\n" T depth_grade.blackpoint}
+ addUserKnob {41 depth_far_point l "Depth far point" t "You can set this value with the Analize Zdepth and the Set Zdepht value button." T depth_grade.whitepoint}
+ addUserKnob {26 dvd l "" +STARTLINE}
+ addUserKnob {20 DebugFarm l "Debug mode" n 1}
+ DebugFarm 0
+ addUserKnob {41 maxlumapixvalue l "Test script Value" -STARTLINE T Zdepth_Pixel.maxlumapixvalue}
+ addUserKnob {16 minvalue}
+ minvalue {{Zdepth_Pixel.minlumapixvalue.r}}
+ addUserKnob {16 maxvalue -STARTLINE}
+ maxvalue {{Zdepth_Pixel.maxlumapixvalue.r}}
+ addUserKnob {20 endGroup_4 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {4 Zdefocus l "Z mode" t "Resolution Z 1:1 : The depth have the same resolution that your original format. \n\nResolution Z 2:1 : The depth have a double resolution  that your original format. " M {"Resolution Z 1:1" "Resolution Z 2:1" "" "" "" "" "" "" ""}}
+ addUserKnob {41 math_1 l "      Z calculation" -STARTLINE T ZDefocus2.math}
+ addUserKnob {26 ""}
+ addUserKnob {22 ZfpEasy l "Normalize mode" t "Use this mode to set your focal point , have less step than the ZFP Advanced but a little bit less accurancy. \n\na\['center'].clearAnimated()" -STARTLINE T "a = nuke.thisNode()\nb =nuke.toNode('Zdefocus2')\nc = nuke.toNode('Premult3')\n\na\['RefDepth'].setValue(0)\nc\['disable'].setValue(1)\na\['center'].setExpression('Z_focus_picker')\na\['center'].setEnabled(False)\na\['ZfpEasy'].setEnabled(False)\na\['SetValue'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['MZF'].setEnabled(True)\na\['Z_focus_picker'].setEnabled(True)\na\['zdepth'].setValue(1)\na\['ResultB'].setEnabled(True)\na\['DepthN'].setEnabled(False)\na\['DepthB'].setEnabled(True)\na\['AlphaF'].setEnabled(True)\na\['FP'].setEnabled(True)\n"}
+ addUserKnob {22 resetB l INVISIBLE -STARTLINE +INVISIBLE T "a\['center'].setEnabled(True)\na\['ZfpEasy'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['MZF'].setEnabled(True)\na\['Z_focus_picker'].setEnabled(False)\na\['FP'].setEnabled(True)"}
+ addUserKnob {6 Z_focus_picker_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {22 Zfp l "Z True mode" t "Use this mode if you want to have more accurancy with the focal plane , homeweaver you need to pick the value on the Z and not the on Z BW" -STARTLINE T "a = nuke.thisNode()\nb =nuke.toNode('Zdefocus2')\n\na\['RefDepth'].setValue(1)\na\['center'].clearAnimated()\na\['center'].setExpression('Z_focus_picker/depth_grade.whitepoint')\na\['center'].setEnabled(False)\na\['ZfpEasy'].setEnabled(True)\na\['Zfp'].setEnabled(False)\na\['SetValue'].setEnabled(False)\na\['MZF'].setEnabled(True)\na\['Z_focus_picker'].setEnabled(True)\na\['zdepth'].setValue(3)\na\['ResultB'].setEnabled(True)\na\['DepthN'].setEnabled(True)\na\['DepthB'].setEnabled(False)\na\['AlphaF'].setEnabled(True)\na\['FP'].setEnabled(True)"}
+ addUserKnob {19 Z_focus_picker l "Focal Picker"}
+ Z_focus_picker 0.1015999988
+ addUserKnob {26 ""}
+ addUserKnob {22 SetValue l "Focal Set Value " -STARTLINE T "a = nuke.thisNode()\nz = nuke.toNode('Shuffle1')\n\na\['ZfpEasy'].setEnabled(True)\na\['FP'].execute\nfp = nuke.sample(z,\"a\",a\['FOCALPSETUP'].value(0),a\['FOCALPSETUP'].value(1))\na\['Z_focus_picker'].setValue(fp)"}
+ addUserKnob {12 FOCALPSETUP l "" -STARTLINE}
+ FOCALPSETUP {774 432}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 disable_2 l "DISABLE PREMULT" -STARTLINE T Premult3.disable}
+ addUserKnob {41 disable_1 l "DISABLE FOCUS HELP" -STARTLINE T Merge3.disable}
+ addUserKnob {22 REMOVEKEY l "Remove All Key" t "Remove All the Key on the Z focus picker" -STARTLINE T "a = nuke.thisNode()\nb = a\['Z_focus_picker']\n\nb.clearAnimated()\n"}
+ addUserKnob {22 FP l INVISIBLE t "a\['center'].setExpression('Z_focus_picker')" -STARTLINE +INVISIBLE T "a = nuke.thisNode()\nb =nuke.toNode('Zdefocus2')\nc = nuke.toNode('Premult3')\nz = nuke.toNode('Shuffle1')\n\n\na\['zdepth'].setValue(1)\n\n\n\n\n\n\n\n\nfp = nuke.sample(a,\"r\",a\['FOCALPSETUP'].value(0),a\['FOCALPSETUP'].value(1))\n\nc\['disable'].setValue(1)\na\['Z_focus_picker'].setValue(fp)\n\na\['center'].setExpression('Z_focus_picker')\n\na\['center'].setEnabled(False)\na\['ZfpEasy'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['MZF'].setEnabled(True)\na\['FP'].setEnabled(False)\na\['Z_focus_picker'].setEnabled(True)\na\['ResultB'].setEnabled(True)\na\['DepthN'].setEnabled(False)\na\['DepthB'].setEnabled(True)\na\['AlphaF'].setEnabled(True)\n"}
+ addUserKnob {26 ""}
+ addUserKnob {26 txthelp l INVISIBLE -STARTLINE +INVISIBLE T "     Experimental mode"}
+ addUserKnob {41 center l INVISIBLE +INVISIBLE T ZDefocus1.center}
+ addUserKnob {22 MZF l INVISIBLE t "To use the default mode , click on that button if you want set the focal point direclly ,\nBe careful this mode not working with the focal point . (The focal point system from nuke  coul be  break all the Node) If it s the case , click on Reset Zdepth" -STARTLINE +INVISIBLE T "a = nuke.thisNode()\nb = nuke.toNode('ZDefocus2')\na\['center'].clearAnimated()\n\na\['center'].setEnabled(True)\na\['ZfpEasy'].setEnabled(True)\na\['Zfp'].setEnabled(True)\na\['MZF'].setEnabled(False)\na\['Z_focus_picker'].setEnabled(False)\na\['FP'].setEnabled(True)\n"}
+ addUserKnob {6 Z_focus_pickerX_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 div l INVISIBLE +INVISIBLE}
+ addUserKnob {41 focal_point_sample l INVISIBLE +INVISIBLE T ZDefocus2.focal_point}
+ addUserKnob {41 focus_area_size l "Depth on field size" t "Set the focus area size" T ZDefocus2.dof}
+ addUserKnob {41 defocus_amount l "Defocus amount" T ZDefocus2.size}
+ addUserKnob {41 max_size l Maximum T ZDefocus2.max_size}
+ addUserKnob {41 math l INVISIBLE +INVISIBLE T ZDefocus2.math}
+ addUserKnob {26 ""}
+ addUserKnob {20 filterG l "Filter Depth" n 1}
+ filterG 0
+ addUserKnob {41 filter_type l "filter type" T ZDefocus2.filter_type}
+ addUserKnob {41 legacy_resize_mode l "legacy resize mode" T ZDefocus2.legacy_resize_mode}
+ addUserKnob {41 aspect l "aspect ratio" T ZDefocus2.aspect}
+ addUserKnob {41 blades T ZDefocus2.blades}
+ addUserKnob {41 roundness T ZDefocus2.roundness}
+ addUserKnob {41 rotation T ZDefocus2.rotation}
+ addUserKnob {41 inner_size l "inner size" T ZDefocus2.inner_size}
+ addUserKnob {41 inner_feather l "inner feather" T ZDefocus2.inner_feather}
+ addUserKnob {41 inner_brightness l "inner brightness" T ZDefocus2.inner_brightness}
+ addUserKnob {41 catadioptric_size l "catadioptric size" T ZDefocus2.catadioptric_size}
+ addUserKnob {41 catadioptric T ZDefocus2.catadioptric}
+ addUserKnob {26 ""}
+ addUserKnob {41 bloom_gamma l "gamma correction" T ZDefocus2.bloom_gamma}
+ addUserKnob {41 bloom T ZDefocus2.bloom}
+ addUserKnob {41 bloom_threshold l "bloom threshold" T ZDefocus2.bloom_threshold}
+ addUserKnob {41 bloom_gain l "bloom gain" T ZDefocus2.bloom_gain}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {6 Zalpha l INVISIBLE t "Custom fix to put a Dof on the foreground plan, more powerful than the classic Zdefocus tool from Nuke." +INVISIBLE +STARTLINE}
+ addUserKnob {22 ZfixEdges l "Z Fix Edge FG - BG" T "a= nuke.thisNode()\n\na\['Zalpha'].setValue(1)\na\['ZfixEdges'].setEnabled(False)\na\['Classicmode'].setEnabled(True)" +STARTLINE}
+ addUserKnob {22 resetZfE l "" -STARTLINE T "a= nuke.thisNode()\n\na\['ZfixEdges'].setEnabled(True)\na\['ZfixEdgeB'].setEnabled(True)"}
+ addUserKnob {22 Classicmode l "Classic mode" -STARTLINE T "a= nuke.thisNode()\n\na\['Zalpha'].setValue(0)\na\['ZfixEdges'].setEnabled(True)\na\['Classicmode'].setEnabled(False)"}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix l "Mix Z fix Edge BG-FG" T Zdefocus_filter.mix}
+ addUserKnob {7 M_Zedge l "Z edge multiplier"}
+ M_Zedge 1
+ addUserKnob {7 Size_Zedge l "Size edge Fix"}
+ Size_Zedge 1
+ addUserKnob {7 Blur_Zedge l "Blur Z edge" R 0 200}
+ Blur_Zedge 75
+ addUserKnob {41 filter_2 l "" -STARTLINE T ZEdge.filter}
+ addUserKnob {41 show_image l INVISIBLE t "To see you picture throught the focal plane setup node" -STARTLINE +INVISIBLE T ZDefocus2.show_image}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {6 disable_z l INVISIBLE +INVISIBLE +STARTLINE}
+ addUserKnob {20 Depth l "Depth Format"}
+ addUserKnob {22 ZprSetup l INVISIBLE -STARTLINE +INVISIBLE T "nuke.root().begin()\nd = nuke.thisNode()\na = nuke.createNode('JLA_Connect', inpanel =False)\nb = nuke.createNode('JLA_Connect', inpanel =False)\nc = nuke.createNode('ZMerge', inpanel =False)\n\nc.setInput(1,a)\n\n"}
+ addUserKnob {26 ""}
+ addUserKnob {20 reformat l Reformat n 1}
+ addUserKnob {41 format l "output format" T Reformat1.format}
+ addUserKnob {41 resize l " resize Depth" -STARTLINE T Reformat1.resize}
+ addUserKnob {41 filter l "    filter Depth" -STARTLINE T Reformat1.filter}
+ addUserKnob {26 ""}
+ addUserKnob {26 RBTU l "Read Before to Use :" T "\n\n\nUse only this part  if you have a custom Depth Resolution.\nYou need to choose the resolution Z 2:1 on the Zdefocus mode.\n"}
+ addUserKnob {26 ""}
+ addUserKnob {41 type l INVISIBLE +INVISIBLE T Reformat2.type}
+ addUserKnob {41 format_1 l "Depth format" T Reformat2.format}
+ addUserKnob {26 ""}
+ addUserKnob {41 box_width l INVISIBLE +INVISIBLE T Reformat2.box_width}
+ addUserKnob {41 box_height l INVISIBLE -STARTLINE +INVISIBLE T Reformat2.box_height}
+ addUserKnob {41 box_fixed l INVISIBLE +INVISIBLE T Reformat2.box_fixed}
+ addUserKnob {41 box_pixel_aspect l "pixel aspect" T Reformat2.box_pixel_aspect}
+ addUserKnob {41 scale l INVISIBLE +INVISIBLE T Reformat2.scale}
+ addUserKnob {41 resize_1 l "resize type" T Reformat2.resize}
+ addUserKnob {41 filter_1 l filter -STARTLINE T Reformat2.filter}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {41 center_1 l INVISIBLE +INVISIBLE T Reformat2.center}
+ addUserKnob {20 Info}
+ addUserKnob {26 Help l "" +STARTLINE T "LCA Zdepth 2.4\nelcfx@me.com\n\nIf you have some issue or suggestion with this node let me know.\n\n"}
+ addUserKnob {26 ""}
+ addUserKnob {22 hwtum l "How to use me" T "import webbrowser\n\ndef openWebpage():\n  webbrowser.open(\"http://www.nukepedia.com/gizmos/filter/zdepthvx\")\n\nopenWebpage()" +STARTLINE}
+}
+ Dot {
+  inputs 0
+  name Dot4
+  xpos 1345
+  ypos -744
+  hide_input true
+ }
+ Dot {
+  name Dot3
+  xpos 1345
+  ypos -643
+ }
+ Dot {
+  name Dot5
+  xpos 1406
+  ypos -643
+ }
+ Dot {
+  inputs 0
+  name Dot9
+  xpos 1497
+  ypos -641
+  hide_input true
+ }
+ Dot {
+  name Dot8
+  xpos 1430
+  ypos -641
+ }
+ Dot {
+  name Dot6
+  xpos 1430
+  ypos -734
+ }
+ Dot {
+  name Dot7
+  xpos 1497
+  ypos -734
+ }
+ Dot {
+  inputs 0
+  name Dot16
+  xpos 1182
+  ypos -529
+  hide_input true
+ }
+ Input {
+  inputs 0
+  name Depth_in
+  xpos -264
+  ypos -532
+  number 1
+ }
+set N7dc65c00 [stack 0]
+push $N7dc65c00
+ Dot {
+  name Dot19
+  xpos -230
+  ypos -636
+ }
+ Shuffle {
+  in depth
+  name Z_Depth_channel
+  xpos -76
+  ypos -640
+ }
+set N7dc65400 [stack 0]
+ Switch {
+  inputs 2
+  which {{channel}}
+  name Switch8
+  xpos -76
+  ypos -532
+ }
+set N93fd1f80 [stack 0]
+ Dot {
+  name Dot13
+  xpos 140
+  ypos -528
+ }
+push $N93fd1f80
+ Dot {
+  name Dot20
+  xpos -42
+  ypos -296
+ }
+ Reformat {
+  clamp true
+  name Reformat1
+  xpos 215
+  ypos -300
+ }
+ Switch {
+  inputs 2
+  which {{Zdefocus}}
+  name Switch2
+  xpos 260
+  ypos -532
+ }
+ set C93fd1b00 [stack 0]
+set N93fd1b00 [stack 0]
+ Grade {
+  channels alpha
+  whitepoint 10000
+  name depth_grade
+  xpos 462
+  ypos -538
+ }
+set N7dc64000 [stack 0]
+ Input {
+  inputs 0
+  name Sc_in
+  label "\n"
+  xpos 855
+  ypos -711
+ }
+set N193b5c00 [stack 0]
+ Reformat {
+  name Reformat2
+  xpos 592
+  ypos -707
+ }
+ set C193b5800 [stack 0]
+set N193b5800 [stack 0]
+push $N193b5c00
+ Switch {
+  inputs 2
+  which {{Zdefocus}}
+  name Switch3
+  xpos 940
+  ypos -620
+ }
+ set C93fd0d80 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 depth.Z
+  name Copy2
+  xpos 940
+  ypos -543
+  disable {{disable_z}}
+ }
+ set C193b5000 [stack 0]
+set N193b5000 [stack 0]
+ ZDefocus2 {
+  inputs 2
+  math depth
+  output "focal plane setup"
+  show_image false
+  center {{Z_focus_picker}}
+  focal_point {{parent.ZDefocus2.focal_point.x x1001 1416} {parent.ZDefocus2.focal_point.y x1001 444}}
+  dof {{parent.ZDefocus2.dof 0.9499999881 x1047 0.7350000143}}
+  filter_channel none
+  name ZDefocus1
+  xpos 1058
+  ypos -539
+ }
+set N193b4c00 [stack 0]
+ Expression {
+  channel0 rgb
+  expr0 b
+  name Blue
+  xpos 1107
+  ypos -466
+ }
+push $N193b5000
+ ZDefocus2 {
+  output "focal plane setup"
+  show_image false
+  center {{parent.ZDefocus2.center}}
+  dof {{parent.ZDefocus2.dof x1058 0.4799999893}}
+  blur_dof false
+  legacy_resize_mode false
+  show_legacy_resize_mode false
+  name ZDefocus4
+  xpos 534
+  ypos -378
+ }
+set N19867c00 [stack 0]
+ Expression {
+  expr0 r-r
+  expr2 b-b
+  name Expression1
+  xpos 534
+  ypos -322
+ }
+set N19867400 [stack 0]
+push $N93fd1b00
+ Dot {
+  name Dot21
+  xpos 323
+  ypos -406
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Z
+  xpos 352
+  ypos -362
+ }
+ Merge2 {
+  inputs 2
+  operation exclusion
+  mix 0.515
+  name Merge5
+  xpos 352
+  ypos -322
+  disable {{parent.Merge3.disable}}
+ }
+push $N193b4c00
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle_ZAlpha
+  xpos 1006
+  ypos -461
+ }
+push $N7dc64000
+push $N193b5800
+ Dot {
+  name Dot14
+  xpos 626
+  ypos -610
+ }
+push $N193b5c00
+clone $C93fd0d80 {
+  inputs 2
+  xpos 775
+  ypos -614
+  selected false
+ }
+clone $C193b5000 {
+  inputs 2
+  xpos 775
+  ypos -572
+  selected false
+ }
+set Nddd4f800 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 895
+  ypos -462
+ }
+set Nddd4f400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle_Alpha
+  xpos 895
+  ypos -413
+ }
+ PostageStamp {
+  name Alpha_zslice
+  xpos 642
+  ypos -316
+  hide_input true
+ }
+push $N19867c00
+ Expression {
+  expr0 r-r
+  expr1 g-g
+  name Expression2
+  xpos 534
+  ypos -436
+ }
+push 0
+push $N19867400
+push $N93fd1b00
+ Expression {
+  expr0 a
+  expr1 a
+  expr2 a
+  channel3 depth
+  expr3 a
+  name ExprDepth
+  xpos 348
+  ypos -477
+ }
+push $N7dc64000
+ Switch {
+  inputs 2
+  which {{RefDepth}}
+  name Switch_Depth
+  xpos 458
+  ypos -477
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 630
+  ypos -477
+ }
+set N1a9f9800 [stack 0]
+ Merge2 {
+  inputs 3+1
+  mix 0.515
+  name Merge3
+  xpos 645
+  ypos -379
+ }
+ Input {
+  inputs 0
+  name filter
+  xpos 232
+  ypos -715
+  number 2
+ }
+set N1a9f9000 [stack 0]
+ Dot {
+  name Dot18
+  xpos 725
+  ypos -343
+  hide_input true
+ }
+push $Nddd4f400
+ Premult {
+  name Premult2
+  xpos 787
+  ypos -448
+ }
+push $N193b5c00
+clone $C193b5800 {
+  xpos 1038
+  ypos -707
+  selected false
+ }
+set N1a9f8400 [stack 0]
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos 1189
+  ypos -707
+ }
+push $N1a9f8400
+push $N193b5c00
+clone $C93fd1b00 {
+  inputs 2
+  xpos 1043
+  ypos -617
+  selected false
+ }
+ Switch {
+  inputs 2
+  which {{Zalpha}}
+  name Switch6
+  xpos 1189
+  ypos -617
+ }
+ Dot {
+  name Dot10
+  xpos 1232
+  ypos -150
+ }
+ Dot {
+  name Dot11
+  xpos 734
+  ypos -150
+ }
+ Merge2 {
+  inputs 2
+  also_merge rgb
+  name Merge2
+  xpos 706
+  ypos -448
+  disable {{Zalpha-1 x1170 1}}
+ }
+push $Nddd4f800
+ Switch {
+  inputs 2
+  which {{Zalpha}}
+  name Switch7
+  xpos 775
+  ypos -402
+ }
+ ZDefocus2 {
+  inputs 2
+  channels rgba
+  math depth
+  center {{parent.ZDefocus1.center x1001 0 x1005 0}}
+  dof 0.8000000119
+  blur_dof false
+  layerCurve 3.3
+  name ZDefocus2
+  xpos 775
+  ypos -353
+ }
+ set C76f50c00 [stack 0]
+set N76f50c00 [stack 0]
+ Dot {
+  name Dot12
+  xpos 809
+  ypos -218
+ }
+ Erode {
+  channels alpha
+  size 112.5
+  blur 20
+  quality 20
+  mix 0
+  name Zdefocus_filter
+  xpos 839
+  ypos -221
+ }
+ EdgeBlur {
+  channels alpha
+  size {{parent.Size_Zedge*100}}
+  quality {{parent.Blur_Zedge}}
+  crop false
+  edge_mult {{parent.M_Zedge*10}}
+  brightness 1.34
+  name ZEdge
+  xpos 939
+  ypos -221
+ }
+ Premult {
+  name Premult1
+  xpos 1034
+  ypos -215
+ }
+ Dot {
+  name Dot15
+  xpos 1067
+  ypos -295
+ }
+push $N1a9f9000
+ Dot {
+  name Dot17
+  xpos 1068
+  ypos -346
+  hide_input true
+ }
+push $N193b5000
+clone $C76f50c00 {
+  inputs 2
+  xpos 940
+  ypos -356
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation disjoint-over
+  name Merge1
+  xpos 940
+  ypos -299
+ }
+ Dot {
+  name Dot2
+  xpos 975
+  ypos -252
+ }
+push $N76f50c00
+ Switch {
+  inputs 2
+  which {{Zalpha}}
+  name Switch5
+  xpos 866
+  ypos -260
+ }
+ Switch {
+  inputs 5
+  which {{zdepth}}
+  name Switch1
+  xpos 559
+  ypos -254
+ }
+set Ne1fbf180 [stack 0]
+ Reformat {
+  format {{{Reformat1.format}}}
+  filter Lanczos6
+  clamp true
+  name Reformat3
+  xpos 442
+  ypos -264
+ }
+ Dot {
+  name Dot1
+  xpos 472
+  ypos 12
+ }
+push $Ne1fbf180
+ Switch {
+  inputs 2
+  which {{Zdefocus}}
+  name Switch4
+  xpos 559
+  ypos 8
+ }
+ Premult {
+  name Premult3
+  xpos 559
+  ypos 105
+  disable true
+ }
+ Output {
+  name Output1
+  xpos 559
+  ypos 278
+ }
+push $N1a9f9800
+ Expression {
+  channel0 rgba
+  expr0 r
+  expr1 g
+  expr2 b
+  channel3 {-rgba.alpha}
+  expr3 "r (EF.x, EF.y)"
+  name Focal_Exp
+  xpos 426
+  ypos -428
+  disable true
+  addUserKnob {20 User}
+  addUserKnob {19 RGBA l "Color processing"}
+  RGBA {{"\[sample this red EFRGBA.x EFRGBA.y]"} {"\[sample this green EFRGBA.x EFRGBA.y]"} {"\[sample this blue EFRGBA.x EFRGBA.y]"} 0}
+  addUserKnob {6 RGBA_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {12 EFRGBA l INVISIBLE +INVISIBLE}
+  EFRGBA {{parent.EF.x} {parent.EF.y}}
+ }
+push $N1a9f9800
+ Viewer {
+  frame_range 1001-1001
+  fps 25
+  colour_sample_bbox {0.09791667014 -0.1604166627 0.09895833582 -0.159374997}
+  samplepoints {{0.25 0}
+    }
+  name Viewer1
+  xpos 352
+  ypos -263
+ }
+push $N7dc65400
+ CurveTool {
+  operation "Max Luma Pixel"
+  ROI {0.08000004292 0.3000000119 1997.300049 1078}
+  autocropdata {0.25 0.3000000119 1997.449951 1078}
+  maxlumapixdata {1517 734}
+  maxlumapixvalue {20000 20000 20000}
+  minlumapixvalue {0 0 0}
+  name Zdepth_Pixel
+  selected true
+  xpos 247
+  ypos -640
+ }
+end_group

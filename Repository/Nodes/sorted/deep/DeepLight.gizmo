@@ -1,0 +1,1219 @@
+#! C:/Program Files/Nuke10.5v4/nuke-10.5.4.dll -nx
+version 10.5 v4
+Gizmo {
+ inputs 2
+ tile_color 0x65ff
+ addUserKnob {20 User l DeepLight}
+ addUserKnob {4 mode M {"point light" "spot light"}}
+ mode "spot light"
+ addUserKnob {4 result M {add replace}}
+ addUserKnob {26 ""}
+ addUserKnob {7 falloff}
+ falloff 800
+ addUserKnob {18 color}
+ color {0.1899999976 0.6841001511 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 intensity}
+ intensity 5
+ addUserKnob {26 div1 l "spot light"}
+ addUserKnob {7 radius}
+ radius 0.45
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -1470
+  ypos -186
+ }
+set N4be8000 [stack 0]
+push $N4be8000
+ Group {
+  name DeepStackOp
+  tile_color 0xa59fff
+  label "\[value mode]"
+  xpos -1558
+  ypos -144
+  addUserKnob {20 User l DeepStackOp}
+  addUserKnob {4 stackChannel M {stack1 stack2}}
+  stackChannel stack2
+  addUserKnob {4 mode M {push pop pop_mult pop_add pop_mixback ""}}
+  addUserKnob {26 ""}
+  addUserKnob {20 push_grp l push n 1}
+  push_grp 0
+  addUserKnob {6 addchannel l "create stack channel" +STARTLINE}
+  addchannel true
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {20 pop_grp l pop n 1}
+  pop_grp 0
+  addUserKnob {6 preserveAlpha +STARTLINE}
+  preserveAlpha true
+  addUserKnob {6 mixback_invert +STARTLINE}
+  addUserKnob {3 mixback_invert_int l INVISIBLE -STARTLINE +INVISIBLE}
+  mixback_invert_int {{mixback_invert}}
+  addUserKnob {20 endGroup_1 l endGroup n -1}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos 107
+   ypos -428
+  }
+set N4c43c00 [stack 0]
+  Dot {
+   name Dot4
+   xpos 498
+   ypos -234
+  }
+set N4c43800 [stack 0]
+  Dot {
+   name Dot5
+   xpos 710
+   ypos -234
+  }
+set N4c43400 [stack 0]
+  Dot {
+   name Dot6
+   xpos 942
+   ypos -234
+  }
+set N4c43000 [stack 0]
+  Dot {
+   name Dot8
+   xpos 1176
+   ypos -234
+  }
+set N4c42c00 [stack 0]
+  DeepExpression {
+   temp_name0 m
+   temp_expr0 "\[value parent.mixback_invert_int] ? (1-mask.a) : mask.a"
+   chans1 none
+   rgba.red "r*m + stack2.red*(1-m)"
+   rgba.green "g*m + stack2.green*(1-m)"
+   rgba.blue "b*m + stack2.blue*(1-m)"
+   rgba.alpha a
+   name DeepExpression3
+   xpos 1235
+   ypos -163
+  }
+push $N4c42c00
+  DeepExpression {
+   temp_name0 m
+   temp_expr0 "\[value parent.mixback_invert_int] ? (1-mask.a) : mask.a"
+   chans1 none
+   rgba.red "r*m + stack2.red*(1-m)"
+   rgba.green "g*m + stack2.green*(1-m)"
+   rgba.blue "b*m + stack2.blue*(1-m)"
+   rgba.alpha "a*m + stack2.alpha*(1-m)"
+   name DeepExpression4
+   xpos 1142
+   ypos -189
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch11
+   xpos 1142
+   ypos -121
+  }
+push $N4c43000
+  DeepExpression {
+   chans1 none
+   rgba.red "stack2.red + r"
+   rgba.green "stack2.green + g"
+   rgba.blue "stack2.blue + b"
+   rgba.alpha a
+   name DeepExpression_popMult4
+   xpos 1001
+   ypos -149
+  }
+push $N4c43000
+  DeepExpression {
+   chans1 none
+   rgba.red "stack2.red + r"
+   rgba.green "stack2.green + g"
+   rgba.blue "stack2.blue + b"
+   rgba.alpha "stack2.alpha + a"
+   name DeepExpression_popMult5
+   xpos 908
+   ypos -177
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch5
+   xpos 908
+   ypos -115
+  }
+push $N4c43400
+  DeepExpression {
+   chans1 none
+   rgba.red "stack2.red * r"
+   rgba.green "stack2.green * g"
+   rgba.blue "stack2.blue * b"
+   rgba.alpha a
+   name DeepExpression_popMult6
+   xpos 753
+   ypos -148
+  }
+push $N4c43400
+  DeepExpression {
+   chans1 none
+   rgba.red "stack2.red * r"
+   rgba.green "stack2.green * g"
+   rgba.blue "stack2.blue * b"
+   rgba.alpha "stack2.alpha * a"
+   name DeepExpression_popMult7
+   xpos 676
+   ypos -177
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch6
+   xpos 676
+   ypos -115
+  }
+push $N4c43800
+  DeepExpression {
+   chans1 none
+   rgba.red stack2.red
+   rgba.green stack2.green
+   rgba.blue stack2.blue
+   rgba.alpha stack2.alpha
+   name DeepExpression_pop2
+   xpos 535
+   ypos -151
+  }
+push $N4c43800
+  DeepExpression {
+   chans1 none
+   rgba.red stack2.red
+   rgba.green stack2.green
+   rgba.blue stack2.blue
+   rgba.alpha stack2.alpha
+   name DeepExpression_pop3
+   xpos 464
+   ypos -178
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch7
+   xpos 464
+   ypos -113
+  }
+push $N4c43800
+add_layer {stack2 stack2.red stack2.green stack2.blue stack2.alpha}
+  Group {
+   name DeepAddChannel1
+   tile_color 0x65ff
+   xpos 323
+   ypos -182
+   disable {{!parent.addchannel}}
+   addUserKnob {20 User}
+   addUserKnob {41 out l "out 1" T Shuffle5.out}
+  }
+   Input {
+    inputs 0
+    name deep
+    xpos -1470
+    ypos -232
+   }
+   Dot {
+    name Dot5
+    xpos -1436
+    ypos 138
+   }
+set N4c6e400 [stack 0]
+   Dot {
+    name Dot6
+    xpos -1216
+    ypos 138
+   }
+   DeepToImage {
+    name DeepToImage5
+    xpos -1250
+    ypos 231
+   }
+   Reformat {
+    inputs 0
+    type "to box"
+    box_width {{input.width}}
+    box_height {{input.height}}
+    box_fixed true
+    scale {1 1}
+    name Reformat1
+    selected true
+    xpos -1131
+    ypos 305
+   }
+   Shuffle {
+    in2 rgba
+    red black
+    green black
+    blue black
+    alpha black
+    black black
+    white black
+    red2 black
+    green2 black
+    out stack2
+    out2 rgba
+    name Shuffle5
+    label "\[knob in]>\[knob out]"
+    xpos -1250
+    ypos 299
+   }
+   DeepFromImage {
+    z 1
+    name DeepFromImage2
+    xpos -1250
+    ypos 375
+   }
+   Dot {
+    name Dot7
+    xpos -1216
+    ypos 450
+   }
+push $N4c6e400
+   DeepMerge {
+    inputs 2
+    name DeepMerge3
+    xpos -1470
+    ypos 446
+   }
+   Output {
+    name Output1
+    xpos -1470
+    ypos 974
+   }
+  end_group
+  DeepExpression {
+   chans0 stack2
+   chans1 none
+   stack2.red r
+   stack2.green g
+   stack2.blue b
+   stack2.alpha a
+   name DeepExpression_stack1
+   xpos 323
+   ypos -156
+  }
+  Switch {
+   inputs 5
+   which {{parent.mode}}
+   name Switch8
+   xpos 464
+   ypos -34
+  }
+push $N4c43c00
+  Dot {
+   name Dot1
+   xpos -623
+   ypos -249
+  }
+set N4cdd800 [stack 0]
+  Dot {
+   name Dot2
+   xpos -411
+   ypos -249
+  }
+set N4cdd400 [stack 0]
+  Dot {
+   name Dot3
+   xpos -179
+   ypos -249
+  }
+set N4cdd000 [stack 0]
+  Dot {
+   name Dot7
+   xpos 50
+   ypos -249
+  }
+set N4cdcc00 [stack 0]
+  DeepExpression {
+   temp_name0 m
+   temp_expr0 "\[value parent.mixback_invert_int] ? (1-mask.a) : mask.a"
+   chans1 none
+   rgba.red "r*m + stack.red*(1-m)"
+   rgba.green "g*m + stack.green*(1-m)"
+   rgba.blue "b*m + stack.blue*(1-m)"
+   rgba.alpha a
+   name DeepExpression2
+   xpos 109
+   ypos -178
+  }
+push $N4cdcc00
+  DeepExpression {
+   temp_name0 m
+   temp_expr0 "\[value parent.mixback_invert_int] ? (1-mask.a) : mask.a"
+   chans1 none
+   rgba.red "r*m + stack.red*(1-m)"
+   rgba.green "g*m + stack.green*(1-m)"
+   rgba.blue "b*m + stack.blue*(1-m)"
+   rgba.alpha "a*m + stack.alpha*(1-m)"
+   name DeepExpression1
+   xpos 16
+   ypos -204
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch10
+   xpos 16
+   ypos -136
+  }
+push $N4cdd000
+  DeepExpression {
+   chans1 none
+   rgba.red "stack.red + r"
+   rgba.green "stack.green + g"
+   rgba.blue "stack.blue + b"
+   rgba.alpha a
+   name DeepExpression_popMult3
+   xpos -120
+   ypos -164
+  }
+push $N4cdd000
+  DeepExpression {
+   chans1 none
+   rgba.red "stack.red + r"
+   rgba.green "stack.green + g"
+   rgba.blue "stack.blue + b"
+   rgba.alpha "stack.alpha + a"
+   name DeepExpression_popMult1
+   xpos -213
+   ypos -192
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch4
+   xpos -213
+   ypos -130
+  }
+push $N4cdd400
+  DeepExpression {
+   chans1 none
+   rgba.red "stack.red * r"
+   rgba.green "stack.green * g"
+   rgba.blue "stack.blue * b"
+   rgba.alpha a
+   name DeepExpression_popMult2
+   xpos -368
+   ypos -163
+  }
+push $N4cdd400
+  DeepExpression {
+   chans1 none
+   rgba.red "stack.red * r"
+   rgba.green "stack.green * g"
+   rgba.blue "stack.blue * b"
+   rgba.alpha "stack.alpha * a"
+   name DeepExpression_popMult
+   xpos -445
+   ypos -192
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch3
+   xpos -445
+   ypos -130
+  }
+push $N4cdd800
+  DeepExpression {
+   chans1 none
+   rgba.red stack.red
+   rgba.green stack.green
+   rgba.blue stack.blue
+   rgba.alpha stack.alpha
+   name DeepExpression_pop1
+   xpos -586
+   ypos -166
+  }
+push $N4cdd800
+  DeepExpression {
+   chans1 none
+   rgba.red stack.red
+   rgba.green stack.green
+   rgba.blue stack.blue
+   rgba.alpha stack.alpha
+   name DeepExpression_pop
+   xpos -657
+   ypos -193
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch2
+   xpos -657
+   ypos -128
+  }
+push $N4cdd800
+add_layer {stack stack.red stack.green stack.blue stack.alpha}
+  Group {
+   name DeepAddChannel3
+   tile_color 0x65ff
+   xpos -798
+   ypos -197
+   disable {{!parent.addchannel}}
+   addUserKnob {20 User}
+   addUserKnob {41 out l "out 1" T Shuffle5.out}
+  }
+   Input {
+    inputs 0
+    name deep
+    xpos -1470
+    ypos -232
+   }
+   Dot {
+    name Dot5
+    xpos -1436
+    ypos 138
+   }
+set N4d10400 [stack 0]
+   Dot {
+    name Dot6
+    xpos -1216
+    ypos 138
+   }
+   DeepToImage {
+    name DeepToImage5
+    xpos -1250
+    ypos 231
+   }
+   Reformat {
+    inputs 0
+    type "to box"
+    box_width {{input.width}}
+    box_height {{input.height}}
+    box_fixed true
+    scale {1 1}
+    name Reformat1
+    selected true
+    xpos -1131
+    ypos 305
+   }
+   Shuffle {
+    in2 rgba
+    red black
+    green black
+    blue black
+    alpha black
+    black black
+    white black
+    red2 black
+    green2 black
+    out stack
+    out2 rgba
+    name Shuffle5
+    label "\[knob in]>\[knob out]"
+    xpos -1250
+    ypos 299
+   }
+   DeepFromImage {
+    z 1
+    name DeepFromImage2
+    xpos -1250
+    ypos 375
+   }
+   Dot {
+    name Dot7
+    xpos -1216
+    ypos 450
+   }
+push $N4d10400
+   DeepMerge {
+    inputs 2
+    name DeepMerge3
+    xpos -1470
+    ypos 446
+   }
+   Output {
+    name Output1
+    xpos -1470
+    ypos 974
+   }
+  end_group
+  DeepExpression {
+   chans0 stack
+   chans1 none
+   stack.red r
+   stack.green g
+   stack.blue b
+   stack.alpha a
+   name DeepExpression_stack
+   xpos -798
+   ypos -171
+  }
+  Switch {
+   inputs 5
+   which {{parent.mode}}
+   name Switch1
+   xpos -657
+   ypos -49
+  }
+  Switch {
+   inputs 2
+   which {{parent.stackChannel}}
+   name Switch9
+   xpos 52
+   ypos 128
+  }
+  Output {
+   name Output1
+   xpos 52
+   ypos 230
+  }
+ end_group
+ Switch {
+  inputs 2
+  which {{parent.result}}
+  name Switch3
+  xpos -1470
+  ypos -104
+ }
+ DeepExpression {
+  temp_name0 px
+  temp_expr0 "pworld.x-\[value CamInfo.world_matrix.3]"
+  temp_name1 py
+  temp_expr1 "pworld.y-\[value CamInfo.world_matrix.7]"
+  temp_name2 pz
+  temp_expr2 "pworld.z-\[value CamInfo.world_matrix.11]"
+  chans1 none
+  rgba.red "\[value CamInfo.world_matrix.0]*px + \[value CamInfo.world_matrix.4]*py + \[value CamInfo.world_matrix.8]*pz"
+  rgba.green "\[value CamInfo.world_matrix.1]*px + \[value CamInfo.world_matrix.5]*py + \[value CamInfo.world_matrix.9]*pz"
+  rgba.blue "-(\[value CamInfo.world_matrix.2]*px + \[value CamInfo.world_matrix.6]*py + \[value CamInfo.world_matrix.10]*pz)"
+  name DeepExpression_allinone
+  xpos -1470
+  ypos -61
+ }
+set N4d7d400 [stack 0]
+ DeepExpression {
+  temp_name0 v
+  temp_expr0 "b < 0 ? 0 : ((\[value parent.radius]*b)-sqrt(r*r+g*g))/(\[value parent.radius]*b)"
+  temp_name1 d
+  temp_expr1 sqrt(r*r+g*g+b*b)
+  temp_name2 f
+  temp_expr2 "\[value parent.falloff]"
+  chans0 {rgba.red rgba.green -rgba.blue -rgba.alpha}
+  chans1 none
+  rgba.red "v <= 0 ? (v >= 1 ? v*v : 1) : 0"
+  rgba.green "d <= f ? 0 : pow2((f-d)/f)"
+  name DeepExpression_coneClamped1
+  xpos -1372
+  ypos -15
+ }
+ DeepExpression {
+  temp_name0 v
+  temp_expr0 "r * g * \[value parent.intensity] * 10 * stack.alpha"
+  chans1 none
+  rgba.red "v * \[value parent.color.r]"
+  rgba.green "v * \[value parent.color.g]"
+  rgba.blue "v * \[value parent.color.b]"
+  name DeepExpression_popMult1
+  xpos -1372
+  ypos 11
+ }
+push $N4d7d400
+ DeepExpression {
+  temp_name0 f
+  temp_expr0 "\[value parent.falloff]"
+  temp_name1 d
+  temp_expr1 sqrt(r*r+g*g+b*b)
+  chans0 {rgba.red rgba.green -rgba.blue -rgba.alpha}
+  chans1 none
+  rgba.green "d <= f ? 0 : pow2((f-d)/f)"
+  name DeepExpression_falloff
+  xpos -1567
+  ypos -19
+ }
+ DeepExpression {
+  temp_name0 v
+  temp_expr0 "g * \[value parent.intensity] * 2 * stack.alpha"
+  chans1 none
+  rgba.red "v * \[value parent.color.r]"
+  rgba.green "v * \[value parent.color.g]"
+  rgba.blue "v * \[value parent.color.b]"
+  name DeepExpression_popMult
+  xpos -1567
+  ypos 7
+ }
+ Switch {
+  inputs 2
+  which {{parent.mode}}
+  name Switch1
+  xpos -1468
+  ypos 74
+ }
+set N4c88480 [stack 0]
+push $N4c88480
+ Group {
+  name DeepStackOp1
+  tile_color 0xa59fff
+  label "\[value mode]"
+  xpos -1566
+  ypos 101
+  addUserKnob {20 User l DeepStackOp}
+  addUserKnob {4 stackChannel M {stack1 stack2}}
+  stackChannel stack2
+  addUserKnob {4 mode M {push pop pop_mult pop_add pop_mixback ""}}
+  mode pop_add
+  addUserKnob {26 ""}
+  addUserKnob {20 push_grp l push n 1}
+  push_grp 0
+  addUserKnob {6 addchannel l "create stack channel" +STARTLINE}
+  addchannel true
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {20 pop_grp l pop n 1}
+  pop_grp 0
+  addUserKnob {6 preserveAlpha +STARTLINE}
+  preserveAlpha true
+  addUserKnob {6 mixback_invert +STARTLINE}
+  addUserKnob {3 mixback_invert_int l INVISIBLE -STARTLINE +INVISIBLE}
+  mixback_invert_int {{mixback_invert}}
+  addUserKnob {20 endGroup_1 l endGroup n -1}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos 107
+   ypos -428
+  }
+set N4d7c000 [stack 0]
+  Dot {
+   name Dot4
+   xpos 498
+   ypos -234
+  }
+set Ne429c00 [stack 0]
+  Dot {
+   name Dot5
+   xpos 710
+   ypos -234
+  }
+set Ne429800 [stack 0]
+  Dot {
+   name Dot6
+   xpos 942
+   ypos -234
+  }
+set Ne429400 [stack 0]
+  Dot {
+   name Dot8
+   xpos 1176
+   ypos -234
+  }
+set Ne429000 [stack 0]
+  DeepExpression {
+   temp_name0 m
+   temp_expr0 "\[value parent.mixback_invert_int] ? (1-mask.a) : mask.a"
+   chans1 none
+   rgba.red "r*m + stack2.red*(1-m)"
+   rgba.green "g*m + stack2.green*(1-m)"
+   rgba.blue "b*m + stack2.blue*(1-m)"
+   rgba.alpha a
+   name DeepExpression3
+   xpos 1235
+   ypos -163
+  }
+push $Ne429000
+  DeepExpression {
+   temp_name0 m
+   temp_expr0 "\[value parent.mixback_invert_int] ? (1-mask.a) : mask.a"
+   chans1 none
+   rgba.red "r*m + stack2.red*(1-m)"
+   rgba.green "g*m + stack2.green*(1-m)"
+   rgba.blue "b*m + stack2.blue*(1-m)"
+   rgba.alpha "a*m + stack2.alpha*(1-m)"
+   name DeepExpression4
+   xpos 1142
+   ypos -189
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch11
+   xpos 1142
+   ypos -121
+  }
+push $Ne429400
+  DeepExpression {
+   chans1 none
+   rgba.red "stack2.red + r"
+   rgba.green "stack2.green + g"
+   rgba.blue "stack2.blue + b"
+   rgba.alpha a
+   name DeepExpression_popMult4
+   xpos 1001
+   ypos -149
+  }
+push $Ne429400
+  DeepExpression {
+   chans1 none
+   rgba.red "stack2.red + r"
+   rgba.green "stack2.green + g"
+   rgba.blue "stack2.blue + b"
+   rgba.alpha "stack2.alpha + a"
+   name DeepExpression_popMult5
+   xpos 908
+   ypos -177
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch5
+   xpos 908
+   ypos -115
+  }
+push $Ne429800
+  DeepExpression {
+   chans1 none
+   rgba.red "stack2.red * r"
+   rgba.green "stack2.green * g"
+   rgba.blue "stack2.blue * b"
+   rgba.alpha a
+   name DeepExpression_popMult6
+   xpos 753
+   ypos -148
+  }
+push $Ne429800
+  DeepExpression {
+   chans1 none
+   rgba.red "stack2.red * r"
+   rgba.green "stack2.green * g"
+   rgba.blue "stack2.blue * b"
+   rgba.alpha "stack2.alpha * a"
+   name DeepExpression_popMult7
+   xpos 676
+   ypos -177
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch6
+   xpos 676
+   ypos -115
+  }
+push $Ne429c00
+  DeepExpression {
+   chans1 none
+   rgba.red stack2.red
+   rgba.green stack2.green
+   rgba.blue stack2.blue
+   rgba.alpha stack2.alpha
+   name DeepExpression_pop2
+   xpos 535
+   ypos -151
+  }
+push $Ne429c00
+  DeepExpression {
+   chans1 none
+   rgba.red stack2.red
+   rgba.green stack2.green
+   rgba.blue stack2.blue
+   rgba.alpha stack2.alpha
+   name DeepExpression_pop3
+   xpos 464
+   ypos -178
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch7
+   xpos 464
+   ypos -113
+  }
+push $Ne429c00
+  Group {
+   name DeepAddChannel1
+   tile_color 0x65ff
+   xpos 323
+   ypos -182
+   disable {{!parent.addchannel}}
+   addUserKnob {20 User}
+   addUserKnob {41 out l "out 1" T Shuffle5.out}
+  }
+   Input {
+    inputs 0
+    name deep
+    xpos -1470
+    ypos -232
+   }
+   Dot {
+    name Dot5
+    xpos -1436
+    ypos 138
+   }
+set Ne460800 [stack 0]
+   Dot {
+    name Dot6
+    xpos -1216
+    ypos 138
+   }
+   DeepToImage {
+    name DeepToImage5
+    xpos -1250
+    ypos 231
+   }
+   Reformat {
+    inputs 0
+    type "to box"
+    box_width {{input.width}}
+    box_height {{input.height}}
+    box_fixed true
+    scale {1 1}
+    name Reformat1
+    selected true
+    xpos -1131
+    ypos 305
+   }
+   Shuffle {
+    in2 rgba
+    red black
+    green black
+    blue black
+    alpha black
+    black black
+    white black
+    red2 black
+    green2 black
+    out stack2
+    out2 rgba
+    name Shuffle5
+    label "\[knob in]>\[knob out]"
+    xpos -1250
+    ypos 299
+   }
+   DeepFromImage {
+    z 1
+    name DeepFromImage2
+    xpos -1250
+    ypos 375
+   }
+   Dot {
+    name Dot7
+    xpos -1216
+    ypos 450
+   }
+push $Ne460800
+   DeepMerge {
+    inputs 2
+    name DeepMerge3
+    xpos -1470
+    ypos 446
+   }
+   Output {
+    name Output1
+    xpos -1470
+    ypos 974
+   }
+  end_group
+  DeepExpression {
+   chans0 stack2
+   chans1 none
+   stack2.red r
+   stack2.green g
+   stack2.blue b
+   stack2.alpha a
+   name DeepExpression_stack1
+   xpos 323
+   ypos -156
+  }
+  Switch {
+   inputs 5
+   which {{parent.mode}}
+   name Switch8
+   xpos 464
+   ypos -34
+  }
+push $N4d7c000
+  Dot {
+   name Dot1
+   xpos -623
+   ypos -249
+  }
+set Ne4cfc00 [stack 0]
+  Dot {
+   name Dot2
+   xpos -411
+   ypos -249
+  }
+set Ne4cf800 [stack 0]
+  Dot {
+   name Dot3
+   xpos -179
+   ypos -249
+  }
+set Ne4cf400 [stack 0]
+  Dot {
+   name Dot7
+   xpos 50
+   ypos -249
+  }
+set Ne4cf000 [stack 0]
+  DeepExpression {
+   temp_name0 m
+   temp_expr0 "\[value parent.mixback_invert_int] ? (1-mask.a) : mask.a"
+   chans1 none
+   rgba.red "r*m + stack.red*(1-m)"
+   rgba.green "g*m + stack.green*(1-m)"
+   rgba.blue "b*m + stack.blue*(1-m)"
+   rgba.alpha a
+   name DeepExpression2
+   xpos 109
+   ypos -178
+  }
+push $Ne4cf000
+  DeepExpression {
+   temp_name0 m
+   temp_expr0 "\[value parent.mixback_invert_int] ? (1-mask.a) : mask.a"
+   chans1 none
+   rgba.red "r*m + stack.red*(1-m)"
+   rgba.green "g*m + stack.green*(1-m)"
+   rgba.blue "b*m + stack.blue*(1-m)"
+   rgba.alpha "a*m + stack.alpha*(1-m)"
+   name DeepExpression1
+   xpos 16
+   ypos -204
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch10
+   xpos 16
+   ypos -136
+  }
+push $Ne4cf400
+  DeepExpression {
+   chans1 none
+   rgba.red "stack.red + r"
+   rgba.green "stack.green + g"
+   rgba.blue "stack.blue + b"
+   rgba.alpha a
+   name DeepExpression_popMult3
+   xpos -120
+   ypos -164
+  }
+push $Ne4cf400
+  DeepExpression {
+   chans1 none
+   rgba.red "stack.red + r"
+   rgba.green "stack.green + g"
+   rgba.blue "stack.blue + b"
+   rgba.alpha "stack.alpha + a"
+   name DeepExpression_popMult1
+   xpos -213
+   ypos -192
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch4
+   xpos -213
+   ypos -130
+  }
+push $Ne4cf800
+  DeepExpression {
+   chans1 none
+   rgba.red "stack.red * r"
+   rgba.green "stack.green * g"
+   rgba.blue "stack.blue * b"
+   rgba.alpha a
+   name DeepExpression_popMult2
+   xpos -368
+   ypos -163
+  }
+push $Ne4cf800
+  DeepExpression {
+   chans1 none
+   rgba.red "stack.red * r"
+   rgba.green "stack.green * g"
+   rgba.blue "stack.blue * b"
+   rgba.alpha "stack.alpha * a"
+   name DeepExpression_popMult
+   xpos -445
+   ypos -192
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch3
+   xpos -445
+   ypos -130
+  }
+push $Ne4cfc00
+  DeepExpression {
+   chans1 none
+   rgba.red stack.red
+   rgba.green stack.green
+   rgba.blue stack.blue
+   rgba.alpha stack.alpha
+   name DeepExpression_pop1
+   xpos -586
+   ypos -166
+  }
+push $Ne4cfc00
+  DeepExpression {
+   chans1 none
+   rgba.red stack.red
+   rgba.green stack.green
+   rgba.blue stack.blue
+   rgba.alpha stack.alpha
+   name DeepExpression_pop
+   xpos -657
+   ypos -193
+  }
+  Switch {
+   inputs 2
+   which {{parent.preserveAlpha}}
+   name Switch2
+   xpos -657
+   ypos -128
+  }
+push $Ne4cfc00
+  Group {
+   name DeepAddChannel3
+   tile_color 0x65ff
+   xpos -798
+   ypos -197
+   disable {{!parent.addchannel}}
+   addUserKnob {20 User}
+   addUserKnob {41 out l "out 1" T Shuffle5.out}
+  }
+   Input {
+    inputs 0
+    name deep
+    xpos -1470
+    ypos -232
+   }
+   Dot {
+    name Dot5
+    xpos -1436
+    ypos 138
+   }
+set Ne506800 [stack 0]
+   Dot {
+    name Dot6
+    xpos -1216
+    ypos 138
+   }
+   DeepToImage {
+    name DeepToImage5
+    xpos -1250
+    ypos 231
+   }
+   Reformat {
+    inputs 0
+    type "to box"
+    box_width {{input.width}}
+    box_height {{input.height}}
+    box_fixed true
+    scale {1 1}
+    name Reformat1
+    selected true
+    xpos -1131
+    ypos 305
+   }
+   Shuffle {
+    in2 rgba
+    red black
+    green black
+    blue black
+    alpha black
+    black black
+    white black
+    red2 black
+    green2 black
+    out stack
+    out2 rgba
+    name Shuffle5
+    label "\[knob in]>\[knob out]"
+    xpos -1250
+    ypos 299
+   }
+   DeepFromImage {
+    z 1
+    name DeepFromImage2
+    xpos -1250
+    ypos 375
+   }
+   Dot {
+    name Dot7
+    xpos -1216
+    ypos 450
+   }
+push $Ne506800
+   DeepMerge {
+    inputs 2
+    name DeepMerge3
+    xpos -1470
+    ypos 446
+   }
+   Output {
+    name Output1
+    xpos -1470
+    ypos 974
+   }
+  end_group
+  DeepExpression {
+   chans0 stack
+   chans1 none
+   stack.red r
+   stack.green g
+   stack.blue b
+   stack.alpha a
+   name DeepExpression_stack
+   xpos -798
+   ypos -171
+  }
+  Switch {
+   inputs 5
+   which {{parent.mode}}
+   name Switch1
+   xpos -657
+   ypos -49
+  }
+  Switch {
+   inputs 2
+   which {{parent.stackChannel}}
+   name Switch9
+   xpos 52
+   ypos 128
+  }
+  Output {
+   name Output1
+   xpos 52
+   ypos 230
+  }
+ end_group
+ Switch {
+  inputs 2
+  which {{parent.result}}
+  name Switch2
+  xpos -1468
+  ypos 141
+ }
+ Output {
+  name Output1
+  xpos -1468
+  ypos 183
+ }
+ Input {
+  inputs 0
+  name axis
+  selected true
+  xpos -1140
+  ypos -184
+  number 1
+ }
+ Camera2 {
+  focal 0
+  haperture 0
+  vaperture 0
+  name CamInfo
+  xpos -1130
+  ypos -80
+ }
+end_group

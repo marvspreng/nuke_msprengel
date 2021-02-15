@@ -1,0 +1,388 @@
+#! /Applications/Nuke9.0v6/Nuke9.0v6.app/Contents/MacOS//libnuke-9.0.6.dylib -nx
+version 9.0 v6
+Gizmo {
+ addUserKnob {20 User l RoundRect}
+ addUserKnob {26 RoundRect}
+ addUserKnob {41 Size T RoundRectControl.Size}
+ addUserKnob {41 Corner T RoundRectControl.Corner}
+ addUserKnob {41 alphaOnly l "Alpha Only" T RoundRectControl.alphaOnly}
+ addUserKnob {6 rReplace l Replace -STARTLINE}
+ addUserKnob {41 color T Constant1.color}
+ addUserKnob {6 rColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 rAspect l "Aspect Ratio"}
+ addUserKnob {41 rWidth l Width T RoundRectControl.rWidth}
+ addUserKnob {41 rHeight l Height T RoundRectControl.rHeight}
+ addUserKnob {26 rTransf l Transform}
+ addUserKnob {41 translate T Transform10.translate}
+ addUserKnob {41 rotate T Transform10.rotate}
+ addUserKnob {41 skewX l "skew X" T Transform10.skewX}
+ addUserKnob {41 skewY l "skew Y" T Transform10.skewY}
+ addUserKnob {41 skew_order l "skew order" T Transform10.skew_order}
+ addUserKnob {41 invert_matrix l invert T Transform10.invert_matrix}
+ addUserKnob {41 filter T Transform10.filter}
+ addUserKnob {41 clamp -STARTLINE T Transform10.clamp}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T Transform10.black_outside}
+ addUserKnob {41 motionblur T Transform10.motionblur}
+ addUserKnob {41 shutter T Transform10.shutter}
+ addUserKnob {41 shutteroffset l "shutter offset" T Transform10.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T Transform10.shuttercustomoffset}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  color 1
+  name Constant1
+  xpos -146
+  ypos 560
+ }
+ Reformat {
+  type "to box"
+  box_width {{RoundRectControl.picSize.w}}
+  box_height {{RoundRectControl.picSize.h}}
+  box_fixed true
+  name Reformat2
+  xpos -146
+  ypos 632
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 340
+  ypos -577
+ }
+ Dot {
+  name Dot10
+  xpos 374
+  ypos -431
+ }
+set N90225a80 [stack 0]
+ NoOp {
+  name RoundRectControl
+  xpos 158
+  ypos -434
+  addUserKnob {20 User}
+  addUserKnob {7 Size R 0 4096}
+  Size 1000
+  addUserKnob {7 Corner R 0 2}
+  Corner 1
+  addUserKnob {6 alphaOnly l "Alpha Only" +STARTLINE}
+  addUserKnob {14 picSize l INVISIBLE +INVISIBLE R 0 100}
+  picSize {{"\[python nuke.thisNode().width()]"} {"\[python nuke.thisNode().height()]"}}
+  addUserKnob {26 ""}
+  addUserKnob {7 rWidth l Width R 1 5}
+  rWidth 1
+  addUserKnob {7 rHeight l Height R 1 5}
+  rHeight 1
+ }
+ Reformat {
+  resize none
+  name Reformat1
+  xpos -12
+  ypos -434
+ }
+ Dot {
+  name Dot7
+  xpos -146
+  ypos -431
+ }
+set N9023ca30 [stack 0]
+ Dot {
+  name Dot8
+  xpos -316
+  ypos -431
+ }
+ Remove {
+  name Remove1
+  xpos -350
+  ypos 177
+ }
+ Dot {
+  name Dot9
+  xpos -316
+  ypos 251
+ }
+set N9024cc70 [stack 0]
+ Dot {
+  name Dot6
+  xpos -316
+  ypos 295
+ }
+ Rectangle {
+  cliptype none
+  area {{(((Radial1.area.r)/4)*RoundRectControl.Corner)+Transform5.translate.x} {-Transform5.translate.y} {(((Radial1.area.r)/2)+((Radial1.area.r)/4))+(((Radial1.area.r)/4)-this.x)} {(Radial1.area.r)-this.y}}
+  name Rectangle2
+  label vertical
+  xpos -239
+  ypos 288
+ }
+push $N9024cc70
+ Rectangle {
+  cliptype none
+  area {{Transform5.translate.x} {(((Radial1.area.r)/4)*RoundRectControl.Corner)-Transform5.translate.y} {(Radial1.area.r)++Transform6.translate.x} {(((Radial1.area.r)/2)+((Radial1.area.r)/4))+(((Radial1.area.r)/4)-this.y)}}
+  name Rectangle1
+  label horizontal
+  xpos -244
+  ypos 244
+ }
+ Merge2 {
+  inputs 2
+  name Merge3
+  xpos -119
+  ypos 292
+ }
+push $N9023ca30
+ Remove {
+  name Remove2
+  xpos -180
+  ypos -384
+ }
+ Radial {
+  cliptype none
+  area {0 0 {(RoundRectControl.Size)} {(RoundRectControl.Size)}}
+  softness 0
+  name Radial1
+  xpos -180
+  ypos -352
+ }
+ Dot {
+  name Dot1
+  xpos -260
+  ypos -349
+ }
+ Dot {
+  name Dot2
+  xpos -260
+  ypos -280
+ }
+set N902939d0 [stack 0]
+ Dot {
+  name Dot3
+  xpos -260
+  ypos -180
+ }
+set N90297c10 [stack 0]
+ Dot {
+  name Dot4
+  xpos -260
+  ypos -66
+ }
+set N9029bed0 [stack 0]
+ Dot {
+  name Dot5
+  xpos -260
+  ypos 41
+ }
+ Transform {
+  translate {{((Radial1.area.r)/4)} {-((Radial1.area.r)/4)}}
+  scale 0.5
+  center {{((Radial1.area.r)/2)} {((Radial1.area.r)/2)}}
+  name Transform4
+  label "Lower Right"
+  xpos -189
+  ypos 34
+ }
+ Transform {
+  translate {{-(((RoundRectControl.Size/2)-((RoundRectControl.Size/2)*RoundRectControl.rWidth))/2)} {(((RoundRectControl.Size/2)-((RoundRectControl.Size/2)*RoundRectControl.rHeight))/2)}}
+  scale {{RoundRectControl.Corner}}
+  center {{(Radial1.area.r)} 0}
+  name Transform8
+  xpos -189
+  ypos 83
+ }
+push $N902939d0
+ Transform {
+  translate {{-((Radial1.area.r)/4)} {((Radial1.area.r)/4)}}
+  scale 0.5
+  center {{((Radial1.area.r)/2)} {((Radial1.area.r)/2)}}
+  name Transform1
+  label "Upper Left"
+  xpos -184
+  ypos -287
+ }
+ Transform {
+  translate {{(((RoundRectControl.Size/2)-((RoundRectControl.Size/2)*RoundRectControl.rWidth))/2)} {-(((RoundRectControl.Size/2)-((RoundRectControl.Size/2)*RoundRectControl.rHeight))/2)}}
+  scale {{RoundRectControl.Corner}}
+  center {0 {(Radial1.area.r)}}
+  name Transform5
+  xpos -184
+  ypos -241
+ }
+ Dot {
+  name Dot11
+  xpos 90
+  ypos -238
+ }
+push 0
+push $N9029bed0
+ Transform {
+  translate {{-((Radial1.area.r)/4)} {-((Radial1.area.r)/4)}}
+  scale 0.5
+  center {{((Radial1.area.r)/2)} {((Radial1.area.r)/2)}}
+  name Transform3
+  label "Lower Left"
+  xpos -183
+  ypos -73
+ }
+ Transform {
+  translate {{(((RoundRectControl.Size/2)-((RoundRectControl.Size/2)*RoundRectControl.rWidth))/2)} {(((RoundRectControl.Size/2)-((RoundRectControl.Size/2)*RoundRectControl.rHeight))/2)}}
+  scale {{RoundRectControl.Corner}}
+  name Transform7
+  xpos -183
+  ypos -28
+ }
+ Dot {
+  name Dot13
+  xpos 17
+  ypos -25
+ }
+push $N90297c10
+ Transform {
+  translate {{((Radial1.area.r)/4)} {((Radial1.area.r)/4)}}
+  scale 0.5
+  center {{((Radial1.area.r)/2)} {((Radial1.area.r)/2)}}
+  name Transform2
+  label "Upper Right"
+  xpos -184
+  ypos -187
+ }
+ Transform {
+  translate {{-(((RoundRectControl.Size/2)-((RoundRectControl.Size/2)*RoundRectControl.rWidth))/2)} {-(((RoundRectControl.Size/2)-((RoundRectControl.Size/2)*RoundRectControl.rHeight))/2)}}
+  scale {{RoundRectControl.Corner}}
+  center {{(Radial1.area.r)} {(Radial1.area.r)}}
+  name Transform6
+  xpos -184
+  ypos -144
+ }
+ Dot {
+  name Dot12
+  xpos 48
+  ypos -141
+ }
+ Merge2 {
+  inputs 4+1
+  name Merge1
+  xpos 56
+  ypos 83
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos 56
+  ypos 292
+ }
+ Transform {
+  translate {{(RoundRectControl.picSize/2)-this.center.x} {(RoundRectControl.picSize/2)-this.center.y}}
+  center {{RoundRectControl.Size/2} {RoundRectControl.Size/2}}
+  name Transform9
+  xpos 56
+  ypos 354
+ }
+ Crop {
+  box {{((RoundRectControl.picSize.w/2)-(RoundRectControl.Size/2))+Transform5.translate.x-10} {((RoundRectControl.picSize.h/2)-(RoundRectControl.Size/2))-Transform5.translate.y-10} {RoundRectControl.picSize.w-this.x} {RoundRectControl.picSize.h-this.y}}
+  name Crop2
+  xpos 56
+  ypos 414
+ }
+ Transform {
+  center {{RoundRectControl.picSize.w/2 x1 0} {RoundRectControl.picSize.h/2 x1 0}}
+  name Transform10
+  xpos 56
+  ypos 488
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 56
+  ypos 594
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  from1 rgba.green
+  to1 rgba.green
+  from2 rgba.blue
+  to2 rgba.blue
+  bbox B
+  name Copy2
+  xpos 56
+  ypos 618
+ }
+ Multiply {
+  value {{Constant1.color.a}}
+  name Multiply1
+  xpos 56
+  ypos 670
+ }
+ Premult {
+  name Premult1
+  xpos 56
+  ypos 702
+ }
+set N9035f2e0 [stack 0]
+ Dot {
+  name Dot15
+  xpos 90
+  ypos 958
+ }
+push $N9035f2e0
+ Dot {
+  name Dot16
+  xpos 386
+  ypos 705
+ }
+set N9036aa50 [stack 0]
+push $N90225a80
+ Dot {
+  name Dot14
+  xpos 384
+  ypos 497
+ }
+set N9036ed40 [stack 0]
+ ChannelMerge {
+  inputs 2
+  name ChannelMerge1
+  xpos 459
+  ypos 778
+ }
+push $N9036aa50
+push $N9036ed40
+ Merge2 {
+  inputs 2
+  name Merge4
+  xpos 249
+  ypos 788
+ }
+ Switch {
+  inputs 2
+  which {{parent.alphaOnly}}
+  name Switch1
+  xpos 361
+  ypos 883
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 361
+  ypos 951
+  disable {{-(parent.rReplace-1)}}
+ }
+set N90392690 [stack 0]
+ Output {
+  name Output1
+  xpos 361
+  ypos 1063
+ }
+push $N90225a80
+push $N90392690
+ Viewer {
+  inputs 2
+  frame 1
+  frame_range 1-100
+  frame_increment 12
+  name Viewer1
+  xpos 694
+  ypos 1091
+ }
+end_group

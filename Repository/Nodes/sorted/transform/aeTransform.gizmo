@@ -1,0 +1,154 @@
+Group {
+ name aeTransform
+ onCreate "n = nuke.thisNode()\nw = n.format().width()/2\nh = n.format().height()/2\ncenter = \[w,h]\n\nif n.knob('create').value()==False:\n    n.knob('center').setValue(center)\n    n.knob('create').setValue(1)\n\n"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"smart\":\n    s = n.knob('smart').getValue()\n    if s == 0: \n        groupNode = nuke.thisNode()\n        with groupNode:\n            m = nuke.toNode('mask')\n            s = nuke.toNode('STMap')\n            s.setInput(2, m)\n    else:\n        groupNode = nuke.thisNode()\n        with groupNode:\n            m = nuke.toNode('mask')\n            s = nuke.toNode('STMap')\n            s.setInput(2, None)"
+ tile_color 0xa0500ff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ icon aeTransform_Node.png
+ addUserKnob {20 aeTransform}
+ addUserKnob {7 width R -200 200}
+ addUserKnob {7 heigth R -200 200}
+ addUserKnob {7 rotate R -180 180}
+ addUserKnob {41 scale T Transform1.scale}
+ addUserKnob {41 center T Transform1.center}
+ addUserKnob {22 set_center l "set center" -STARTLINE T "n = nuke.thisNode()\nw= n.width()\nh=n.height()\nprint w,h\nn\['center'].setValue(\[w/2,h/2])"}
+ addUserKnob {41 filter T Transform1.filter}
+ addUserKnob {26 text_5_1 l "" -STARTLINE T "  "}
+ addUserKnob {41 invert_matrix l invert -STARTLINE T Transform1.invert_matrix}
+ addUserKnob {26 text_5_1_1 l "" -STARTLINE T "  "}
+ addUserKnob {41 clamp -STARTLINE T Transform1.clamp}
+ addUserKnob {26 ""}
+ addUserKnob {7 add l overscan R 0 1024}
+ addUserKnob {26 text_5_2 l "" -STARTLINE T "     "}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T Transform1.black_outside}
+ addUserKnob {26 ""}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 text_5 l "" -STARTLINE T "    "}
+ addUserKnob {6 smart l "smart mask  " -STARTLINE}
+ smart true
+ addUserKnob {26 ""}
+ addUserKnob {6 create +INVISIBLE +STARTLINE}
+ addUserKnob {26 about_1 l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>aeTransform v1.5</b> - <a  style=\"color:#666;text-decoration: none;\">Aitor Echeveste</a>  © 2020</span>"}
+ addUserKnob {20 About}
+ addUserKnob {26 text_1 l "" +STARTLINE T "   "}
+ addUserKnob {26 text_2 l "" +STARTLINE T "   "}
+ addUserKnob {26 text_4 l "" +STARTLINE T "<font color=#ffffff><font size=\"7\">aeTransform</font><font size=\"5\"> v1.5</font>\n"}
+ addUserKnob {26 about_1_1 l "" +STARTLINE T "by Aitor Echeveste Izquierdo © 2020"}
+ addUserKnob {26 text_1_1 l "" +STARTLINE T "   "}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_3 l "" +STARTLINE T "   "}
+ addUserKnob {26 website l "" +STARTLINE T "<b><a href=\"http://www.aitorecheveste.com\"><span style=\"color:#C8C8C8;\">www.aitorecheveste.com</span></a><b>"}
+}
+ Input {
+  inputs 0
+  name crtlMask
+  xpos 570
+  ypos 537
+  number 1
+ }
+set N20973400 [stack 0]
+ Expression {
+  temp_name0 alpha_an
+  temp_expr0 a!=0?1:0
+  expr0 alpha_an
+  expr1 alpha_an
+  expr2 alpha_an
+  expr3 alpha_an
+  name no_filter
+  xpos 570
+  ypos 561
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 604
+  ypos 640
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 386
+  ypos 587
+  number 2
+ }
+ Expression {
+  expr3 (1-a)
+  name invert
+  xpos 386
+  ypos 613
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 386
+  ypos 637
+ }
+set N20972000 [stack 0]
+ Expression {
+  expr0 (x+0.5)/input.width
+  expr1 (y+0.5)/input.height
+  name uvmap
+  xpos 386
+  ypos 561
+  hide_input true
+  addUserKnob {20 User}
+  addUserKnob {12 iformat}
+  iformat {{input.width/2} {input.height/2}}
+ }
+set N20971c00 [stack 0]
+push $N20973400
+push $N20971c00
+ Transform {
+  translate {{parent.knob.width} {parent.heigth}}
+  rotate {{parent.rotate}}
+  center {1024 778}
+  black_outside false
+  name Transform1
+  xpos 386
+  ypos 537
+ }
+push $N20971c00
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos 474
+  ypos 531
+ }
+ Keymix {
+  inputs 3
+  name Keymix2
+  xpos 474
+  ypos 569
+  disable {{"\[exists parent.input2]==1?smart==1?0:1:1" x1001 1}}
+ }
+ Expression {
+  expr0 ((x+0.5)/width)
+  expr1 ((y+0.5)/height)
+  mix {{1-parent.mix}}
+  name mix
+  xpos 474
+  ypos 607
+  hide_input true
+ }
+push $N20972000
+ STMap {
+  inputs 2+1
+  uv rgb
+  name STMap
+  xpos 474
+  ypos 631
+ }
+ Crop {
+  box {{-(add/2)} {-(add/2)} {input.width+(add/2)} {input.height+(add/2)}}
+  name Crop1
+  xpos 474
+  ypos 667
+ }
+ Output {
+  name Output1
+  xpos 474
+  ypos 691
+ }
+end_group

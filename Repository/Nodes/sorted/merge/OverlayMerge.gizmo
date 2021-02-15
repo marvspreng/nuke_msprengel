@@ -1,0 +1,42 @@
+#! C:/Program Files/Nuke10.0v5/nuke-10.0.5.dll -nx
+version 10.0 v5
+Gizmo {
+inputs 2
+addUserKnob {20 User}
+addUserKnob {41 maskChannelMask l mask -STARTLINE T MergeOverlay.maskChannelMask}
+addUserKnob {41 inject -STARTLINE T MergeOverlay.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T MergeOverlay.invert_mask}
+addUserKnob {41 fringe -STARTLINE T MergeOverlay.fringe}
+addUserKnob {41 mix_1 l mix T MergeOverlay.mix}
+}
+Input {
+inputs 0
+name Input2
+xpos 509
+ypos 149
+number 1
+}
+Input {
+inputs 0
+name Input1
+xpos 509
+ypos 149
+}
+MergeExpression {
+inputs 2
+expr0 B.r<0.5?2*(A.r*B.r):1-2*(1-A.r)*(1-B.r)
+expr1 B.g<0.5?2*(A.g*B.g):1-2*(1-A.g)*(1-B.g)
+expr2 B.b<0.5?2*(A.b*B.b):1-2*(1-A.b)*(1-B.b)
+maskChannelMask none
+mix 0.795
+name MergeOverlay
+selected true
+xpos 509
+ypos 189
+}
+Output {
+name Output1
+xpos 509
+ypos 289
+}
+end_group

@@ -1,0 +1,36 @@
+set cut_paste_input [stack 0]
+version 11.3 v4
+push $cut_paste_input
+Group {
+ name mixture_cam1
+ note_font_size 16
+ selected true
+ xpos 363
+ ypos -531
+ addUserKnob {20 User}
+ addUserKnob {22 g l "generate mixture cam" T "n = nuke.thisNode()\nx, y = n\['xpos'].getValue(), n\['ypos'].getValue()\n\nnuke.root().begin()\nc1 = n.input(0)\nc2 = n.input(1)\nc1n = c1.name()\nc2n = c2.name()\nnn = n.name()\nnewCam = nuke.nodes.Camera()\nnewCam.setXYpos(int(x),int(y+100))\nnewCam.addKnob(nuke.nuke.Double_Knob('mix', 'Mix'))\nd = \"this.mix\"\n\nfor i in \['translate', 'rotate', 'scaling', 'pivot', 'skew', 'uniform_scale', 'focal', 'haperture', 'vaperture', 'near', 'far']:\n    for j in i:\n        newCam\[i].setExpression(\"(\{\}.\{\}*\{\}) + (\{\}.\{\}*(1-\{\}))\".format(c1n,i,d,c2n,i,d))\n\n\nnewCam\['label'].setValue(\"\{\} x \{\} mixture cam\".format(c1n, c2n))\n" +STARTLINE}
+ addUserKnob {26 t l "" +STARTLINE T "        by sergeant compsly"}
+}
+ Output {
+  inputs 0
+  name Output1
+  note_font_size 16
+  xpos -1910
+  ypos 1117
+ }
+ Input {
+  inputs 0
+  name cam1
+  note_font_size 16
+  xpos -2190
+  ypos 977
+ }
+ Input {
+  inputs 0
+  name cam2
+  note_font_size 16
+  xpos -1929
+  ypos 975
+  number 1
+ }
+end_group

@@ -1,0 +1,265 @@
+#! C:/Program Files/Nuke10.5v4/nuke-10.5.4.dll -nx
+version 10.5 v4
+Gizmo {
+ tile_color 0xa59fff
+ addUserKnob {20 User l DeepSoften}
+ addUserKnob {41 thickness T SOFTEN_CONTROL.thickness}
+ addUserKnob {41 split l "sample count" T SOFTEN_CONTROL.split}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 306
+  ypos 291
+ }
+ DeepExpression {
+  temp_name0 d
+  temp_expr0 "\[value SOFTEN_CONTROL.thickness]"
+  chans0 deep
+  chans1 none
+  deep.front deep.front-d/2
+  deep.back deep.back+d/2
+  name DeepExpression1
+  xpos 306
+  ypos 331
+  disable {{!parent.SOFTEN_CONTROL.thickness}}
+ }
+ Dot {
+  name Dot1
+  xpos 340
+  ypos 374
+ }
+set N323dc00 [stack 0]
+ Group {
+  name Split
+  xpos 106
+  ypos 391
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 16
+   ypos 321
+  }
+  DeepExpression {
+   temp_name0 na
+   temp_expr0 1-sqrt(1-a)
+   chans1 deep
+   rgba.red r/a*na
+   rgba.green g/a*na
+   rgba.blue b/a*na
+   rgba.alpha na
+   name DeepExpression2
+   xpos 16
+   ypos 361
+  }
+set N323d400 [stack 0]
+  DeepExpression {
+   chans1 deep
+   deep.back deep.back-(deep.back-deep.front)/2
+   name DeepExpression3
+   xpos -56
+   ypos 392
+  }
+push $N323d400
+  DeepExpression {
+   chans1 deep
+   deep.front deep.front+(deep.back-deep.front)/2
+   name DeepExpression4
+   xpos 86
+   ypos 393
+  }
+  DeepMerge {
+   inputs 2
+   name DeepMerge1
+   xpos 16
+   ypos 429
+  }
+  Output {
+   name Output1
+   xpos 16
+   ypos 529
+  }
+ end_group
+set N2ee0000 [stack 0]
+ Group {
+  name Split1
+  xpos 106
+  ypos 451
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 16
+   ypos 321
+  }
+  DeepExpression {
+   temp_name0 na
+   temp_expr0 1-sqrt(1-a)
+   chans1 deep
+   rgba.red r/a*na
+   rgba.green g/a*na
+   rgba.blue b/a*na
+   rgba.alpha na
+   name DeepExpression2
+   xpos 16
+   ypos 361
+  }
+set N326dc00 [stack 0]
+  DeepExpression {
+   chans1 deep
+   deep.back deep.back-(deep.back-deep.front)/2
+   name DeepExpression3
+   xpos -56
+   ypos 392
+  }
+push $N326dc00
+  DeepExpression {
+   chans1 deep
+   deep.front deep.front+(deep.back-deep.front)/2
+   name DeepExpression4
+   xpos 86
+   ypos 393
+  }
+  DeepMerge {
+   inputs 2
+   name DeepMerge1
+   xpos 16
+   ypos 429
+  }
+  Output {
+   name Output1
+   xpos 16
+   ypos 529
+  }
+ end_group
+set N2ee3a80 [stack 0]
+ Group {
+  name Split2
+  xpos 106
+  ypos 508
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 16
+   ypos 321
+  }
+  DeepExpression {
+   temp_name0 na
+   temp_expr0 1-sqrt(1-a)
+   chans1 deep
+   rgba.red r/a*na
+   rgba.green g/a*na
+   rgba.blue b/a*na
+   rgba.alpha na
+   name DeepExpression2
+   xpos 16
+   ypos 361
+  }
+set N326c400 [stack 0]
+  DeepExpression {
+   chans1 deep
+   deep.back deep.back-(deep.back-deep.front)/2
+   name DeepExpression3
+   xpos -56
+   ypos 392
+  }
+push $N326c400
+  DeepExpression {
+   chans1 deep
+   deep.front deep.front+(deep.back-deep.front)/2
+   name DeepExpression4
+   xpos 86
+   ypos 393
+  }
+  DeepMerge {
+   inputs 2
+   name DeepMerge1
+   xpos 16
+   ypos 429
+  }
+  Output {
+   name Output1
+   xpos 16
+   ypos 529
+  }
+ end_group
+set N2ee3600 [stack 0]
+ Group {
+  name Split3
+  xpos 106
+  ypos 565
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 16
+   ypos 321
+  }
+  DeepExpression {
+   temp_name0 na
+   temp_expr0 1-sqrt(1-a)
+   chans1 deep
+   rgba.red r/a*na
+   rgba.green g/a*na
+   rgba.blue b/a*na
+   rgba.alpha na
+   name DeepExpression2
+   xpos 16
+   ypos 361
+  }
+set N32aac00 [stack 0]
+  DeepExpression {
+   chans1 deep
+   deep.back deep.back-(deep.back-deep.front)/2
+   name DeepExpression3
+   xpos -56
+   ypos 392
+  }
+push $N32aac00
+  DeepExpression {
+   chans1 deep
+   deep.front deep.front+(deep.back-deep.front)/2
+   name DeepExpression4
+   xpos 86
+   ypos 393
+  }
+  DeepMerge {
+   inputs 2
+   name DeepMerge1
+   xpos 16
+   ypos 429
+  }
+  Output {
+   name Output1
+   xpos 16
+   ypos 529
+  }
+ end_group
+push $N2ee3600
+push $N2ee3a80
+push $N2ee0000
+push $N323dc00
+ Switch {
+  inputs 5
+  which {{parent.SOFTEN_CONTROL.split}}
+  name Switch2
+  xpos 306
+  ypos 565
+ }
+ Output {
+  name Output1
+  xpos 306
+  ypos 599
+ }
+ NoOp {
+  name SOFTEN_CONTROL
+  xpos 480
+  ypos 599
+  addUserKnob {20 User}
+  addUserKnob {4 split M {1x 2x 4x 8x 16x}}
+  addUserKnob {7 thickness R 0 100}
+  thickness 200
+ }
+end_group
