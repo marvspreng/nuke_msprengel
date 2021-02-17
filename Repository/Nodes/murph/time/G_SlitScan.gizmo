@@ -1,0 +1,294 @@
+#! C:/Program Files/Nuke10.0v2/nuke-10.0.2.dll -nx
+version 10.0 v2
+Gizmo {
+ tile_color 0xff479bff
+ addUserKnob {20 SexySlitScan}
+ addUserKnob {41 frame_size l Format T NoOp1.frame_size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 frame_length l "Slit Frame Length" T NoOp1.frame_length}
+ addUserKnob {41 Direction T NoOp1.Direction}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 Siften l Filtering T NoOp1.Soften}
+ addUserKnob {41 Gaussian_filter_size l "Gaussian filter size" T NoOp1.Gaussian_filter_size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 author l "" t "your favorite compositor" +STARTLINE T "SlitScan v1.1 by George VW Pinkava"}
+ addUserKnob {26 "" +STARTLINE}
+}
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{parent.NoOp1.scanlinewidth_sideways}}
+  box_height {{parent.NoOp1.frame_size.h}}
+  box_fixed true
+  scale {1 1}
+  flip true
+  black_outside true
+  name Reformat3
+  xpos -741
+  ypos -153
+ }
+ Crop {
+  box {0 0 {Reformat3.width} {Reformat3.height}}
+  name Crop1
+  xpos -741
+  ypos -106
+ }
+ Shuffle {
+  red white
+  green white
+  blue white
+  alpha white
+  name Shuffle2
+  xpos -728
+  ypos -74
+ }
+ Transform {
+  translate {{frame*NoOp1.scanlinewidth_sideways-NoOp1.scanlinewidth_sideways} 0}
+  center {12 576}
+  name Transform2
+  xpos -728
+  ypos -48
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{parent.NoOp1.frame_size.w}}
+  box_height {{parent.NoOp1.frame_size.h}}
+  box_fixed true
+  name Reformat4
+  xpos -589
+  ypos -92
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos -580
+  ypos -30
+ }
+set N5b775800 [stack 0]
+ Mirror2 {
+  flop true
+  name Mirror2_2
+  xpos -567
+  ypos 33
+ }
+push $N5b775800
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{parent.NoOp1.frame_size.w}}
+  box_height {{parent.NoOp1.scanlinewidth}}
+  box_fixed true
+  scale {1 1}
+  black_outside true
+  name Reformat1
+  xpos -645
+  ypos -363
+ }
+ Shuffle {
+  red white
+  green white
+  blue white
+  alpha white
+  name Shuffle1
+  xpos -645
+  ypos -333
+ }
+ BlackOutside {
+  name BlackOutside1
+  xpos -645
+  ypos -307
+ }
+ Transform {
+  translate {0 {(NoOp1.frame_size.h+NoOp1.scanlinewidth)-frame*(NoOp1.scanlinewidth)}}
+  center {1024 11.5}
+  name Transform1
+  xpos -645
+  ypos -281
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{parent.NoOp1.frame_size.w}}
+  box_height {{parent.NoOp1.frame_size.h}}
+  box_fixed true
+  name Reformat2
+  xpos -544
+  ypos -345
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos -613
+  ypos -236
+ }
+set N1d01e800 [stack 0]
+ Mirror2 {
+  flip true
+  name Mirror2_1
+  xpos -387
+  ypos 37
+ }
+push $N1d01e800
+ Switch {
+  inputs 4
+  which {{NoOp1.Direction}}
+  name Switch1
+  xpos -290
+  ypos -90
+ }
+ TimeClip {
+  time ""
+  last {{parent.NoOp1.frame_length}}
+  after loop
+  origlast 50
+  origset true
+  name TimeClip1
+  xpos -164
+  ypos -90
+ }
+set N1d01e400 [stack 0]
+ AdjBBox {
+  numpixels {{parent.NoOp1.Gaussian_filter_size*4}}
+  name AdjBBox1
+  xpos 9
+  ypos -42
+ }
+push $N1d01e400
+ FilterErode {
+  size {{-NoOp1.Gaussian_filter_size}}
+  filter gaussian
+  name FilterErode1
+  selected true
+  xpos -66
+  ypos -139
+ }
+ Input {
+  inputs 0
+  name Footage
+  xpos 33
+  ypos -318
+ }
+ TimeWarp {
+  lookup {{curve(((frame-1)%(NoOp1.frame_length-1+1))+1)+(rint(frame/NoOp1.frame_length)) C x1 1 x1965 1965}}
+  time ""
+  name TimeWarp2
+  xpos 33
+  ypos -160
+ }
+set N3d227c00 [stack 0]
+ Multiply {
+  inputs 1+1
+  value 0
+  invert_mask true
+  name Multiply1
+  xpos 94
+  ypos -92
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox2
+  xpos 90
+  ypos 7
+ }
+ TimeEcho {
+  framesbehind {{parent.NoOp1.frame_length}}
+  name TimeEcho2
+  xpos 113
+  ypos 95
+ }
+ TimeWarp {
+  lookup {{frame*(NoOp1.frame_length) C x1 1 x617 617}}
+  time ""
+  name TimeWarp3
+  xpos 113
+  ypos 196
+ }
+set N8e88b400 [stack 0]
+ Crop {
+  box {0 0 {parent.NoOp1.frame_size.w} {parent.NoOp1.frame_size.h}}
+  reformat true
+  crop false
+  name Crop3
+  xpos 113
+  ypos 254
+ }
+push $N1d01e400
+push $N3d227c00
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -83
+  ypos -30
+ }
+ BlackOutside {
+  name BlackOutside2
+  xpos -96
+  ypos 14
+ }
+ TimeEcho {
+  framesbehind {{parent.NoOp1.frame_length}}
+  name TimeEcho1
+  xpos -84
+  ypos 99
+ }
+ TimeWarp {
+  lookup {{frame*(NoOp1.frame_length) C x1 1 x617 617}}
+  time ""
+  name TimeWarp1
+  xpos -84
+  ypos 185
+ }
+ Crop {
+  box {0 0 {parent.NoOp1.frame_size.w} {parent.NoOp1.frame_size.h}}
+  reformat true
+  crop false
+  name Crop2
+  xpos -84
+  ypos 211
+ }
+ Switch {
+  inputs 2
+  which {{NoOp1.Soften}}
+  name Switch2
+  xpos -1
+  ypos 327
+ }
+set Nc1244480 [stack 0]
+ Output {
+  name Output1
+  xpos -1
+  ypos 421
+ }
+ NoOp {
+  inputs 0
+  name NoOp1
+  xpos -253
+  ypos -438
+  addUserKnob {20 User}
+  addUserKnob {3 Gaussian_filter_size l "Gaussian filter size"}
+  Gaussian_filter_size 20
+  addUserKnob {4 Soften M {None Gaussian}}
+  Soften Gaussian
+  addUserKnob {7 scanlinewidth_sideways}
+  scanlinewidth_sideways {{rint(frame_size.w/frame_length+1)}}
+  addUserKnob {4 Direction M {Down Up Right Left}}
+  addUserKnob {14 frame_size R 0 100}
+  frame_size {2048 1152}
+  addUserKnob {7 scanlinewidth}
+  scanlinewidth {{rint(frame_size.h/frame_length)+1}}
+  addUserKnob {3 frame_length}
+  frame_length 150
+ }
+push $N8e88b400
+push $Nc1244480
+ Viewer {
+  inputs 2
+  frame 200
+  frame_range 1-1965
+  translate {-0.06700000167 -0.02199999988}
+  name Viewer1
+  xpos -768
+  ypos -24
+ }
+end_group

@@ -1,0 +1,317 @@
+#! C:/Program Files/Nuke11.3v5/nuke-11.3.5.dll -nx
+version 11.3 v5
+Gizmo {
+ inputs 3
+ addUserKnob {20 User}
+ addUserKnob {41 StartFrame T SmartDissolve_CTRL.StartFrame}
+ addUserKnob {6 Backward l "Keep Track Backward" -STARTLINE}
+ addUserKnob {41 EndFrame T SmartDissolve_CTRL.EndFrame}
+ addUserKnob {6 Farward l "Keep Track Farward" -STARTLINE}
+}
+ Input {
+  inputs 0
+  name SCN
+  xpos -268
+  ypos 353
+ }
+ Dot {
+  name Dot5
+  xpos -234
+  ypos 437
+ }
+set N11fb9000 [stack 0]
+ Dot {
+  name Dot8
+  xpos -234
+  ypos 615
+ }
+set N11fb8c00 [stack 0]
+ Dot {
+  name Dot1
+  xpos -234
+  ypos 898
+ }
+set N11fb8800 [stack 0]
+ Dot {
+  name Dot11
+  xpos -234
+  ypos 978
+ }
+ Input {
+  inputs 0
+  name Mask
+  xpos 209
+  ypos 762
+  number 2
+ }
+ Invert {
+  name Invert2
+  xpos 225
+  ypos 814
+ }
+ Expression {
+  inputs 0
+  expr0 1
+  expr1 1
+  expr2 1
+  expr3 1
+  name Expression1
+  xpos 83
+  ypos 692
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 83
+  ypos 820
+ }
+push $N11fb8800
+ Input {
+  inputs 0
+  name SmartVertor
+  xpos -375
+  ypos 404
+  number 1
+ }
+ Dot {
+  name Dot10
+  xpos -341
+  ypos 444
+ }
+ Dot {
+  name Dot3
+  xpos -341
+  ypos 564
+ }
+set N13162800 [stack 0]
+ Dot {
+  name Dot7
+  xpos -341
+  ypos 742
+ }
+push $N11fb8c00
+ Dot {
+  name Dot9
+  xpos -153
+  ypos 615
+ }
+ Group {
+  name frameholdCurrent2
+  label "(frame \[value first_frameNode])"
+  xpos -187
+  ypos 671
+  addUserKnob {20 User}
+  addUserKnob {41 first_frameNode l "first frame" T FrameHold1.first_frame}
+  addUserKnob {41 increment T FrameHold1.increment}
+  addUserKnob {22 curFrame l "Use Current Frame" t "Sets the framehold to the current frame" T nuke.thisNode().knob('first_frameNode').setValue(nuke.frame()) +STARTLINE}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -308
+   ypos -304
+  }
+  FrameHold {
+   first_frame {{parent.parent.SmartDissolve_CTRL.EndFrame}}
+   name FrameHold1
+   xpos -308
+   ypos -264
+  }
+  Output {
+   name Output1
+   xpos -308
+   ypos -164
+  }
+ end_group
+ Group {
+  inputs 2
+  name VectorDistortWraper2
+  xpos -187
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {41 refFrame_hlpr l "reference frame" T VectorDistort_Wraper.refFrame_hlpr}
+  addUserKnob {41 rf_set l "set to current frame" -STARTLINE T VectorDistort_Wraper.rf_set}
+  addUserKnob {41 holdFrame_hlpr l "hold frame" -STARTLINE T VectorDistort_Wraper.holdFrame_hlpr}
+  addUserKnob {41 frameDist_hlpr l "frame distance" T VectorDistort_Wraper.frameDist_hlpr}
+ }
+  Input {
+   inputs 0
+   name Src
+   xpos -547
+   ypos -134
+  }
+  Input {
+   inputs 0
+   name SmartVector
+   xpos -724
+   ypos -246
+   number 1
+  }
+  VectorDistort {
+   inputs 2
+   referenceFrame {{parent.VectorDistort_Wraper.refFrame_hlpr}}
+   reference_frame_set true
+   holdFrame {{parent.VectorDistort_Wraper.holdFrame_hlpr}}
+   frameDistance {{parent.VectorDistort_Wraper.frameDist_hlpr}}
+   name VectorDistort2
+   xpos -724
+   ypos -110
+  }
+  Output {
+   name Output1
+   xpos -718
+   ypos 98
+  }
+  NoOp {
+   inputs 0
+   name VectorDistort_Wraper
+   xpos -914
+   ypos -110
+   addUserKnob {20 User}
+   addUserKnob {3 refFrame_hlpr l "reference frame" t "The frame of the \"Edit\" input to be warped. Nothing will be warped at this frame, the warp at all other frames will be relative to the reference frame. "}
+   refFrame_hlpr {{parent.parent.SmartDissolve_CTRL.EndFrame}}
+   addUserKnob {22 rf_set l "set to current frame" t "Sets the reference frame to the current frame" T "rf = nuke.thisNode().knob('refFrame_hlpr')\nrf.setValue(nuke.frame())" +STARTLINE}
+   addUserKnob {6 holdFrame_hlpr l "hold frame" t "Equivalent to putting a frame hold at the Src input (default). Disable to allow Src input's current frame to be warped instead of the referene frame." +STARTLINE}
+   holdFrame_hlpr true
+   addUserKnob {7 frameDist_hlpr l "frame distance" t "A trade-off between warping things well for nearby frames vs. frames further away. For example, if you want to warp up to 20-30 frames away from the reference frame, it's better to go for a value closer to 0. For warps over 100 frames away, you can set this closer to 6.\n\nFor high motion shots, you should set this value closer to 0. Shots with low motion can be set closer to 6." R 0 6}
+  }
+ end_group
+ Dot {
+  name Dot12
+  xpos -153
+  ypos 791
+ }
+push $N13162800
+push $N11fb9000
+ Dot {
+  name Dot6
+  xpos -153
+  ypos 437
+ }
+ Group {
+  name frameholdCurrent1
+  label "(frame \[value first_frameNode])"
+  xpos -187
+  ypos 507
+  addUserKnob {20 User}
+  addUserKnob {41 first_frameNode l "first frame" T FrameHold1.first_frame}
+  addUserKnob {41 increment T FrameHold1.increment}
+  addUserKnob {22 curFrame l "Use Current Frame" t "Sets the framehold to the current frame" T nuke.thisNode().knob('first_frameNode').setValue(nuke.frame()) +STARTLINE}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -308
+   ypos -304
+  }
+  FrameHold {
+   first_frame {{parent.parent.SmartDissolve_CTRL.StartFrame}}
+   name FrameHold1
+   xpos -308
+   ypos -264
+  }
+  Output {
+   name Output1
+   xpos -308
+   ypos -164
+  }
+ end_group
+ Group {
+  inputs 2
+  name VectorDistortWraper1
+  xpos -187
+  ypos 560
+  addUserKnob {20 User}
+  addUserKnob {41 refFrame_hlpr l "reference frame" T VectorDistort_Wraper.refFrame_hlpr}
+  addUserKnob {41 rf_set l "set to current frame" -STARTLINE T VectorDistort_Wraper.rf_set}
+  addUserKnob {41 holdFrame_hlpr l "hold frame" -STARTLINE T VectorDistort_Wraper.holdFrame_hlpr}
+  addUserKnob {41 frameDist_hlpr l "frame distance" T VectorDistort_Wraper.frameDist_hlpr}
+ }
+  Input {
+   inputs 0
+   name Src
+   xpos -547
+   ypos -134
+  }
+  Input {
+   inputs 0
+   name SmartVector
+   xpos -724
+   ypos -246
+   number 1
+  }
+  VectorDistort {
+   inputs 2
+   referenceFrame {{parent.VectorDistort_Wraper.refFrame_hlpr}}
+   reference_frame_set true
+   holdFrame {{parent.VectorDistort_Wraper.holdFrame_hlpr}}
+   frameDistance {{parent.VectorDistort_Wraper.frameDist_hlpr}}
+   name VectorDistort2
+   xpos -724
+   ypos -110
+  }
+  Output {
+   name Output1
+   xpos -718
+   ypos 98
+  }
+  NoOp {
+   inputs 0
+   name VectorDistort_Wraper
+   xpos -914
+   ypos -110
+   addUserKnob {20 User}
+   addUserKnob {3 refFrame_hlpr l "reference frame" t "The frame of the \"Edit\" input to be warped. Nothing will be warped at this frame, the warp at all other frames will be relative to the reference frame. "}
+   refFrame_hlpr {{parent.parent.frameholdCurrent1.FrameHold1.knob.first_frame}}
+   addUserKnob {22 rf_set l "set to current frame" t "Sets the reference frame to the current frame" T "rf = nuke.thisNode().knob('refFrame_hlpr')\nrf.setValue(nuke.frame())" +STARTLINE}
+   addUserKnob {6 holdFrame_hlpr l "hold frame" t "Equivalent to putting a frame hold at the Src input (default). Disable to allow Src input's current frame to be warped instead of the referene frame." +STARTLINE}
+   holdFrame_hlpr true
+   addUserKnob {7 frameDist_hlpr l "frame distance" t "A trade-off between warping things well for nearby frames vs. frames further away. For example, if you want to warp up to 20-30 frames away from the reference frame, it's better to go for a value closer to 0. For warps over 100 frames away, you can set this closer to 6.\n\nFor high motion shots, you should set this value closer to 0. Shots with low motion can be set closer to 6." R 0 6}
+  }
+ end_group
+ Dot {
+  name Dot2
+  xpos -16
+  ypos 564
+ }
+ Dissolve {
+  inputs 2
+  which {{(frame-SmartDissolve_CTRL.StartFrame)/(SmartDissolve_CTRL.EndFrame-SmartDissolve_CTRL.StartFrame)}}
+  name Dissolve1
+  xpos -50
+  ypos 781
+ }
+ Dissolve {
+  inputs 2+1
+  name Dissolve2
+  xpos -50
+  ypos 888
+ }
+ Switch {
+  inputs 2
+  which {{"1*(Backward-(frame<(SmartDissolve_CTRL.StartFrame))*Backward+(1-Backward))*(Farward-(frame>(SmartDissolve_CTRL.EndFrame))*Farward+(1-Farward))\n?((frame>SmartDissolve_CTRL.EndFrame)||frame<SmartDissolve_CTRL.StartFrame):0"}}
+  name Switch1
+  xpos -50
+  ypos 974
+ }
+ Dot {
+  name Dot4
+  xpos -16
+  ypos 1042
+ }
+ Output {
+  name Output1
+  xpos -50
+  ypos 1097
+ }
+ NoOp {
+  inputs 0
+  name SmartDissolve_CTRL
+  xpos -496
+  ypos 580
+  addUserKnob {20 User}
+  addUserKnob {3 StartFrame}
+  addUserKnob {3 EndFrame}
+ }
+end_group

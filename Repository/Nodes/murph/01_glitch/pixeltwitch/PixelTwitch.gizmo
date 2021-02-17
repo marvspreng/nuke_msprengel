@@ -1,0 +1,187 @@
+#! /usr/local/Nuke10.0v1/libnuke-10.0.1.so -nx
+version 10.0 v1
+Gizmo {
+ inputs 2
+ tile_color 0xc97f51ff
+ addUserKnob {20 PixelTwitch}
+ addUserKnob {41 channels T PixelTwitchCore.channels}
+ addUserKnob {41 type t "Twitch per individual pixel or for a full scanline." T PixelTwitchCore.type}
+ addUserKnob {41 salt -STARTLINE T PixelTwitchCore.salt}
+ addUserKnob {41 radius T PixelTwitchCore.radius}
+ addUserKnob {41 size l "pre blur" t "Blur the underlying image before applying the PixelTwitch." T Blur1.size}
+ addUserKnob {7 mix}
+ mix 0.7
+ addUserKnob {20 presets l Presets t "node = nuke.thisNode()\nnode\[t\"ype\"].setValue(\"frame\")"}
+ addUserKnob {26 presets_static l static}
+ addUserKnob {22 frame_small l "frame small" t "Create a low static pixel type distortion," -STARTLINE T "node = nuke.thisNode()\nnode\[\"type\"].setValue(\"pixel\")\nnode\[\"radius\"].setValue(5)\nnode\[\"salt\"].clearAnimated()\nnode\[\"salt\"].setValue(12345)\nnode\[\"size\"].setValue(1)\nnode\[\"mix\"].setValue(0.7)"}
+ addUserKnob {22 frame_large l "frame large" t "Create a static large pixel type distortion," -STARTLINE T "node = nuke.thisNode()\nnode\[\"type\"].setValue(\"pixel\")\nnode\[\"radius\"].setValue(15)\nnode\[\"salt\"].clearAnimated()\nnode\[\"salt\"].setValue(12345)\nnode\[\"size\"].setValue(1)\nnode\[\"mix\"].setValue(0.7)"}
+ addUserKnob {22 frame_large_blur l "frame large blur" t "Create a static large pixel type blured distortion," -STARTLINE T "node = nuke.thisNode()\nnode\[\"type\"].setValue(\"pixel\")\nnode\[\"radius\"].setValue(15)\nnode\[\"salt\"].clearAnimated()\nnode\[\"salt\"].setValue(12345)\nnode\[\"size\"].setValue(3)\nnode\[\"mix\"].setValue(1)"}
+ addUserKnob {22 scanline t "Create a static large scanline type distortion," -STARTLINE T "node = nuke.thisNode()\nnode\[\"type\"].setValue(\"scanline\")\nnode\[\"radius\"].setValue(10)\nnode\[\"salt\"].clearAnimated()\nnode\[\"salt\"].setValue(12345)\nnode\[\"size\"].setValue(1)\nnode\[\"mix\"].setValue(0.7)"}
+ addUserKnob {26 presets_motion l motion}
+ addUserKnob {22 frame_twitch l "frame twitch" t "Create a low motion pixel type distortion," T "node = nuke.thisNode()\nnode\[\"type\"].setValue(\"pixel\")\nnode\[\"radius\"].setValue(0)\nnode\[\"salt\"].setExpression(\"frame\")\nnode\[\"size\"].setValue(0)\nnode\[\"mix\"].setValue(0.6)" +STARTLINE}
+ addUserKnob {22 frame_motion l frame t "Create a large motion pixel type distortion," -STARTLINE T "node = nuke.thisNode()\nnode\[\"type\"].setValue(\"pixel\")\nnode\[\"radius\"].setValue(5)\nnode\[\"salt\"].clearAnimated()\nnode\[\"salt\"].setExpression(\"frame\")\nnode\[\"size\"].setValue(1)\nnode\[\"mix\"].setValue(0.7)"}
+ addUserKnob {22 scanline_motion l scanline t "Create a large motion scanline type distortion," -STARTLINE T "node = nuke.thisNode()\nnode\[\"type\"].setValue(\"scanline\")\nnode\[\"radius\"].setValue(3)\nnode\[\"salt\"].clearAnimated()\nnode\[\"salt\"].setExpression(\"frame * 0.3\")\nnode\[\"size\"].setValue(1)\nnode\[\"mix\"].setValue(0.7)"}
+ addUserKnob {22 scanline_ghost l "scanline ghost" t "Create a large motion scanline type dreamy like distortion," -STARTLINE T "node = nuke.thisNode()\nnode\[\"type\"].setValue(\"scanline\")\nnode\[\"radius\"].setValue(3)\nnode\[\"salt\"].clearAnimated()\nnode\[\"salt\"].setExpression(\"frame * 0.3\")\nnode\[\"size\"].setValue(5)\nnode\[\"mix\"].setValue(1)"}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos -995
+  ypos -957
+  number 1
+ }
+ Constant {
+  inputs 0
+  channels alpha
+  color 1
+  name Constant1
+  xpos -858
+  ypos -990
+ }
+ Reformat {
+  type "to box"
+  box_width {{"\[value src.width]"}}
+  box_height {{"\[value src.height]"}}
+  box_fixed true
+  resize none
+  center false
+  name Reformat1
+  xpos -858
+  ypos -906
+ }
+ Dot {
+  name Dot11
+  xpos -824
+  ypos -704
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1.input]"}}
+  name Switch1
+  xpos -995
+  ypos -708
+ }
+ Input {
+  inputs 0
+  name src
+  xpos -670
+  ypos -964
+ }
+ Dot {
+  name Dot6
+  xpos -636
+  ypos -607
+ }
+set N4eebd20 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -995
+  ypos -617
+ }
+ Premult {
+  name Premult1
+  xpos -995
+  ypos -517
+ }
+ Dot {
+  name Dot1
+  xpos -961
+  ypos -353
+ }
+set N4976ed0 [stack 0]
+ Dot {
+  name Dot2
+  xpos -1094
+  ypos -353
+ }
+set N4e1e9e0 [stack 0]
+ Dot {
+  name Dot7
+  xpos -1284
+  ypos -353
+ }
+ Dot {
+  name Dot8
+  xpos -1284
+  ypos 265
+ }
+push $N4e1e9e0
+ Transform {
+  translate {{"\[value parent.radius] > 0 ? \[value parent.radius] : 0"} 0}
+  center {1024 778}
+  name Transform1
+  xpos -1128
+  ypos -195
+ }
+ Dot {
+  name Dot5
+  xpos -1094
+  ypos -14
+ }
+push $N4976ed0
+ Dot {
+  name Dot3
+  xpos -831
+  ypos -353
+ }
+ Blur {
+  channels rgb
+  size 1
+  name Blur1
+  selected true
+  xpos -865
+  ypos -205
+ }
+ PixelTwitchCore {
+  radius 7
+  name PixelTwitchCore
+  xpos -865
+  ypos -179
+ }
+ Dot {
+  name Dot4
+  xpos -831
+  ypos -14
+ }
+ Merge2 {
+  inputs 2
+  bbox B
+  mix {{1-parent.mix}}
+  name Merge1
+  xpos -999
+  ypos -18
+ }
+ Transform {
+  translate {{"\[value parent.radius] > 0 ? \[value parent.radius] * -1 : 0"} 0}
+  center {1024 778}
+  name Transform2
+  xpos -999
+  ypos 144
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -999
+  ypos 261
+ }
+ Dot {
+  name Dot9
+  xpos -965
+  ypos 432
+ }
+push $N4eebd20
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos -670
+  ypos 428
+ }
+ Output {
+  name Output1
+  xpos -670
+  ypos 591
+ }
+end_group

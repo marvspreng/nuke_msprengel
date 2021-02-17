@@ -1,0 +1,30 @@
+#----------------------------------------------------------------------------------------------------------
+#
+# AUTOMATICALLY GENERATED FILE TO BE USED BY W_HOTBOX
+#
+# NAME: Add Backdrop
+# COLOR: #3ac652
+# TEXTCOLOR: #111111
+#
+#----------------------------------------------------------------------------------------------------------
+
+import nukescripts
+Backdrop = nukescripts.autoBackdrop()
+
+for i in nuke.selectedNodes():
+    i.knob('selected').setValue(False)
+
+Backdrop.knob('selected').setValue(True)
+
+bName = nuke.getInput('Backdrop Name', 'Backdrop')
+bSize = nuke.getInput('Font Size', '50')
+bColor = nuke.getColor()
+
+
+Backdrop['label'].setValue(bName.upper())
+
+bSize = int(bSize)
+Backdrop['note_font_size'].setValue(bSize)
+
+Backdrop['tile_color'].setValue(bColor)
+Backdrop['gl_color'].setValue(bColor)

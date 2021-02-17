@@ -1,0 +1,644 @@
+#! C:/Program Files/Nuke8.0v4/nuke-8.0.v4.dll -nx
+version 8.0 v4
+Gizmo {
+ inputs 2
+ tile_color 0xcc2396ff
+ addUserKnob {20 User}
+ addUserKnob {7 AudioLink l "\[ Audio Link ]"}
+ addUserKnob {7 trigger l "\[ Manual Trigger]"}
+ addUserKnob {4 mask M {rgba.a rgba.r rgba.g rgba.b}}
+ addUserKnob {6 mon l "" -STARTLINE}
+ mon true
+ addUserKnob {7 mix l "mix front"}
+ mix 0.75
+ addUserKnob {26 lines l "" +STARTLINE}
+ addUserKnob {12 Effects_center l "Action Center"}
+ Effects_center {1452 466}
+ addUserKnob {7 trigger_multiply l multiply_trigger R 1 10}
+ trigger_multiply 1
+ addUserKnob {26 ""}
+ addUserKnob {6 LinesRGB l "Grid RGB" +STARTLINE}
+ LinesRGB true
+ addUserKnob {3 H_lines l H-lines}
+ H_lines 90
+ addUserKnob {3 V_lines l V-lines -STARTLINE}
+ addUserKnob {16 lines_size l size -STARTLINE}
+ lines_size 2
+ addUserKnob {16 delay l RBB-delay}
+ delay 3
+ addUserKnob {12 transform}
+ transform {19 11}
+ addUserKnob {7 rotation l rotate R -180 180}
+ addUserKnob {16 blur_1 l blur}
+ addUserKnob {6 R -STARTLINE}
+ R true
+ addUserKnob {6 G -STARTLINE}
+ G true
+ addUserKnob {6 B -STARTLINE}
+ B true
+ addUserKnob {26 ""}
+ addUserKnob {6 BoxesRGB l "Boxes RGB" +STARTLINE}
+ BoxesRGB true
+ addUserKnob {7 Speed}
+ Speed 0.15
+ addUserKnob {7 noise -STARTLINE R 0 1000}
+ addUserKnob {7 amount t "in pixels" R 0 1000}
+ amount 30
+ addUserKnob {16 rgbdelay2 l RBB-delay}
+ rgbdelay2 3
+ addUserKnob {15 Area}
+ Area {1185.25 410 1685 917}
+ addUserKnob {15 Area2}
+ Area2 {1299 503.5 1646.21875 869}
+ addUserKnob {12 BiGtranslate l transform}
+ BiGtranslate {19 12}
+ addUserKnob {7 rotatebig l rotate R -180 180}
+ addUserKnob {6 R_1 l R -STARTLINE}
+ R_1 true
+ addUserKnob {6 G_1 l G -STARTLINE}
+ G_1 true
+ addUserKnob {6 B_1 l B -STARTLINE}
+ B_1 true
+ addUserKnob {16 blur}
+}
+ Rectangle {
+  inputs 0
+  area {{parent.Area2.x} {parent.Area2.y} {parent.Area2.r} {parent.Area2.t}}
+  name Mother1
+  xpos -540
+  ypos 523
+ }
+ Rectangle {
+  inputs 0
+  area {{parent.Area.x} {parent.Area.y} {parent.Area.r} {parent.Area.t}}
+  name Mother
+  xpos -532
+  ypos 259
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 70
+  ypos -371
+ }
+set N796b9bb0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 104
+  ypos -107
+ }
+ Dot {
+  name Dot2
+  xpos 104
+  ypos 22
+ }
+ Dot {
+  name Dot9
+  xpos 104
+  ypos 808
+ }
+set N796ba600 [stack 0]
+ Dot {
+  name Dot8
+  xpos -6
+  ypos 808
+ }
+ Premult {
+  name Premult1
+  xpos -41
+  ypos 986
+ }
+push $N796ba600
+ Rectangle {
+  inputs 0
+  area {{(parent.AudioLink+parent.trigger)*(sin((frame*parent.Speed-10)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.Mother1.area.x x29 -82.2828595} {Mother1.area.y+(Mother1.area.t-Mother1.area.y)/2-(Mother1.area.t-Mother1.area.y)/4} {(parent.AudioLink+parent.trigger)*(sin(((frame*parent.Speed-10)*parent.trigger_multiply)*-1)*parent.amount+random(frame)*parent.noise)+parent.Mother1.area.r} {parent.Mother1.area.t-(Mother1.area.t-Mother1.area.y)/4}}
+  name Rectangle5
+  xpos -366
+  ypos 518
+ }
+ Transform {
+  rotate {{parent.rotatebig}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform13
+  xpos -149
+  ypos 518
+  disable {{1-parent.B}}
+ }
+ Blur {
+  size {{parent.blur}}
+  name Blur1
+  xpos -19
+  ypos 512
+  disable {{1-clamp(floor(parent.blur+0.999))}}
+ }
+ set C796bb730 [stack 0]
+ Rectangle {
+  inputs 0
+  area {{(parent.AudioLink+parent.trigger)*(sin((frame*parent.Speed-10)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.Mother.area.x x29 -82.2828595} {Mother.area.y+(Mother.area.t-Mother.area.y)/2-(Mother.area.t-Mother.area.y)/4} {(parent.AudioLink+parent.trigger)*(sin(((frame*parent.Speed-10)*parent.trigger_multiply)*-1)*parent.amount+random(frame)*parent.noise)+parent.Mother.area.r} {parent.Mother.area.t-(Mother.area.t-Mother.area.y)/4}}
+  name Rectangle3
+  xpos -373
+  ypos 268
+ }
+ Transform {
+  rotate {{parent.rotatebig}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform14
+  xpos -158
+  ypos 268
+  disable {{1-parent.B}}
+ }
+clone $C796bb730 {
+  xpos -19
+  ypos 262
+  selected false
+ }
+push $N796b9bb0
+ Shuffle {
+  red black
+  green black
+  blue black
+  name Shuffle7
+  xpos -219
+  ypos -371
+  disable {{parent.mask==0?0:1}}
+ }
+set N796bc4f0 [stack 0]
+ Input {
+  inputs 0
+  name mask
+  tile_color 0x960000ff
+  xpos -497
+  ypos -423
+  number 1
+ }
+ Multiply {
+  inputs 1+1
+  value 0
+  invert_mask true
+  name Multiply1
+  xpos -497
+  ypos -377
+ }
+push $N796bc4f0
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha red
+  name Shuffle8
+  xpos -219
+  ypos -347
+  disable {{parent.mask==1?0:1}}
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha green
+  name Shuffle9
+  xpos -219
+  ypos -323
+  disable {{parent.mask==2?0:1}}
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha green
+  name Shuffle10
+  xpos -219
+  ypos -299
+  disable {{parent.mask==3?0:1}}
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha white
+  name Shuffle11
+  xpos -219
+  ypos -275
+  disable {{parent.mon}}
+ }
+ Dot {
+  name Dot10
+  xpos -397
+  ypos -272
+ }
+ Switch {
+  inputs 2
+  which {{parent.inputs-1}}
+  name Switch1
+  xpos -500
+  ypos -275
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  name Shuffle4
+  xpos -500
+  ypos -234
+  disable {{parent.mask==0?0:1}}
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha red
+  name Shuffle1
+  xpos -500
+  ypos -210
+  disable {{parent.mask==1?0:1}}
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha green
+  name Shuffle2
+  xpos -500
+  ypos -186
+  disable {{parent.mask==2?0:1}}
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha green
+  name Shuffle3
+  xpos -500
+  ypos -162
+  disable {{parent.mask==3?0:1}}
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha white
+  name Shuffle5
+  xpos -500
+  ypos -138
+  disable {{parent.mon}}
+ }
+ Dot {
+  name Dot5
+  tile_color 0xe50000ff
+  xpos -466
+  ypos 57
+ }
+set N7019f880 [stack 0]
+push $N796b9bb0
+ Shuffle {
+  red black
+  green black
+  alpha black
+  name B
+  xpos 354
+  ypos -126
+ }
+set N7019fbf0 [stack 0]
+ Grid {
+  inputs 1+1
+  output {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  number {{parent.V_lines} {parent.H_lines}}
+  size {{parent.lines_size}}
+  translate {{parent.speed*frame+(parent.speed*frame+2)*(parent.delay+0.2)} {parent.speed*frame+(parent.speed*frame+2)*(parent.delay+0.2)}}
+  name Grid3
+  xpos -345
+  ypos -132
+  disable {{1-parent.LinesRGB}}
+ }
+ Transform {
+  rotate {{parent.rotation*(parent.AudioLink+parent.trigger)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform4
+  xpos -197
+  ypos -92
+  disable {{1-parent.B x69 1}}
+ }
+ Blur {
+  size {{parent.blur_1}}
+  name Blur2
+  xpos -23
+  ypos -98
+  disable {{1-clamp(floor(parent.blur_1+0.999))}}
+ }
+ set C701a0640 [stack 0]
+ Dot {
+  name Dot6
+  xpos 340
+  ypos -89
+ }
+push $N7019fbf0
+ TransformMasked {
+  inputs 1+1
+  translate {{parent.transform.x*(1-parent.delay*0.5)*(1-parent.delay*0.5)*(parent.AudioLink+parent.trigger)} {parent.transform.y*(1-parent.delay*0.5)*(1-parent.delay*0.5)*(parent.AudioLink+parent.trigger)}}
+  rotate {{parent.rotation*(parent.AudioLink+parent.trigger)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform1
+  xpos 354
+  ypos 52
+  disable {{1-parent.LinesRGB}}
+ }
+ TransformMasked {
+  inputs 1+1
+  translate {{(parent.AudioLink+parent.trigger)*((sin((frame*parent.Speed)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.BiGtranslate.x)*(1-parent.rgbdelay2*0.5)*(1-parent.rgbdelay2*0.5)} {(parent.AudioLink+parent.trigger)*parent.BiGtranslate.y*(1-parent.rgbdelay2*0.5)*(1-parent.rgbdelay2*0.5)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform9
+  xpos 355
+  ypos 262
+  disable {{1-parent.BoxesRGB}}
+ }
+ TransformMasked {
+  inputs 1+1
+  translate {{(parent.AudioLink+parent.trigger)*((sin((frame*parent.Speed)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.BiGtranslate.x)*(1-parent.rgbdelay2*0.5)*(1-parent.rgbdelay2*0.5)} {(parent.AudioLink+parent.trigger)*parent.BiGtranslate.y*(1-parent.rgbdelay2*0.5)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform12
+  xpos 355
+  ypos 512
+  disable {{1-parent.BoxesRGB}}
+ }
+ Dot {
+  name Dot4
+  xpos 388
+  ypos 846
+ }
+push 0
+ Rectangle {
+  inputs 0
+  area {{(parent.AudioLink+parent.trigger)*(sin(frame*parent.Speed)*parent.amount+random(frame)*parent.noise)+parent.Mother1.area.x x29 -82.2828595} {Mother1.area.y} {(parent.AudioLink+parent.trigger)*(sin((frame*parent.Speed)*-1)*parent.amount+random(frame)*parent.noise)+parent.Mother1.area.r} {Mother1.area.y+(Mother1.area.t-Mother1.area.y)/2}}
+  name Rectangle6
+  xpos -368
+  ypos 429
+ }
+ Rectangle {
+  area {{parent.Mother1.area.x+(parent.Mother1.area.t-parent.Mother1.area.x)/2} {parent.Mother1.area.t-(parent.Mother1.area.t-parent.Mother1.area.y)/1.6} {(parent.AudioLink+parent.trigger)*(sin((frame*parent.Speed-20)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.Mother1.area.r+(parent.Mother1.area.t-parent.Mother1.area.x)/2} {parent.Mother1.area.t-(parent.Mother1.area.t-parent.Mother1.area.y)/2.2}}
+  color 0
+  name Rectangle8
+  xpos -258
+  ypos 429
+ }
+ set C701a1e50 [stack 0]
+ Transform {
+  rotate {{parent.rotatebig}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform15
+  xpos -148
+  ypos 437
+  disable {{1-parent.G}}
+ }
+clone $C796bb730 {
+  xpos -18
+  ypos 431
+  selected false
+ }
+ Rectangle {
+  inputs 0
+  area {{(parent.AudioLink+parent.trigger)*(sin(frame*parent.Speed)*parent.amount+random(frame)*parent.noise)+parent.Mother.area.x x29 -82.2828595} {Mother.area.y} {(parent.AudioLink+parent.trigger)*(sin((frame*parent.Speed)*-1)*parent.amount+random(frame)*parent.noise)+parent.Mother.area.r} {Mother.area.y+(Mother.area.t-Mother.area.y)/2}}
+  name Rectangle2
+  xpos -372
+  ypos 198
+ }
+ Rectangle {
+  area {{parent.Mother.area.x+(parent.Mother.area.t-parent.Mother.area.x)/2} {parent.Mother.area.t-(parent.Mother.area.t-parent.Mother.area.y)/1.6} {(parent.AudioLink+parent.trigger)*(sin((frame*parent.Speed-20)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.Mother.area.r+(parent.Mother.area.t-parent.Mother.area.x)/2} {parent.Mother.area.t-(parent.Mother.area.t-parent.Mother.area.y)/2.2}}
+  color 0
+  name Rectangle4
+  xpos -262
+  ypos 198
+ }
+ set C701a2c10 [stack 0]
+ Transform {
+  rotate {{parent.rotatebig}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform16
+  xpos -150
+  ypos 203
+  disable {{1-parent.G}}
+ }
+clone $C796bb730 {
+  xpos -17
+  ypos 197
+  selected false
+ }
+push $N7019f880
+push $N796b9bb0
+ Shuffle {
+  red black
+  blue black
+  alpha black
+  name G
+  xpos 251
+  ypos -127
+ }
+set N701a3660 [stack 0]
+ Grid {
+  inputs 1+1
+  output {-rgba.red rgba.green -rgba.blue rgba.alpha}
+  number {{parent.V_lines} {parent.H_lines}}
+  size {{parent.lines_size}}
+  translate {{parent.speed*frame+(parent.speed*frame+1)*(parent.delay+0.1)} {parent.speed*frame+(parent.speed*frame+1)*(parent.delay+0.1)}}
+  name Grid2
+  xpos -345
+  ypos -48
+  disable {{1-parent.LinesRGB}}
+ }
+ Transform {
+  rotate {{parent.rotation*(parent.AudioLink+parent.trigger)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform5
+  xpos -197
+  ypos -19
+  disable {{1-parent.G x69 1}}
+ }
+clone $C701a0640 {
+  xpos -22
+  ypos -25
+  selected false
+ }
+ Dot {
+  name Dot7
+  xpos 240
+  ypos -16
+ }
+push $N701a3660
+ TransformMasked {
+  inputs 1+1
+  translate {{parent.transform.x*(1-parent.delay*0.5)*(parent.AudioLink+parent.trigger)} {parent.transform.y*(1-parent.delay*0.5)*(parent.AudioLink+parent.trigger)}}
+  rotate {{parent.rotation*(parent.AudioLink+parent.trigger)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform3
+  xpos 251
+  ypos 47
+  disable {{1-parent.LinesRGB}}
+ }
+ TransformMasked {
+  inputs 1+1
+  translate {{(parent.AudioLink+parent.trigger)*((sin((frame*parent.Speed)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.BiGtranslate.x)} {(parent.AudioLink+parent.trigger)*parent.BiGtranslate.y}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform8
+  xpos 252
+  ypos 197
+  disable {{1-parent.BoxesRGB}}
+ }
+ TransformMasked {
+  inputs 1+1
+  translate {{(parent.AudioLink+parent.trigger)*((sin((frame*parent.Speed)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.BiGtranslate.x)*(1-parent.rgbdelay2*0.5)} {(parent.AudioLink+parent.trigger)*parent.BiGtranslate.y*(1-parent.rgbdelay2*0.5)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform11
+  xpos 252
+  ypos 431
+  disable {{1-parent.BoxesRGB}}
+ }
+ Dot {
+  name Dot3
+  xpos 285
+  ypos 846
+ }
+ Rectangle {
+  inputs 0
+  area {{(parent.AudioLink+parent.trigger)*(sin((frame*parent.Speed-20)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.Mother1.area.x x29 -82.2828595} {Mother1.area.y+(Mother1.area.t-Mother1.area.y)/2} {(parent.AudioLink+parent.trigger)*(sin(((frame*parent.Speed-20)*parent.trigger_multiply)*-1)*parent.amount+random(frame)*parent.noise)+parent.Mother1.area.r} {parent.Mother1.area.t}}
+  name Rectangle7
+  xpos -368
+  ypos 363
+ }
+clone $C701a1e50 {
+  xpos -258
+  ypos 363
+  selected false
+ }
+ Transform {
+  rotate {{parent.rotatebig}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform17
+  xpos -154
+  ypos 368
+  disable {{1-parent.R}}
+ }
+clone $C796bb730 {
+  xpos -16
+  ypos 360
+  selected false
+ }
+ Rectangle {
+  inputs 0
+  area {{(parent.AudioLink+parent.trigger)*(sin((frame*parent.Speed-20)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.Mother.area.x x29 -82.2828595} {Mother.area.y+(Mother.area.t-Mother.area.y)/2} {(parent.AudioLink+parent.trigger)*(sin(((frame*parent.Speed-20)*parent.trigger_multiply)*-1)*parent.amount+random(frame)*parent.noise)+parent.Mother.area.r} {parent.Mother.area.t}}
+  name Rectangle1
+  xpos -371
+  ypos 133
+ }
+clone $C701a2c10 {
+  xpos -261
+  ypos 133
+  selected false
+ }
+ Transform {
+  rotate {{parent.rotatebig}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform18
+  xpos -151
+  ypos 138
+  disable {{1-parent.R}}
+ }
+clone $C796bb730 {
+  xpos -20
+  ypos 132
+  selected false
+ }
+push $N7019f880
+push $N796b9bb0
+ Shuffle {
+  green black
+  blue black
+  alpha black
+  name R
+  xpos 147
+  ypos -128
+ }
+set N9cc76640 [stack 0]
+ Grid {
+  inputs 1+1
+  output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  number {{parent.V_lines} {parent.H_lines}}
+  size {{parent.lines_size}}
+  translate {{parent.AudioLink+parent.trigger} {parent.AudioLink+parent.trigger}}
+  name Grid1
+  xpos -346
+  ypos 48
+  disable {{1-parent.LinesRGB}}
+ }
+ Transform {
+  rotate {{parent.rotation*(parent.AudioLink+parent.trigger)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform6
+  xpos -198
+  ypos 54
+  disable {{1-parent.R x50 1}}
+ }
+clone $C701a0640 {
+  xpos -25
+  ypos 48
+  selected false
+ }
+push $N9cc76640
+ TransformMasked {
+  inputs 1+1
+  translate {{parent.transform.x*(1-parent.delay)*(parent.AudioLink+parent.trigger)} {parent.transform.y*(1-parent.delay)*(parent.AudioLink+parent.trigger)}}
+  rotate {{parent.rotation*(parent.AudioLink+parent.trigger)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform2
+  xpos 149
+  ypos 48
+  disable {{1-parent.LinesRGB x50 1}}
+ }
+set N9cc77400 [stack 0]
+ TransformMasked {
+  inputs 1+1
+  translate {{(parent.AudioLink+parent.trigger)*((sin((frame*parent.Speed-20)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.BiGtranslate.x)*(1-parent.rgbdelay2*0.5)} {(parent.AudioLink+parent.trigger)*parent.BiGtranslate.y*(1-parent.rgbdelay2*0.5)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform7
+  xpos 149
+  ypos 132
+  disable {{1-parent.BoxesRGB}}
+ }
+ TransformMasked {
+  inputs 1+1
+  translate {{(parent.AudioLink+parent.trigger)*((sin((frame*parent.Speed-20)*parent.trigger_multiply)*parent.amount+random(frame)*parent.noise)+parent.BiGtranslate.x)*(1-parent.rgbdelay2*0.5)} {(parent.AudioLink+parent.trigger)*parent.BiGtranslate.y*(1-parent.rgbdelay2*0.5)}}
+  center {{parent.Effects_center.x} {parent.Effects_center.y}}
+  name Transform10
+  xpos 150
+  ypos 360
+  disable {{1-parent.BoxesRGB x69 1}}
+ }
+ Merge2 {
+  inputs 3+1
+  name Merge1
+  xpos 150
+  ypos 843
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos 70
+  ypos 909
+ }
+ Merge2 {
+  inputs 2
+  mix {{parent.mix}}
+  name Merge2
+  xpos 69
+  ypos 986
+ }
+ Output {
+  name Output1
+  xpos 69
+  ypos 1145
+ }
+push $N9cc77400
+ Viewer {
+  input_process false
+  name Viewer1
+  xpos -308
+  ypos 1058
+ }
+end_group
