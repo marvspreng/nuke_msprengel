@@ -20,7 +20,7 @@ def CardInFrustum():
 		sel = nuke.selectedNode()
 
 		# check if the node is a camera node
-		if sel.Class() == 'Camera2' or sel.Class() == 'Camera':
+		if sel.Class() == 'Camera4' or sel.Class() == 'Camera3' or sel.Class() == 'Camera2' or sel.Class() == 'Camera':
 			cam = sel
 		else:
 			nuke.message(NoCamSelected)

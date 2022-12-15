@@ -1,0 +1,95 @@
+#! C:/Program Files/Nuke12.2v3/nuke-12.2.3.dll -nx
+version 12.2 v3
+Gizmo {
+ tile_color 0x540054ff
+ note_font_size 20
+ addUserKnob {20 kronitch l KRONITCH}
+ addUserKnob {41 input.first l "Input Range" T Kronos.input.first}
+ addUserKnob {41 input.last l "" -STARTLINE T Kronos.input.last}
+ addUserKnob {41 resetInputRange l autoRange -STARTLINE T Kronos.resetInputRange}
+ addUserKnob {41 timingOutputSpeed l "Output Speed" T Kronos.timingOutputSpeed}
+ addUserKnob {41 reverse T kronitch_retime.reverse}
+ addUserKnob {41 disable_1 l "retime or noretime" -STARTLINE T kronitch_retime.disable}
+ addUserKnob {7 scale_1 l fragment-size R 0.1 5}
+ scale_1 1
+ addUserKnob {7 Kronosdistortion l KRONOSGLITCH R 5000 50000}
+ Kronosdistortion 50000000
+ addUserKnob {41 flickerCompensation l "Flicker Compensation" T Kronos.flickerCompensation}
+ addUserKnob {7 Red l "RED %"}
+ Red 1
+ addUserKnob {7 green l "GRENN %"}
+ green 1
+ addUserKnob {7 blue l "BLUE %"}
+ blue 1
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 6
+  ypos -27
+ }
+set Ne825f000 [stack 0]
+ Reformat {
+  type scale
+  scale {{parent.scale_1}}
+  name Reformat2
+  xpos 6
+  ypos 61
+ }
+ Kronos {
+  input.first 1001
+  input.last 2001
+  retimedChannels all
+  showLegacyMode false
+  motionEstimation Regularized
+  vectorDetailLocal 1
+  smoothnessLocal 0
+  vectorDetailReg 1
+  strengthReg {{parent.Kronosdistortion}}
+  shutterSamples 0
+  autoShutterTime true
+  Advanced 1
+  legacyModeNuke9 false
+  Tolerances 1
+  weightRed {{parent.Red}}
+  weightGreen {{parent.green}}
+  weightBlue {{parent.blue}}
+  vectorSpacing 5
+  name Kronos
+  xpos 6
+  ypos 134
+ }
+set Ne825e400 [stack 0]
+ Retime {
+  input.last 404
+  output.last 275
+  speed {{1/Kronos.timingOutputSpeed x122 1.992753623 x308 3.832278481}}
+  filter nearest
+  time ""
+  name kronitch_retime
+  xpos 6
+  ypos 202
+ }
+ Reformat {
+  type scale
+  scale {{1/parent.Reformat2.scale}}
+  name Reformat1
+  xpos 6
+  ypos 252
+ }
+ Output {
+  name Output1
+  xpos 6
+  ypos 400
+ }
+push $Ne825f000
+push $Ne825e400
+ Viewer {
+  inputs 2
+  frame_range 1-1250
+  fps 25
+  name Viewer1
+  xpos 283
+  ypos 515
+ }
+end_group

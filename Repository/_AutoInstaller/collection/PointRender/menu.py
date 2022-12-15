@@ -1,6 +1,6 @@
 ''' Add this to your menu.py '''
 import nuke
-##Hagbarth Tools
+##Higx Tools
 toolbar = nuke.toolbar("Nodes")
 m = toolbar.addMenu("Higx Tools", icon="higx_tools.png")
 m_general = m.addMenu("General",icon="h_pointRender.png")
@@ -22,6 +22,7 @@ m_generator.addCommand("Point_UnitSphere_NU", "nuke.createNode(\"Point_UnitSpher
 m_generator.addCommand("Point_UnitCube_NU", "nuke.createNode(\"Point_UnitCube\")", icon="h_pointGenerator.png")
 m_generator.addCommand("Point_Grid_NU", "nuke.createNode(\"Point_Grid\")", icon="h_pointGenerator.png")
 m_generator.addCommand("Point_Particles_NU", "nuke.createNode(\"Point_Particles\")", icon="h_pointGenerator.png")
+#m_generator.addCommand("Point_Lightning_NU", "nuke.createNode(\"Point_Lightning\")", icon="h_pointGenerator.png") ##comming soon
 m_generator.addCommand("Point_GeoSource_NU", "nuke.createNode(\"Point_GeoSource\")", icon="h_pointGenerator.png")
 m_generator.addCommand("Point_GeoSourceUV_NU", "nuke.createNode(\"Point_GeoSourceUV\")", icon="h_pointGenerator.png")
 
@@ -34,7 +35,7 @@ m_modifier.addCommand("Point_Transform", "nuke.createNode(\"Point_Transform\")",
 m_modifier.addCommand("Point_Twist", "nuke.createNode(\"Point_Twist\")", icon="h_pointModifier.png")
 m_modifier.addCommand("Point_Merge_NU", "nuke.createNode(\"Point_Merge_NU\")", icon="h_pointModifier.png")
 m_modifier.addCommand("Point_Dublicator_NU", "nuke.createNode(\"Point_Dublicator_NU\")", icon="h_pointModifier.png")
-
+#m_modifier.addCommand("Point_Weave_NU", "nuke.createNode(\"Point_Weave\")", icon="h_pointModifier.png") ##comming soon
 
 #Textures
 m_shader.addCommand("Point_Distance", "nuke.createNode(\"Point_Distance\")", icon="h_pointShader.png")

@@ -4,10 +4,11 @@ Group {
  tile_color 0x434343ff
  note_font_color 0x7dadf9ff
  addUserKnob {20 User}
- addUserKnob {26 info_header l "" +STARTLINE T "Card Generator v1.1\n"}
+ addUserKnob {26 info_header l "" +STARTLINE T "Card Generator v1.2\n"}
  addUserKnob {26 info_basic l "<b><font color=#7DADF9>General</font><b>"}
  addUserKnob {14 whx l "Point Density" t "The number of points in each axis.\nNote: Nuke can't handle images that are 1 in height or width, and as such you can't set this to 1. \nA workaround is that you can set the count to 2 and set the scale to 0 opposite axis." R 0 100}
  whx {400 400}
+ addUserKnob {6 lockAspect l "Maintain Aspect" +STARTLINE}
  addUserKnob {26 _1 l "<b><font color=#7DADF9>Transform</font><b>"}
  addUserKnob {4 orientation l Orientation t "The orientation that the plane should face." M {XY XZ YZ ""}}
  orientation XZ
@@ -89,50 +90,53 @@ Group {
   expr3 1
   name Expression1
   xpos -586
-  ypos 221
+  ypos 194
  }
  Grade {
-  white {{parent.scale.w} {parent.scale.h} 1 1}
+  white {{parent.scale.w*mix(min(1,(1920/1080)),1,!parent.lockAspect)} {parent.scale.h*mix(min(1,(1080/1920)),1,!parent.lockAspect)} 1 1}
   black_clamp false
   name Grade1
+  selected true
   xpos -586
   ypos 262
  }
-set N61607800 [stack 0]
+set N22b23c00 [stack 0]
  Shuffle {
   red blue
-  green red
-  blue green
+  blue red
   name Shuffle1
   xpos -480
-  ypos 277
+  ypos 262
  }
  Grade {
+  multiply {1 1 -1 1}
+  multiply_panelDropped true
   add {1 0 0 0}
   add_panelDropped true
   black_clamp false
   name Grade3
   xpos -480
-  ypos 301
+  ypos 303
  }
-push $N61607800
+push $N22b23c00
  Shuffle {
-  red green
   green blue
-  blue red
+  blue green
   name Shuffle5
   xpos -703
-  ypos 287
+  ypos 262
  }
  Grade {
+  multiply {1 1 -1 1}
+  multiply_panelDropped true
   add {0 1 0 0}
   add_panelDropped true
   black_clamp false
   name Grade2
   xpos -703
-  ypos 311
+  ypos 301
  }
-push $N61607800
+push $N22b23c00
  Grade {
   add {0 0 1 0}
   add_panelDropped true
@@ -208,8 +212,7 @@ add_layer {pos pos.red pos.green pos.blue pos.alpha}
  Axis2 {
   inputs 0
   name Axis1
-  selected true
-  xpos -424
+  xpos -323
   ypos 341
  }
 end_group

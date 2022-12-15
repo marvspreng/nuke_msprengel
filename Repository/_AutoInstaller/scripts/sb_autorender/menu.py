@@ -3,7 +3,7 @@ import sb_autoRender
 
 nuke.toolbar("Nodes").addCommand("murph/render/sb AutoRender", '''sb_autoRender.sb_autoRenderNode(
 		rootFolderMethod="search word",
-		rootFolderUserInput="WORK", 
+		rootFolderUserInput="work", 
 		customRenderPath="",
 		renderType="main render",
 		renderName="script name",
@@ -15,8 +15,8 @@ nuke.toolbar("Nodes").addCommand("murph/render/sb AutoRender", '''sb_autoRender.
 		addFileExtensionSubfolder=False,
 		addColorToFileName=False,
 		useOCIO=False,
-		channels="rgb",
-		colorspace="Linear",
+		channels="rgba",
+		colorspace="default",
 		fileType="exr",
 		mainRenderFolder="OUT/render",
 		precompRenderFolder="OUT/prerender",

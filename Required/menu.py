@@ -1,4 +1,4 @@
-# NukeShared v2.5 - Max van Leeuwen - maxvanleeuwen.com/nukeshared
+# NukeShared v2.6 - Max van Leeuwen - maxvanleeuwen.com/nukeshared
 
 
 import os
@@ -14,7 +14,7 @@ except NameError:
     menuID = 0
 menuIDString = '{:03}'.format(menuID + 1) #get the current menu.py count (start at <001> so user won't be confused)
 
-NukeSharedStr	= "[NukeShared v2.5%s] "
+NukeSharedStr	= "[NukeShared v2.6%s] "
 NukeSharedPrint = NukeSharedStr % ((" (" + menuIDString + ")") if initID > 0 else ("")) #text to show on prints (only show NukeShared count if more than 1 instance is installed)
 
 
@@ -221,11 +221,11 @@ except:
 		f.write(ToDo_Menu)
 		f.close()
 
-		execfile(cachef)
+		exec(open(cachef).read())
 
 	else:
 
-		exec ToDo_Menu
+		exec(ToDo_Menu)
 
 
 def GetStats():
@@ -243,7 +243,7 @@ if not blacklisted and not wrongversion:
 			ManualLoad()
 		else:
 			if os.path.isfile(cachef):
-				execfile(cachef)
+				exec(open(cachef).read())
 			else:
 				cachenow = True
 				ManualLoad()

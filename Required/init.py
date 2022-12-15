@@ -1,4 +1,4 @@
-# NukeShared v2.5 - Max van Leeuwen - maxvanleeuwen.com/nukeshared
+# NukeShared v2.6 - Max van Leeuwen - maxvanleeuwen.com/nukeshared
 
 
 # Default configuration (will be overwritten by the Settings.py file, if it exists):
@@ -45,7 +45,7 @@ except NameError:
 initIDString = '{:03}'.format(initID + 1) #start counting amount of init.py files at 1 in logs so user won't be confused
 
 
-NukeSharedStr	= "[NukeShared v2.5%s] "
+NukeSharedStr	= "[NukeShared v2.6%s] "
 NukeSharedPrint = NukeSharedStr % (' (' + initIDString + ')' if initIDString != "001" else '') #don't show initID in message when it is the first NukeShared
 
 
@@ -58,8 +58,8 @@ root_req = os.path.dirname(currroot) + "/Required/"
 configPath = os.path.dirname(currroot).replace('\\', '/') + '/Configuration/Settings.py'
 if os.path.isfile(configPath):
 	try:
-		execfile(configPath) #run the Settings.py file as a python script
-	except Exception, e:
+		exec(open(configPath).read()) #run the Settings.py file as a python script
+	except Exception as e:
 		print (NukeSharedPrint + "Configuration file ('Settings.py') not loaded properly. Error:\n" + NukeSharedPrint + str(e)) #if something goes wrong, print the error
 
 
@@ -168,7 +168,7 @@ def LoadCache(): #load the init file
 
 	f = open(cachef,'r')
 	ReadFile = f.read()
-	exec ReadFile
+	exec(ReadFile)
 	f.close()
 
 
@@ -361,7 +361,7 @@ def ManualInit(): #generate the init file
 	
 	else:
 
-		exec ToDo_Init
+		exec(ToDo_Init)
 
 
 if not blacklisted and not wrongversion: #only actually run NukeShared if not blacklisted or wrong version

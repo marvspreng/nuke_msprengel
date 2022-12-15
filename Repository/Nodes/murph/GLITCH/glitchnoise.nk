@@ -1,0 +1,98 @@
+set cut_paste_input [stack 0]
+version 12.2 v3
+push $cut_paste_input
+Noise {
+ size {5000 68}
+ zoffset {{frame*s}}
+ gain 0.79
+ gamma 0
+ center {1712 1101}
+ name Nice_Noise
+ selected true
+ xpos 3465
+ ypos 1004
+ addUserKnob {20 User}
+ addUserKnob {7 s}
+ s 0.005
+}
+set Ne8a27c00 [stack 0]
+Noise {
+ inputs 0
+ size {68 5000}
+ zoffset {{frame*s+10}}
+ gain 0.57
+ gamma 0
+ center {1712 1101}
+ name Nice_Noise1
+ selected true
+ xpos 3610
+ ypos 1008
+ addUserKnob {20 User}
+ addUserKnob {7 s}
+ s 0.05
+}
+ChannelMerge {
+ inputs 2
+ operation in
+ name ChannelMerge1
+ selected true
+ xpos 3616
+ ypos 1090
+}
+set Ne8a27400 [stack 0]
+push $Ne8a27400
+push $Ne8a27c00
+Grade {
+ inputs 1+1
+ white 2.05
+ name Grade1
+ selected true
+ xpos 3465
+ ypos 1102
+}
+Copy {
+ inputs 2
+ from0 rgba.alpha
+ to0 mask.a
+ name Copy1
+ selected true
+ xpos 3465
+ ypos 1182
+}
+FrameHold {
+ first_frame 3412
+ increment 4
+ name FrameHold1
+ selected true
+ xpos 3465
+ ypos 1226
+}
+set Ne8a04100 [stack 0]
+Glint {
+ repeat 6
+ length 280
+ aspect 1.41
+ rotation 54
+ steps 8
+ effect_only true
+ w_channel mask.a
+ name Glint1
+ selected true
+ xpos 3613
+ ypos 1226
+}
+SD_Pixelate.gizmo {
+ name SD_Pixelate
+ selected true
+ xpos 3613
+ ypos 1318
+ Pixelate 14
+}
+push $Ne8a04100
+Merge2 {
+ inputs 2
+ name Merge2
+ selected true
+ xpos 3465
+ ypos 1318
+}

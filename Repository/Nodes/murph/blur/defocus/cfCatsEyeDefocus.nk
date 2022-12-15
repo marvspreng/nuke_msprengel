@@ -1,0 +1,250 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name cfCatsEyeDefocus
+ tile_color 0xcc804eff
+ selected true
+ xpos -225
+ ypos -14
+ addUserKnob {20 User}
+ addUserKnob {41 splits l "splits (Warning: Exponetial)" T NoOp1.splits}
+ addUserKnob {41 scale_1 l "slicing radial scale" T Transform2.scale}
+ addUserKnob {41 offsetW l "horizontal occlusion" T NoOp1.offsetW}
+ addUserKnob {41 offsetH l "vertical occlusion" T NoOp1.offsetH}
+ addUserKnob {41 softness T Crop7.softness}
+ addUserKnob {26 ""}
+ addUserKnob {41 disable_1 l "test grid" T Switch1.disable}
+ addUserKnob {41 scale l "grid density" T Expression1.scale}
+ addUserKnob {26 ""}
+ addUserKnob {41 channels T ZDefocus1.channels}
+ addUserKnob {26 "" l " "}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T ZDefocus1.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {41 z_channel l "depth channel" T ZDefocus1.z_channel}
+ addUserKnob {41 math T ZDefocus1.math}
+ addUserKnob {41 output T ZDefocus1.output}
+ addUserKnob {41 show_image l "show image" -STARTLINE T ZDefocus1.show_image}
+ addUserKnob {41 fill_foreground l "fill foreground" -STARTLINE T ZDefocus1.fill_foreground}
+ addUserKnob {41 center l "focus plane (C)" T ZDefocus1.center}
+ addUserKnob {41 focal_point l "focal point" T ZDefocus1.focal_point}
+ addUserKnob {41 dof l "depth of field" T ZDefocus1.dof}
+ addUserKnob {41 blur_dof l "blur inside" T ZDefocus1.blur_dof}
+ addUserKnob {41 size T ZDefocus1.size}
+ addUserKnob {41 max_size l maximum T ZDefocus1.max_size}
+ addUserKnob {26 ""}
+ addUserKnob {41 autoLayerSpacing l "automatic layer spacing" T ZDefocus1.autoLayerSpacing}
+ addUserKnob {41 layers l "depth layers" T ZDefocus1.layers}
+ addUserKnob {41 layerCurve l "layer curve" T ZDefocus1.layerCurve}
+ addUserKnob {26 ""}
+ addUserKnob {41 filter_type l "filter type" T ZDefocus1.filter_type}
+ addUserKnob {41 filter_channel l "filter channel" T ZDefocus1.filter_channel}
+ addUserKnob {41 use_input_channels l "use input channels" -STARTLINE T ZDefocus1.use_input_channels}
+ addUserKnob {41 image_filter l "image filter" T ZDefocus1.image_filter}
+ addUserKnob {41 clamp_image_filter l "clamp image filter" -STARTLINE T ZDefocus1.clamp_image_filter}
+ addUserKnob {26 ""}
+ addUserKnob {41 bloom_gamma l "gamma correction" T ZDefocus1.bloom_gamma}
+ addUserKnob {41 bloom T ZDefocus1.bloom}
+ addUserKnob {41 bloom_threshold l "bloom threshold" T ZDefocus1.bloom_threshold}
+ addUserKnob {41 bloom_gain l "bloom gain" T ZDefocus1.bloom_gain}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelInput l mask -STARTLINE T ZDefocus1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T ZDefocus1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T ZDefocus1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T ZDefocus1.fringe}
+ addUserKnob {41 mix T ZDefocus1.mix}
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "" +STARTLINE T "Chris Fryer 2020"}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 50
+  ypos 580
+  number 2
+ }
+ Input {
+  inputs 0
+  name kernel
+  xpos -338
+  ypos 130
+  number 1
+ }
+ NoTimeBlur {
+  name NoTimeBlur1
+  xpos -338
+  ypos 154
+ }
+ Dot {
+  name Dot1
+  xpos -304
+  ypos 328
+ }
+set N95a39400 [stack 0]
+ Dot {
+  name Dot2
+  xpos -446
+  ypos 328
+ }
+ Radial {
+  area {0 0 {input.width} {input.height}}
+  softness 0
+  name Radial1
+  xpos -480
+  ypos 355
+ }
+ Transform {
+  scale {1 1}
+  center {128 128}
+  name Transform2
+  xpos -480
+  ypos 379
+ }
+ Transform {
+  translate {{-width*(offsetRatioW*(((frame*NoOp1.splits)%1)-.5))} {-height*(offsetRatioH*((frame%1)-.5))}}
+  center {512 512}
+  name Transform1
+  xpos -480
+  ypos 416
+  addUserKnob {20 User}
+  addUserKnob {7 offsetRatioW}
+  offsetRatioW {{parent.NoOp1.offsetW}}
+  addUserKnob {7 offsetRatioH}
+  offsetRatioH {{parent.NoOp1.offsetH}}
+ }
+ Dot {
+  name Dot3
+  xpos -446
+  ypos 458
+ }
+push $N95a39400
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox intersection
+  name Merge1
+  xpos -338
+  ypos 455
+ }
+set Nc6742800 [stack 0]
+ Dot {
+  name Dot4
+  xpos -304
+  ypos 583
+ }
+ Input {
+  inputs 0
+  name img
+  xpos -108
+  ypos 127
+ }
+ NoTimeBlur {
+  name NoTimeBlur2
+  xpos -108
+  ypos 151
+ }
+ Dot {
+  name Dot7
+  xpos -74
+  ypos 241
+ }
+set Nc676dc00 [stack 0]
+push $Nc676dc00
+ Dot {
+  name Dot8
+  xpos 79
+  ypos 241
+ }
+ Expression {
+  expr0 "((x+scale) % scale + 1)/scale == 1  && ((y+scale) % scale + 1)/scale == 1 ? 100 : 0"
+  expr1 "((x+scale) % scale + 1)/scale == 1  && ((y+scale) % scale + 1)/scale == 1 ? 100 : 0"
+  expr2 "((x+scale) % scale + 1)/scale == 1  && ((y+scale) % scale + 1)/scale == 1 ? 100 : 0"
+  expr3 "((x+scale) % scale + 1)/scale == 1  && ((y+scale) % scale + 1)/scale == 1 ? 100 : 0"
+  name Expression1
+  xpos 45
+  ypos 309
+  addUserKnob {20 User}
+  addUserKnob {7 scale R 0 100}
+  scale 50
+ }
+ Dot {
+  name Dot6
+  xpos 79
+  ypos 468
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch1
+  xpos -108
+  ypos 465
+ }
+ ZDefocus2 {
+  inputs 2+1
+  filter_type image
+  legacy_resize_mode false
+  show_legacy_resize_mode false
+  use_input_channels true
+  name ZDefocus1
+  xpos -108
+  ypos 575
+ }
+ Multiply {
+  channels rgba
+  value {{NoOp1.splits**2}}
+  name Multiply1
+  xpos -108
+  ypos 704
+ }
+set Nc676c400 [stack 0]
+ Crop {
+  box {{"((((frame*(NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*width) == 0 ? ((((frame*(NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*width) -softness :  ((((frame*(NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*width) -softness*.5"} {"(((((floor(frame*NoOp1.splits)/NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*height) == 0 ?   (((((floor(frame*NoOp1.splits)/NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*height) -softness : (((((floor(frame*NoOp1.splits)/NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*height) -softness*.5"} {"(((((frame*(NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*width)+width/NoOp1.splits) > width*(NoOp1.splits-.999)/NoOp1.splits ? (((((frame*(NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*width)+width/NoOp1.splits) +softness : (((((frame*(NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*width)+width/NoOp1.splits) +softness*.5" x1 402.7} {"((((((floor(frame*NoOp1.splits)/NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*height)+height/NoOp1.splits) > height*(NoOp1.splits-.999)/(NoOp1.splits) ? ((((((floor(frame*NoOp1.splits)/NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*height)+height/NoOp1.splits) +softness : ((((((floor(frame*NoOp1.splits)/NoOp1.splits)%1)*NoOp1.splits)/NoOp1.splits)*height)+height/NoOp1.splits) +softness*.5"}}
+  name Crop7
+  xpos -108
+  ypos 802
+ }
+ TimeBlur {
+  divisions {{NoOp1.splits**2}}
+  shutter 1
+  shutteroffset start
+  shuttercustomoffset 0
+  name TimeBlur1
+  xpos -108
+  ypos 854
+ }
+ Output {
+  name Output1
+  xpos -108
+  ypos 933
+ }
+ ChannelMerge {
+  inputs 0
+  operation stencil
+  name ChannelMerge1
+  xpos 296
+  ypos 894
+ }
+ NoOp {
+  inputs 0
+  name NoOp1
+  xpos 137
+  ypos 659
+  addUserKnob {20 User}
+  addUserKnob {7 offsetW}
+  offsetW 1
+  addUserKnob {7 offsetH}
+  offsetH 1
+  addUserKnob {7 splits R 0 10}
+  splits 5
+ }
+push $Nc676c400
+push $Nc6742800
+ Viewer {
+  inputs 2
+  frame_range 1-100
+  gain 0.17
+  name Viewer1
+  xpos -253
+  ypos 275
+ }
+end_group

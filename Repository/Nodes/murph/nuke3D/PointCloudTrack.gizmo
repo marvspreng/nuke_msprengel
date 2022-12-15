@@ -1,0 +1,157 @@
+#! C:/Program Files/Nuke11.2v1/nuke-11.2.1.dll -nx
+version 11.2 v1
+Gizmo {
+inputs 3
+tile_color 0xef6138ff
+addUserKnob {20 User}
+addUserKnob {26 PointCloudTrack l "<b><span style=\"color:#bc2751;\">PointCloud Track"}
+addUserKnob {26 sa l "  " T "  "}
+addUserKnob {41 intensitydata l Sample T CurveTool1.intensitydata}
+addUserKnob {26 space l "  " T "  "}
+addUserKnob {26 info l "" +STARTLINE T "<b><span style=\"color:##1cb2b2\">Sample using ctrl+alt+shift"}
+addUserKnob {26 ""}
+addUserKnob {22 GenTrack l "Output Track" T "###    PointCloudTracker \n###    \n###    ---------------------------------------------------------\n###    Created: 13/09/2018\n###    Written by Pranjal Choudhary\n###    robustvfx@gmail.com\n### \n\n\n#Pointing to the group node\ngroupNode = nuke.thisNode()\n\ngroupNode.begin()\n\n#Getting the root frames\nrootfirstFrame = int(nuke.root().knob('first_frame').getValue())\n\nrootlastFrame = int(nuke.root().knob('last_frame').getValue())\n\nnuke.selectAll()\n\nfor n in nuke.selectedNodes():\n    if n.Class() == 'Reconcile3D':\n        nuke.delete(n)\n\nnuke.invertSelection()\n\n#Getting the position info\n\ndef posInfo():\n\n    pos = groupNode.knob('intensitydata').getValue()\n\n    return pos\n\n\n# Creating new reconcile3D node and connecting it to the inputs\n\ncamInput = nuke.toNode('Camera')\nimageInput =  nuke.toNode('BG')\n\nreconcileNode = nuke.createNode('Reconcile3D')\n\nreconcileNode.setInput(1,camInput)\nreconcileNode.setInput(0,imageInput)\n\n#Splitting the pos info into three axis\n\nxVal = (posInfo())\[0]\nyVal = (posInfo())\[1]\nzVal = (posInfo())\[2]\n\n\n\n##reconcileNode.knob('point').setValue(0,0)\n#reconcileNode.knob('point').setValue(0,1)\n#reconcileNode.knob('point').setValue(0,2)\n#reconcileNode.knob('output').setValue(0,0)\n#reconcileNode.knob('output').setValue(0,1)\n\n#Feeding in axis values into reconcile3d node\n\nreconcileNode.knob('point').setValue(xVal,0)\nreconcileNode.knob('point').setValue(yVal,1)\nreconcileNode.knob('point').setValue(zVal,2)\n\n\n#nuke.execute('Reconcile3D1', firstFrame,lastFrame)\n\n#Getting user input for frame range\n\np = nuke.Panel('Frame Range')\np.addSingleLineInput('First Frame', rootfirstFrame)\np.addSingleLineInput('Last Frame', rootlastFrame)\n\nret = p.show()\n\nfirstFrame = int(p.value('First Frame'))\nlastFrame =int(p.value('Last Frame'))\n\nif ret: #if ok is klicked, panel will return 1 otherwise 0\n    \n\n\n\n    #Executing Reconcile3d node\n    nuke.execute('Reconcile3D1', firstFrame,lastFrame)\n\n    print firstFrame\n    print lastFrame\n        \n\n    # Creating the tracker node\n\n    with nuke.root():\n\n\n\n        trackerNode = nuke.createNode('Tracker4')\n        #trackerNode.setInput(0, None)\n        trackerNode\['add_track'].execute()\n        k = trackerNode\['tracks']\n        numColumns = 31\n        colTrackX = 2 \n        colTrackY = 3 \n        trackIdx = 0 \n\n        \n\n\n\n    n  =  firstFrame\n\n\n    # Feeding in the tracker node the XY values\n    for i in range (firstFrame,lastFrame+1):\n\n        \n        \n        reconcilexVal = reconcileNode.knob('output').valueAt(i)\[0]\n        reconcileyVal = reconcileNode.knob('output').valueAt(i)\[1]\n\n       \n        print reconcilexVal\n        print reconcileyVal\n      \n        k.setValueAt(reconcilexVal, n , 31*0 +2)\n        k.setValueAt(reconcileyVal, n , 31*0 +3)\n\n        n = n+1\n\nelse:\n    None\n" +STARTLINE}
+addUserKnob {26 xx l "  " T "  "}
+addUserKnob {41 value l "Position Overlay Mix" T Multiply1.value}
+addUserKnob {26 xx_1 l "  " T "  "}
+addUserKnob {26 author l "" +STARTLINE T "Pranjal\nwww.robustvfx.com"}
+}
+Input {
+inputs 0
+name Camera
+xpos 327
+ypos 421
+number 1
+}
+set N47ade000 [stack 0]
+Dot {
+name Dot1
+label "\[python getParentNode(nuke.thisNode())]"
+xpos 361
+ypos 490
+}
+Input {
+inputs 0
+name PointCloudORGeo
+xpos 460
+ypos 353
+}
+Input {
+inputs 0
+name BG
+xpos 595
+ypos 432
+number 2
+}
+set N47adf500 [stack 0]
+Dot {
+name Dot2
+label "\[python getParentNode(nuke.thisNode())]"
+xpos 634
+ypos 490
+}
+set N47adf180 [stack 0]
+add_layer {pointPos pointPos.red pointPos.green pointPos.blue pointPos.alpha}
+ScanlineRender {
+inputs 3
+conservative_shader_sampling false
+motion_vectors_type distance
+output_shader_vectors true
+P_channel pointPos
+name ScanlineRender1
+xpos 460
+ypos 486
+}
+set N47b31500 [stack 0]
+Shuffle {
+in pointPos
+name Shuffle1
+xpos 460
+ypos 573
+}
+set N47b31180 [stack 0]
+Dot {
+name Dot5
+label "\[python getParentNode(nuke.thisNode())]"
+xpos 311
+ypos 643
+}
+Dot {
+name Dot6
+label "\[python getParentNode(nuke.thisNode())]"
+xpos 311
+ypos 853
+}
+push $N47b31180
+Multiply {
+value 0.134
+name Multiply1
+xpos 460
+ypos 684
+}
+push $N47adf180
+Dot {
+name Dot8
+label "\[python getParentNode(nuke.thisNode())]"
+xpos 634
+ypos 746
+}
+Dot {
+name Dot3
+label "\[python getParentNode(nuke.thisNode())]"
+xpos 634
+ypos 806
+}
+Merge2 {
+inputs 2
+name Merge1
+xpos 460
+ypos 803
+}
+Switch {
+inputs 2
+name Switch1
+xpos 460
+ypos 850
+}
+Output {
+name Output1
+xpos 460
+ypos 898
+}
+push $N47b31180
+Dot {
+name Dot4
+label "\[python getParentNode(nuke.thisNode())]"
+xpos 123
+ypos 577
+}
+CurveTool {
+ROI {512 214 1536 643}
+autocropdata {1932 1053.5 2956 1482.5}
+intensitydata {0.0610560216 -0.04197290167 -0.8500788808 0}
+name CurveTool1
+xpos 89
+ypos 630
+}
+push $N47b31500
+Viewer {
+frame_range 59-59
+gain 0.083
+name Viewer1
+xpos 305
+ypos 989
+}
+push $N47ade000
+push $N47adf500
+Reconcile3D {
+inputs 2
+point {0.0610560216 -0.04197290167 -0.8500788808}
+output {{curve x30 2466.45874 2466.375488 2465.946533 2465.269775 2463.93457 2462.609131 2461.031738 2459.229736 2457.698975 2456.466064 2455.358887 2454.111572 2452.922119 2452.185303 2451.353271 2450.258301 2449.554443 2449.00293 2447.937988 2446.935791 2446.864014 2446.379639 2445.436768 2445.112305 2444.681152 2443.777344 2443.190674 2442.718506 2441.768555 2440.785645 2440.312744 2439.819824 2438.868164 2438.214355 2437.628418 2436.488525 2435.302979 2434.73291 2433.948242 2432.540283 2431.770264 2430.954834 2429.592529 2428.268311 2427.406006 2426.277588 2424.993408 2424.091309 2423.093018 2421.803711 2420.449219 2419.066162 2417.493652 2415.775146 2414.158936 2412.626953 2410.843994 2409.45874 2408.08667 2406.325439 2404.701172} {curve x30 714.5853882 714.5958252 714.6380615 714.6705933 716.3851318 718.019165 719.7528076 721.6832275 723.2775879 724.918457 726.9481201 728.7191162 730.3598022 732.1499634 734.0565796 735.6887207 737.5741577 739.9498291 741.7877197 743.4867554 745.6780396 747.4088745 749.0061035 751.0055542 753.0733643 754.897644 756.7431641 759.0817871 760.9048462 762.6342163 764.7347412 767.0720825 768.8867798 770.7960205 773.2232056 775.1628418 776.9918823 778.8173218 780.6619263 782.4346313 784.1593018 786.1663208 788.0621948 789.9446411 792.3660278 794.3626709 796.2506104 798.4533691 800.5185547 802.2991943 804.1856079 806.531311 808.5606079 810.6522827 813.1499634 815.6118164 817.8306885 820.0053711 822.7720947 825.3111572 827.8873291}}
+outputxyz {{curve x30 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216 0.0610560216} {curve x30 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167 -0.04197290167} {curve x30 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808 -0.8500788808}}
+name Reconcile3D1
+selected true
+xpos 1163
+ypos 808
+}
+end_group

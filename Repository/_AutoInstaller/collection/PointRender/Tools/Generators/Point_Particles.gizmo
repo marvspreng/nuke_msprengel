@@ -4,7 +4,7 @@ Group {
  tile_color 0x434343ff
  note_font_color 0x7dadf9ff
  addUserKnob {20 User}
- addUserKnob {26 info l " " T "Point Particle System v1.2     "}
+ addUserKnob {26 info l " " T "Point Particle System v1.3"}
  addUserKnob {6 useGPU l "Use GPU if available" +STARTLINE}
  useGPU true
  addUserKnob {26 divider_general l "<b><font color=#7DADF9>General</font><b>"}
@@ -153,7 +153,7 @@ Group {
   xpos 16
   ypos -57
  }
-set Ndc326c00 [stack 0]
+set Ne471d000 [stack 0]
  Expression {
   expr3 frame-a
   name Expression1
@@ -168,7 +168,7 @@ add_layer {id id.r}
   xpos 136
   ypos 20
  }
-push $Ndc326c00
+push $Ne471d000
  Expression {
   expr3 a>0?1:0
   name Expression2

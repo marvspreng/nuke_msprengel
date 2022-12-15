@@ -2,7 +2,7 @@
 #
 # AUTOMATICALLY GENERATED FILE TO BE USED BY W_HOTBOX
 #
-# NAME: Reconnect by Title
+# NAME: connect by Title
 # COLOR: #6b4930
 #
 #----------------------------------------------------------------------------------------------------------

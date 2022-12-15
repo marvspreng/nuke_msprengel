@@ -2,13 +2,14 @@
 #
 # AUTOMATICALLY GENERATED FILE TO BE USED BY W_HOTBOX
 #
-# NAME: Localise
+# NAME: show/hide PostageStamp
 #
 #----------------------------------------------------------------------------------------------------------
 
-readKnobList = []
 for i in nuke.selectedNodes():
-	i.knob('cacheLocal').setValue('always')
-	readKnobList.append(i.knob('file'))
 
-nuke.localiseFiles(readKnobList)
+    stamp = i.knob('postage_stamp')
+    if stamp.getValue() == 0:
+        stamp.setValue(1)
+    else:
+        stamp.setValue(0)

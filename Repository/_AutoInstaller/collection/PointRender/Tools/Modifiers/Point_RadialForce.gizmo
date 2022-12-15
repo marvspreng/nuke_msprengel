@@ -27,7 +27,7 @@ Group {
   xpos 423
   ypos -182
  }
-set N6193dc00 [stack 0]
+set N1502a800 [stack 0]
 add_layer {pos pos.red pos.green pos.blue pos.alpha}
  Shuffle {
   in pos
@@ -62,7 +62,7 @@ add_layer {pos pos.red pos.green pos.blue pos.alpha}
   xpos 501
   ypos 34
  }
-push $N6193dc00
+push $N1502a800
  Merge2 {
   inputs 2
   operation copy

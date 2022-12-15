@@ -1,0 +1,63 @@
+set cut_paste_input [stack 0]
+version 11.2 v4
+push $cut_paste_input
+Group {
+ name FrameRebuilder
+ label "\n"
+ selected true
+ xpos 251
+ ypos 424
+ addUserKnob {20 User l FrameRebuilder}
+ addUserKnob {26 mode l Mode: T "Using OFlow"}
+ addUserKnob {26 version l Version: T "v2.0                  "}
+ addUserKnob {6 use_gpu l "Use GPU" t "Use the GPU function of the OFlow/Kronos nodes." -STARTLINE}
+ use_gpu true
+ addUserKnob {26 ""}
+ addUserKnob {26 text1 l "" +STARTLINE T "1) Hit 'Reset' before beginning"}
+ addUserKnob {22 reset l Reset T "try:\n    print \" \"\n    print \"=========== FrameRebuilder ==========\"\n\n\n    try:\n        groupNode = nuke.thisNode()\n    except:\n        groupNode = nuke.selectedNode()\n\n\n\n    \"Incorporate Reset Code from RichFrazer\"\n    n = nuke.thisNode()\['inputframe']\n    kt = nuke.thisNode()\['kt']\n    ko = nuke.thisNode()\['ko']\n    p = nuke.thisNode()\['passthrough']\n    n.clearAnimated()\n    kt.clearAnimated()\n    ko.clearAnimated()\n    n.setAnimated()\n    first_frame = nuke.thisNode().firstFrame()\n    last_frame = nuke.thisNode().lastFrame() \n    n.animation(0).setKey(first_frame,first_frame)\n    n.animation(0).setKey(last_frame,last_frame)\n    p.setValue(0)\n\n\n    n = nuke.thisNode()\['inputframe']\n    n.setAnimated()\n\n\n    n.animation(0).setKey(first_frame,first_frame)\n    n.animation(0).setKey(last_frame,last_frame)\n\n\n    for i in xrange( first_frame, last_frame, 1 ):\n        n.setValueAt(i, i)\n\n\n\n    \"Start Processing Groupnode Code\"\n    groupNode.begin()\n\n\n\n    \"Test if Kronos License is Active\"\n    try:\n        k = nuke.nodes.Kronos()\n        k\[\"timing2\"].setValue(\"Frame\")\n        kronos = True\n    except:\n        kronos = False\n\n\n    if kronos == True:\n        p = nuke.Panel(\"Choose mode\")\n        p.addEnumerationPulldown('Mode:', 'OFlow Kronos')\n        result = p.show()\n        mode = p.value(\"Mode:\")\n    else:\n        mode = \"OFlow\"\n        pass\n\n\n    # for n in nuke.allNodes(\"OFlow2\"):\n    #     n\[\"input.first\"].setValue(f)\n    #     n\[\"input.last\"].setValue(l)\n    #     n\[\"timingFrame2\"].setExpression(\"parent.ko\")\n    #     n\[\"vectorDetailLocal\"].setExpression(\"parent.vector_detail\")\n    #     n\[\"smoothnessLocal\"].setExpression(\"parent.smoothness\")\n    #     n\[\"resampleType\"].setExpression(\"parent.resampling\")\n    #     n\[\"flickerCompensation\"].setExpression(\"parent.flicker_compensation\")\n\n\n    # kronos = False\n    # for n in nuke.allNodes(\"Kronos\"):\n    #     try:\n    #         n\[\"input.first\"].setValue(f)\n    #         n\[\"input.last\"].setValue(l)\n    #         n\[\"timingFrame2\"].setExpression(\"parent.ko\")\n    #         n\[\"vectorDetailLocal\"].setExpression(\"parent.vector_detail\")\n    #         n\[\"smoothnessLocal\"].setExpression(\"parent.smoothness\")\n    #         n\[\"resampleType\"].setExpression(\"parent.resampling\")\n    #         n\[\"flickerCompensation\"].setExpression(\"parent.flicker_compensation\")\n    #         kronos = True\n    #     except Exception as e:\n    #         kronos = False\n    #         print e\n    # groupNode.end()\n\n\n\n    \"Remove almost all nodes inside the group, Start with a clean Slate\"\n    for n in nuke.allNodes():\n        if not \"input\" in n\[\"name\"].getValue().lower():\n            if not \"output\" in n\[\"name\"].getValue().lower():\n                nuke.delete(n)\n    print \"Deleted All nodes for Cleanup\"\n\n\n\n    \"Get Nodes\"\n    inode = nuke.toNode(\"Input1\")\n    output = nuke.toNode(\"Output1\")\n\n\n    \"Find Channels/Layers in Input\"\n    channels = inode.channels()\n    layers = \[c.split('.')\[0] for c in channels]\n    layers = list( set(\[c.split('.')\[0] for c in channels]) )\n\n\n\n    \"Remove to add back to clean pipe\"\n    rm = nuke.nodes.Remove()\n    rm.setInput(0,inode)\n\n\n\n    \"For each layer, let's shuffle it out, make our retime and oflow/kronos nodes and then put it back in a layered stream\"\n    count = 0\n    #layers = \[\"all\"]\n    for l in layers:\n        print \"Creating Rebuild pipe for\", l\n        sh = nuke.nodes.Shuffle()\n        sh.setInput(0,inode)\n        sh\[\"in\"].setValue(l)\n        sh\[\"label\"].setValue(\"\\n\\n\")\n\n\n\n        tw = nuke.nodes.TimeWarp()\n        tw.setInput(0,sh)\n        tw\[\"lookup\"].setExpression(\"parent.kt\")\n\n\n        \n        if mode == \"Kronos\":\n            n = nuke.nodes.Kronos()\n            n.setInput(0,tw)\n            n\[\"input.first\"].setValue(first_frame)\n            n\[\"input.last\"].setValue(last_frame)\n            n\[\"retimedChannels\"].setValue(\"rgba\")\n            n\[\"timing2\"].setValue(\"Frame\")\n            n\[\"timingFrame2\"].setExpression(\"parent.ko\")\n            n\[\"vectorDetailLocal\"].setExpression(\"parent.vector_detail\")\n            n\[\"smoothnessLocal\"].setExpression(\"parent.smoothness\")\n            n\[\"resampleType\"].setExpression(\"parent.resampling\")\n            n\[\"flickerCompensation\"].setExpression(\"parent.flicker_compensation\")\n            n\[\"useGPUIfAvailable\"].setExpression(\"parent.use_gpu\")\n        else:\n            n = nuke.nodes.OFlow2()\n            n.setInput(0,tw)\n            n\[\"input.first\"].setValue(first_frame)\n            n\[\"input.last\"].setValue(last_frame)\n            n\[\"retimedChannels\"].setValue(\"rgba\")\n            n\[\"timing2\"].setValue(\"Frame\")\n            n\[\"timingFrame2\"].setExpression(\"parent.ko\")\n            n\[\"vectorDetailLocal\"].setExpression(\"parent.vector_detail\")\n            n\[\"smoothnessLocal\"].setExpression(\"parent.smoothness\")\n            n\[\"resampleType\"].setExpression(\"parent.resampling\")\n            n\[\"flickerCompensation\"].setExpression(\"parent.flicker_compensation\")\n            n\[\"useGPUIfAvailable\"].setExpression(\"parent.use_gpu\")\n\n\n\n        sh2 = nuke.nodes.Shuffle()\n        sh2.setInput(0,n)\n        sh2\[\"out\"].setValue(l)\n\n\n        copy = nuke.nodes.Copy()\n        if count == 0:\n            copy.setInput(0,rm)\n        else:\n            copy.setInput(0,copy_connect)\n        copy\[\"channels\"].setValue(l)\n        copy.setInput(1,sh2)\n        copy_connect = copy\n        count = count+1\n        #print copy\[\"name\"].getValue()\n        \n\n\n    pt = nuke.nodes.Switch()\n    pt.setInput(1,copy)\n    pt.setInput(0,inode)\n    pt\[\"which\"].setExpression(\"parent.passthrough\")\n\n\n\n    output.setInput(0,pt)\n\n\n\n    groupNode.end()\n    groupNode\[\"mode\"].setValue(\"Using \"+mode)\n\n\nexcept Exception as e:\n    groupNode\[\"mode\"].setValue(\"ERROR:\\n\"+str(e))\n    print e\n    pass\n\n\n" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 text2 l "" +STARTLINE T "2) Add keys on frames that are good\n    Remove keys on frames to be rebuilt "}
+ addUserKnob {3 inputframe l Frame}
+ inputframe {{curve x1001 1001 1002 1003 1004 1005 1006 1007 1008 1009 1010 1011 1012 1013 1014 1015 1016 1017 1018 1019 1020 1021 1022 1023 1024 1025 1026 1027 1028 1029 1030 1031 1032 1033 1034 1035 1036 1037 1038 1039 1040 1041 1042 1043 1044 1045 1046 1047 1048 1049 1050 1051 1052 1053 1054 1055 1056 1057 1058 1059 1060 1061 1062 1063 1064 1065 1066 1067 1068 1069 1070 1071 1072 1073 1074 1075 1076 1077 1078 1079 1080 1081 1082 1083 1084 1085 1086 1087 1088 1089 1090 1091 1092 1093 1094 1095 1096 1097 1098 1099 1100 1101 1102 1103 1104 1105 1106 1107 1108 1109 1110 1111 1112 1113 1114 1115 1116 1117 1118 1119 1120 1121 1122 1123 1124 1125 1126 1127 1128 1129 1130 1131 1132 1133 1134 1135 1136 1137 1138 1139 1140 1141 1142 1143 1144 1145 1146 1147 1148 1149 1150 1151 1152 1153 1154 1155 1156 1157 1158 1159 1160 1161 1162 1163 1164 1165 1166 1167 1168 1169 1170 1171 1172 1173 1174 1175 1176 1177 1178 1179 1180 1181 1182 1183 1184 1185 1186 1187 1188 1189 1190 1191 1192 1193 1194 1195 1196 1197 1198 1199 1200 1201 1202 1203 1204 1205 1206 1207 1208 1209 1210 1211 1212 1213 1214 1215 1216 1217 1218 1219 1220 1221 1222 1223 1224 1225 1226 1227 1228 1229 1230 1231 1232 1233 1234 1235 1236 1237 1238 1239 1240 1241 1242 1243 1244 1245 1246 1247 1248 1249 1250}}
+ addUserKnob {22 addkey l "Add Key" -STARTLINE T "n = nuke.thisNode()\['inputframe']\nn.setAnimated()\nt = nuke.frame()\nn.animation(0).setKey(t,t)\n"}
+ addUserKnob {22 deletekey l "Delete key" -STARTLINE T "n = nuke.thisNode()\['inputframe']\nt = nuke.frame()\n#n.animation(0).removeKeyAt(t)\nn.removeKeyAt(t)"}
+ addUserKnob {22 addall l "Keyframe all" T "n = nuke.thisNode()\['inputframe']\nn.setAnimated()\nf = nuke.thisNode().firstFrame()\nl = nuke.thisNode().lastFrame() \n\nn.animation(0).setKey(f,f)\nn.animation(0).setKey(l,l)\n\nfor i in xrange( f, l, 1 ):\n\tn.setValueAt(i, i)" +STARTLINE}
+ addUserKnob {26 text3 l "" +STARTLINE T "(Do not change value of 'Frame' - leave it as frame number)"}
+ addUserKnob {26 ""}
+ addUserKnob {3 kt l INVISIBLE +INVISIBLE}
+ kt 1250
+ addUserKnob {3 ko l INVISIBLE +INVISIBLE}
+ ko 45
+ addUserKnob {3 passthrough l INVISIBLE +INVISIBLE}
+ addUserKnob {26 text4 l "" +STARTLINE T "3) Hit 'Rebuild' to rebuild 'bad' frames"}
+ addUserKnob {22 rebuild l Rebuild! T "k = nuke.thisNode()\['inputframe']\n\nif(k.isAnimated()):\n\t\t\t\n\ttOriginalCurve = k.animation(0)\n\t\t\t\t\n\ttKeys = tOriginalCurve.keys()\n\n\ti = 0\n\n\t\n\tkt = nuke.thisNode()\['kt']\n\n\tko  = nuke.thisNode()\['ko']\n\n\tkt.clearAnimated()\n\n\tko.clearAnimated()\n\n\tkt.setAnimated()\n\n\tko.setAnimated()\n\n\tfor tKey in tKeys:\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\ttFrame = tKey.x \n\t\ttFrameY = tKey.y\n\n\t\tprint(\"key \" + str(i) + \" has x value \" + str(tFrame) + \", y value \" + str(tFrameY))\n\n\t\tko.setValueAt( i, tFrame )\n\n\t\tkt.setValueAt( tFrame, i )\n\n\t\ti = i+1\n\n\tkoKeys = ko.animation(0).keys()\n\n\tfor tKey in koKeys:\t\n\n\t\ttKey.interpolation = nuke.LINEAR\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\n\tktKeys = kt.animation(0).keys()\n\n\tfor tKey in ktKeys:\t\n\n\t\ttKey.interpolation = nuke.LINEAR\n\np = nuke.thisNode()\['passthrough']\np.setValue(1)" +STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {20 group_settings l Settings n 1}
+ addUserKnob {7 vector_detail l "Vector Detail"}
+ vector_detail 1
+ addUserKnob {7 smoothness l Smoothness}
+ smoothness 0.065
+ addUserKnob {4 resampling l Resampling M {Bilinear Lanczos4 Lanczos6}}
+ addUserKnob {6 flicker_compensation l "Flicker Compensation" t "If your sequence is flickering, turn this on to compensate for that." -STARTLINE}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 about l About}
+ addUserKnob {26 credit l "" -STARTLINE T "Rebuilds broken or missing frames using OFlow/Kronos\nAssumes that many of the frames are OK, but that bad\nframes are littered throughout. \n\nOriginal forked from Richard Frazer\n\nUpdated with Latest OFlow/Kronos nodes which will allow\nall channels in a stream to be processed allowing this tool\nto be used for fixing MultiLayer CG renders as well. \nIn addition it allows processing on the GPU.\n\nCredits:\nRichard Frazer\nRicardo Musch (rebuild)"}
+ addUserKnob {26 ""}
+ addUserKnob {22 rf_site l "Richard Frazer's Website" T "import webbrowser\n\ndef openWebpage():\n  webbrowser.open(\"https://richardfrazer.com/\")\n\nopenWebpage()" +STARTLINE}
+ addUserKnob {22 rm_website l "Ricardo Musch's Website" -STARTLINE T "import webbrowser\n\ndef openWebpage():\n  webbrowser.open(\"http://ricardo-musch.com/\")\n\nopenWebpage()"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 _1 l "" +STARTLINE T "Development Options:"}
+ addUserKnob {22 reset_inside l "Clear Built NodeTree" T "try:\n    groupNode = nuke.thisNode()\nexcept:\n    groupNode = nuke.selectedNode()\n\n\n    \n\"Start Processing Groupnode Code\"\ngroupNode.begin()\n\n\n    \n\"Remove almost all nodes inside the group, Start with a clean Slate\"\nfor n in nuke.allNodes():\n    if not \"input\" in n\[\"name\"].getValue().lower():\n        if not \"output\" in n\[\"name\"].getValue().lower():\n            nuke.delete(n)\nprint \"Deleted All nodes for Cleanup\"\n\n\n\ngroupNode.end()" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 453
+  ypos -440
+ }
+ Output {
+  name Output1
+  xpos 450
+  ypos 222
+ }
+end_group

@@ -45,7 +45,7 @@ class SearchReplacePanel( nukescripts.PythonPanel ):
 
     def loadHistory( self ):
         '''load history file to update knob'''
-        print 'loading search&replace history'
+        print("loading search&replace history")
         # GET EXISTING HISTORY
         if not os.path.isfile( self.historyFile ):
             return []
@@ -90,14 +90,14 @@ class SearchReplacePanel( nukescripts.PythonPanel ):
                 ElementTree.SubElement( root, 'ITEM', attrib=i )
             tree = ElementTree.ElementTree( root )
             # DUMP XML TREE
-            print 'WRITING TO:', self.historyFile
+            print("WRITING TO:", self.historyFile)
             tree.write( self.historyFile )
 
     def search( self, searchstr, nodes ):
         """ Search in nodes with file knobs. """
         fileKnobNodes = [i for i in nodes if self.__NodeHasKnobWithName(i, 'file')]
         proxyKnobNodes = [i for i in nodes if self.__NodeHasKnobWithName(i, 'proxy')]
-        if not fileKnobNodes and not proxyKnobNodes: raise ValueError, "No file nodes selected"
+        if not fileKnobNodes and not proxyKnobNodes: raise ValueError("No file nodes selected")
         nodeMatches = []
         knobMatches = []
         for i in fileKnobNodes:
@@ -169,7 +169,7 @@ class SearchReplacePanel( nukescripts.PythonPanel ):
             self.__doSearch()
         elif knob is self.replace and self.matches is not None:
             # PERFORM REPLACE AND UPDATE HISTORY
-            print 'replacing'
+            print("replacing")
             for k in self.matches:
                 k.setValue( self.__doReplace( k ) )
 

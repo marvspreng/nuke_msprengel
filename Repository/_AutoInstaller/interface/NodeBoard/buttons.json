@@ -1,0 +1,56 @@
+{
+  "buttons": [
+      {
+          "color": "rgb(220, 220, 0)",
+          "name": "custom",
+          "title": "+"
+      },
+      {
+          "color": "rgb(220, 220, 0)",
+          "name": "yellow"
+      },
+      {
+          "color": "rgb(180, 0, 0)",
+          "name": "red"
+      },
+      {
+          "color": "rgb(230, 230, 230)",
+          "name": "grey"
+      },
+      {
+          "color": "rgb(0, 0, 107)",
+          "name": "darkblue"
+      },
+      {
+          "color": "rgb(0, 166, 0)",
+          "name": "green"
+      },
+      {
+          "color": "rgb(197, 183, 103)",
+          "name": "darkyellow"
+      },
+      {
+          "color": "rgb(153, 112, 157)",
+          "name": "purple"
+      },
+      {
+          "color": "rgb(153, 180, 226)",
+          "name": "lightblue"
+      },
+      {
+          "color": "rgb(184, 116, 70)",
+          "name": "brown"
+      },
+      {
+          "color": "rgb(71, 88, 187)",
+          "name": "blue"
+      },
+      {
+          "color": "rgb(171, 64, 107)",
+          "name": "pink"
+      }
+  ],
+  "userButtons": [
+
+  ]
+}

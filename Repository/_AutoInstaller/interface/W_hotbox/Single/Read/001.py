@@ -2,25 +2,17 @@
 #
 # AUTOMATICALLY GENERATED FILE TO BE USED BY W_HOTBOX
 #
-# NAME: Open in File Browser
+# NAME: Set Project Range
 #
 #----------------------------------------------------------------------------------------------------------
 
-import os
-import platform
-import subprocess
+node = nuke.selectedNode()
 
-operatingSystem = platform.system()
+first = node.knob('first').value()
+last = node.knob('last').value()
 
-for i in nuke.selectedNodes():
+nuke.Root().knob('first_frame').setValue(first)
+nuke.Root().knob('last_frame').setValue(last)
 
-    path =  os.path.dirname(i.knob('file').value())
-
-    if os.path.exists(path):
-
-        if operatingSystem == "Windows":
-            os.startfile(path)
-        elif operatingSystem == "Darwin":
-            subprocess.Popen(["open", path])
-        else:
-            subprocess.Popen(["xdg-open", path])
+if nuke.frame() not in range(first,last+1):
+	nuke.frame(first)

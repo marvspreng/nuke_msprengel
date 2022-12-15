@@ -2,9 +2,8 @@ Group {
  name Point_3DViewer
  tile_color 0x434343ff
  note_font_color 0x7dadf9ff
- selected true
  addUserKnob {20 User}
- addUserKnob {26 info l "" +STARTLINE T "3D Preview v1.0\n"}
+ addUserKnob {26 info l "" +STARTLINE T "3D Preview v1.1\n"}
  addUserKnob {26 devider_general l "<b><font color=#7DADF9>General</font><b>"}
  addUserKnob {41 pointSize l "point size" T PositionToPoints1.pointSize}
  addUserKnob {41 detail l "point detail" T PositionToPoints1.detail}
@@ -23,7 +22,7 @@ add_layer {pos pos.red pos.green pos.blue pos.alpha}
   render_mode textured
   P_channel pos
   detail 0.15
-  pointSize 0.6
+  pointSize 0.006
   name PositionToPoints1
   selected true
   xpos 207

@@ -1,9 +1,11 @@
 Gizmo {
- inputs 2
  name Morph_Dissolve
  help "Allows to morph between two moving plates automatically, or can be used to improve manual Morphs."
  tile_color 0x890074ff
  label "(Plate \[value morph])"
+ selected true
+ xpos 1296
+ ypos -251
  addUserKnob {20 User}
  addUserKnob {7 morph l Morph t "Morphs between input 0 and input 1"}
  addUserKnob {26 ""}
@@ -12,8 +14,8 @@ Gizmo {
  vectorDetail 0.75
  addUserKnob {7 strength l Strength t "Match Strength : Stonger values will match larger differences between the two plates." R 0 1.5}
  strength 1.5
- addUserKnob {26 "" +STARTLINE}
- addUserKnob {26 copyright l "" +STARTLINE T "v1.0 - by Erwan Leroy - 2017"}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.1 - by Erwan Leroy - 2017-2022"}
 }
  BackdropNode {
   inputs 0
@@ -39,14 +41,14 @@ Gizmo {
   xpos 1389
   ypos -72
  }
-set Naa2db90 [stack 0]
+set N54ff400 [stack 0]
  Dot {
   name Dot8
   tile_color 0xcccccc00
   xpos 1389
   ypos 1115
  }
-push $Naa2db90
+push $N54ff400
  Dot {
   name Dot13
   tile_color 0xcccccc00
@@ -87,7 +89,7 @@ push $Naa2db90
   xpos 10
   ypos -75
  }
-set Nabd1dc0 [stack 0]
+set N7fd4ac00 [stack 0]
  Dot {
   name Dot14
   tile_color 0xcccccc00
@@ -130,7 +132,7 @@ set Nabd1dc0 [stack 0]
   xpos 684
   ypos 124
  }
-set Naef0720 [stack 0]
+set N7fd70000 [stack 0]
  Dot {
   name Dot2
   tile_color 0xcccccc00
@@ -141,11 +143,9 @@ set Naef0720 [stack 0]
   retimedChannels all
   timing2 Frame
   timingFrame2 {{(frame-1001)*2+1001+parent.morph}}
-  showLegacyMode false
   motionEstimation Regularized
   vectorDetailReg {{parent.vectorDetail}}
   strengthReg {{parent.strength}}
-  legacyModeNuke9 false
   name Kronos1
   xpos 951
   ypos 273
@@ -156,7 +156,7 @@ set Naef0720 [stack 0]
   xpos 985
   ypos 858
  }
-push $Naef0720
+push $N7fd70000
  Dot {
   name Dot10
   tile_color 0xcccccc00
@@ -177,7 +177,7 @@ push $Naef0720
   xpos 415
   ypos 350
  }
-set Nac02c30 [stack 0]
+set N7fd71800 [stack 0]
  Shuffle {
   in backward
   blue black
@@ -195,7 +195,7 @@ set Nac02c30 [stack 0]
   xpos 217
   ypos 484
  }
-push $Nac02c30
+push $N7fd71800
  Shuffle {
   in forward
   blue black
@@ -213,7 +213,7 @@ push $Nac02c30
   xpos 560
   ypos 414
  }
-push $Nac02c30
+push $N7fd71800
  Copy {
   inputs 2
   from0 forward.u
@@ -236,7 +236,7 @@ push $Nac02c30
   xpos 381
   ypos 478
  }
-set Nac44bd0 [stack 0]
+set N7fd9a800 [stack 0]
  Retime {
   input.first 1000
   input.first_lock true
@@ -253,14 +253,20 @@ set Nac44bd0 [stack 0]
   xpos 459
   ypos 559
  }
+ Remove {
+  channels backward
+  name Remove2
+  xpos 459
+  ypos 630
+ }
  IDistort {
   uv forward
   uv_scale {{1-parent.morph}}
   name IDistort2
   xpos 459
-  ypos 628
+  ypos 684
  }
-push $Nac44bd0
+push $N7fd9a800
  Retime {
   input.first 1001
   input.first_lock true
@@ -277,19 +283,25 @@ push $Nac44bd0
   xpos 308
   ypos 560
  }
+ Remove {
+  channels forward
+  name Remove1
+  xpos 308
+  ypos 629
+ }
  IDistort {
   uv backward
   uv_scale {{parent.morph}}
   name IDistort1
   xpos 308
-  ypos 625
+  ypos 689
  }
  Dissolve {
   inputs 2
   which {{parent.morph}}
   name Dissolve1
   xpos 379
-  ypos 710
+  ypos 759
  }
  Dot {
   name Dot11
@@ -304,7 +316,7 @@ push $Nac44bd0
   xpos 627
   ypos 854
  }
-push $Nabd1dc0
+push $N7fd4ac00
  Dot {
   name Dot7
   tile_color 0xcccccc00

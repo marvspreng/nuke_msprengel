@@ -1,7 +1,7 @@
 import nuke
 
 t=nuke.menu("Nodes")
-u=t.addMenu("murph/Pixelfudger", icon="PxF_Menu.png")
+u=t.addMenu("Pixelfudger", icon="PxF_Menu.png")
  
 t.addCommand( "murph/Pixelfudger/PxF_Bandpass", "nuke.createNode('PxF_Bandpass')", icon="PxF_Bandpass.png" ) 
 t.addCommand( "murph/Pixelfudger/PxF_ChromaBlur", "nuke.createNode('PxF_ChromaBlur')", icon="PxF_ChromaBlur.png") 

@@ -1,12 +1,17 @@
 Group {
- name Point_Texture
+ name Point_Texture2
  tile_color 0x434343ff
- note_font_color 0x7DADF9FF
- selected true
+ note_font_color 0x7dadf9ff
  addUserKnob {20 User}
- addUserKnob {26 Info l "" +STARTLINE T "Point Texture v1.1\n\nApply a texture that matches the format of the point data."}
+ addUserKnob {26 Info l "" +STARTLINE T "Point Texture v1.2\n\nApply a texture that matches the format of the point data."}
  addUserKnob {26 devider_general l "<b><font color=#7DADF9>General</font><b>"}
  addUserKnob {41 operation l Operation T Merge1.operation}
+ addUserKnob {41 resize l "resize type" T Reformat2.resize}
+ addUserKnob {41 center -STARTLINE T Reformat2.center}
+ addUserKnob {41 flip -STARTLINE T Reformat2.flip}
+ addUserKnob {41 flop -STARTLINE T Reformat2.flop}
+ addUserKnob {41 turn -STARTLINE T Reformat2.turn}
+ addUserKnob {41 filter T Reformat2.filter}
  addUserKnob {26 ""}
  addUserKnob {41 Achannels l "A channels" T Merge1.Achannels}
  addUserKnob {41 Bchannels l "B channels" T Merge1.Bchannels}
@@ -35,14 +40,14 @@ Group {
   box_fixed true
   resize distort
   name Reformat1
-  selected true
   xpos 142
   ypos 56
  }
  Dot {
   name Dot1
+  selected true
   xpos 176
-  ypos 142
+  ypos 143
  }
  Input {
   inputs 0

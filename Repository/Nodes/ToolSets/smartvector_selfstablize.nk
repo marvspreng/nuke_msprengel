@@ -1,0 +1,209 @@
+#! C:/Program Files/Nuke12.2v3/nuke-12.2.3.dll -nx
+version 12.2 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="7" y="0" w="1920" h="1200" maximized="1" fullscreen="1" screen="0">
+        <splitter orientation="1">
+            <split size="0"/>
+            <dock id="" hideTitles="1"/>
+            <split size="1916" stretch="1"/>
+            <splitter orientation="1">
+                <split size="496"/>
+                <dock id="" activePageId="Properties.1">
+                    <page id="Properties.1"/>
+                </dock>
+                <split size="40"/>
+                <dock id="" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+                <split size="1372"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+    <window x="-1913" y="0" w="1920" h="1200" maximized="1" fullscreen="1" screen="1">
+        <splitter orientation="1">
+            <split size="1920"/>
+            <dock id="" activePageId="Viewer.1">
+                <page id="Viewer.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name C:/Users/msprengel/.nuke/nuke_murph_collection/Repository/Nodes/murph/00_templates/smartvector_selfstablize.nk
+ frame 1036
+ first_frame 1001
+ last_frame 2000
+ lock_range true
+ fps 60
+ format "3840 2160 0 0 3840 2160 1 Glitch HD"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+NoOp {
+ inputs 0
+ name Anchor_2a3ace0fd2
+ help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
+ onCreate "if nuke.GUI:\n    try:\n        import stamps; stamps.anchorOnCreate()\n    except:\n        pass"
+ knobChanged stamps.anchorKnobChanged()
+ autolabel "nuke.thisNode().knob(\"title\").value()"
+ tile_color 0xffffff01
+ note_font_size 20
+ xpos 737
+ ypos -38
+ addUserKnob {20 anchor_tab l "Anchor Stamp"}
+ addUserKnob {26 identifier +HIDDEN T anchor}
+ addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
+ title Footage
+ addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Footage}
+ addUserKnob {26 prev_name l "" +STARTLINE +HIDDEN T Anchor_2a3ace0fd2}
+ addUserKnob {3 showing l "" +STARTLINE +HIDDEN}
+ addUserKnob {1 tags l Tags t "Comma-separated tags you can define for each Anchor, that will help you find it when invoking the Stamp Selector by pressing the Stamps shortkey with nothing selected."}
+ tags selfstabilize
+ addUserKnob {26 line1 l "" +STARTLINE}
+ addUserKnob {26 stamps_label l Stamps: T " "}
+ addUserKnob {22 createStamp l new t "Create a new Stamp for this Anchor." -STARTLINE T stamps.stampCreateWired(nuke.thisNode())}
+ addUserKnob {22 selectStamps l select t "Reconnect all of this Anchor's Stamps." -STARTLINE T stamps.wiredSelectSimilar(nuke.thisNode().name())}
+ addUserKnob {22 reconnectStamps l reconnect -STARTLINE T stamps.anchorReconnectWired()}
+ addUserKnob {22 zoomNext l "zoom next" t "Navigate to this Anchor's next Stamp on the Node Graph." -STARTLINE T stamps.wiredZoomNext(nuke.thisNode().name())}
+ addUserKnob {26 line2 l "" +STARTLINE}
+ addUserKnob {22 buttonHelp l Help -STARTLINE T stamps.showHelp()}
+ addUserKnob {26 version l " " t "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019." -STARTLINE T "<a href=\"http://www.nukepedia.com/gizmos/other/stamps\" style=\"color:#666;text-decoration: none;\"><span style=\"color:#666\"> <big>Stamps v1.0</big></b></a>"}
+}
+set Ndc20ac00 [stack 0]
+NoOp {
+ name Stamp1
+ help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
+ onCreate "if nuke.GUI:\n    try:\n        import stamps; stamps.wiredOnCreate()\n    except:\n        pass\n"
+ knobChanged "import stamps; stamps.wiredKnobChanged()"
+ autolabel "nuke.thisNode().knob(\"title\").value()"
+ tile_color 0x1000001
+ note_font Verdana
+ note_font_size 20
+ xpos 890
+ ypos -38
+ hide_input true
+ addUserKnob {20 wired_tab l "Wired Stamp"}
+ addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+ addUserKnob {3 lockCallbacks l "" +STARTLINE +HIDDEN}
+ addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+ addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
+ title Footage
+ addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Footage}
+ addUserKnob {26 tags l Tags: t "Tags of this stamp's Anchor, for information purpose only.\nClick \"show anchor\" to change them." T <i>selfstabilize</i>}
+ addUserKnob {26 backdrops l Backdrops: t "Labels of backdrop nodes which contain this stamp's Anchor." +HIDDEN T " "}
+ addUserKnob {26 line1 l "" +STARTLINE}
+ addUserKnob {26 anchor_label l Anchor: T " "}
+ addUserKnob {22 show_anchor l " show anchor " t "Show the properties panel for this Stamp's Anchor." -STARTLINE T stamps.wiredShowAnchor()}
+ addUserKnob {22 zoom_anchor l "zoom anchor" t "Navigate to this Stamp's Anchor on the Node Graph." -STARTLINE T stamps.wiredZoomAnchor()}
+ addUserKnob {26 stamps_label l Stamps: T " "}
+ addUserKnob {22 zoomNext l " zoom next " t "Navigate to this Stamp's next sibling on the Node Graph." -STARTLINE T stamps.wiredZoomNext()}
+ addUserKnob {22 selectSimilar l " select similar " t "Select all similar Stamps to this one on the Node Graph." -STARTLINE T stamps.wiredSelectSimilar()}
+ addUserKnob {26 space_1 l "" +STARTLINE T " "}
+ addUserKnob {26 reconnect_label l Reconnect: t "Reconnect by the stored Anchor name." T " "}
+ addUserKnob {22 reconnect_this l this t "Reconnect this Stamp to its Anchor, by its stored Anchor name." -STARTLINE T "n = nuke.thisNode()\ntry:\n    n.setInput(0,nuke.toNode(n.knob(\"anchor\").value()))\nexcept:\n    nuke.message(\"Unable to reconnect.\")\ntry:\n    import stamps\n    stamps.wiredGetStyle(n)\nexcept:\n    pass\n"}
+ addUserKnob {22 reconnect_similar l similar t "Reconnect this Stamp and similar ones to their Anchor, by their stored anchor name." -STARTLINE T stamps.wiredReconnectSimilar()}
+ addUserKnob {22 reconnect_all l all t "Reconnect all the Stamps to their Anchors, by their stored anchor names." -STARTLINE T stamps.wiredReconnectAll()}
+ addUserKnob {26 space_2 l "" +STARTLINE T " "}
+ addUserKnob {20 advanced_reconnection l "Advanced Reconnection" n 2}
+ addUserKnob {26 reconnect_by_title_label l "<font color=gold>By Title:" t "Reconnect by searching for a matching title." T " "}
+ addUserKnob {22 reconnect_by_title_this l this t "Look for an Anchor that shares this Stamp's title, and connect this Stamp to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitle()}
+ addUserKnob {22 reconnect_by_title_similar l similar t "Look for an Anchor that shares this Stamp's title, and connect this Stamp and similar ones to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitleSimilar()}
+ addUserKnob {22 reconnect_by_title_selected l selected t "For each Stamp selected, look for an Anchor that shares its title, and connect to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitleSelected()}
+ addUserKnob {26 reconnect_by_selection_label l "<font color=orangered>By Selection:" t "Force reconnect to a selected Anchor." T " "}
+ addUserKnob {22 reconnect_by_selection_this l this t "Force reconnect this Stamp to a selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelection()}
+ addUserKnob {22 reconnect_by_selection_similar l similar t "Force reconnect this Stamp and similar ones to a selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelectionSimilar()}
+ addUserKnob {22 reconnect_by_selection_selected l selected t "Force reconnect all selected Stamps to an also selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelectionSelected()}
+ addUserKnob {1 anchor l Anchor}
+ anchor Anchor_2a3ace0fd2
+ addUserKnob {6 auto_reconnect_by_title l "<font color=#ED9977>&nbsp; auto-reconnect by title" t "When creating this stamp again (like on copy-paste), auto-reconnect it by title instead of doing it by the saved anchor's name, and auto-turn this off immediately.\nIMPORTANT: Should be off by default. Only use this for setting up templates." +STARTLINE}
+ addUserKnob {26 line2 l "" +STARTLINE}
+ addUserKnob {22 buttonHelp l Help -STARTLINE T stamps.showHelp()}
+ addUserKnob {26 version l " " t "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019." -STARTLINE T "<a href=\"http://www.nukepedia.com/gizmos/other/stamps\" style=\"color:#666;text-decoration: none;\"><span style=\"color:#666\"> <big>Stamps v1.0</big></b></a>"}
+}
+SmartVector {
+ name SmartVector1
+ xpos 890
+ ypos 50
+}
+VectorDistort {
+ referenceFrame 1182
+ reference_frame_set true
+ holdFrame false
+ outputMode st-map
+ last_output_mode st-map
+ name VectorDistort1
+ label "ref frame \[value referenceFrame]"
+ xpos 890
+ ypos 120
+}
+push $Ndc20ac00
+NoOp {
+ name Stamp2
+ help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
+ onCreate "if nuke.GUI:\n    try:\n        import stamps; stamps.wiredOnCreate()\n    except:\n        pass\n"
+ knobChanged "import stamps; stamps.wiredKnobChanged()"
+ autolabel "nuke.thisNode().knob(\"title\").value()"
+ tile_color 0x1000001
+ note_font Verdana
+ note_font_size 20
+ xpos 737
+ ypos 66
+ hide_input true
+ addUserKnob {20 wired_tab l "Wired Stamp"}
+ addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+ addUserKnob {3 lockCallbacks l "" +STARTLINE +HIDDEN}
+ addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+ addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
+ title Footage
+ addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Footage}
+ addUserKnob {26 tags l Tags: t "Tags of this stamp's Anchor, for information purpose only.\nClick \"show anchor\" to change them." T <i>selfstabilize</i>}
+ addUserKnob {26 backdrops l Backdrops: t "Labels of backdrop nodes which contain this stamp's Anchor." +HIDDEN T " "}
+ addUserKnob {26 line1 l "" +STARTLINE}
+ addUserKnob {26 anchor_label l Anchor: T " "}
+ addUserKnob {22 show_anchor l " show anchor " t "Show the properties panel for this Stamp's Anchor." -STARTLINE T stamps.wiredShowAnchor()}
+ addUserKnob {22 zoom_anchor l "zoom anchor" t "Navigate to this Stamp's Anchor on the Node Graph." -STARTLINE T stamps.wiredZoomAnchor()}
+ addUserKnob {26 stamps_label l Stamps: T " "}
+ addUserKnob {22 zoomNext l " zoom next " t "Navigate to this Stamp's next sibling on the Node Graph." -STARTLINE T stamps.wiredZoomNext()}
+ addUserKnob {22 selectSimilar l " select similar " t "Select all similar Stamps to this one on the Node Graph." -STARTLINE T stamps.wiredSelectSimilar()}
+ addUserKnob {26 space_1 l "" +STARTLINE T " "}
+ addUserKnob {26 reconnect_label l Reconnect: t "Reconnect by the stored Anchor name." T " "}
+ addUserKnob {22 reconnect_this l this t "Reconnect this Stamp to its Anchor, by its stored Anchor name." -STARTLINE T "n = nuke.thisNode()\ntry:\n    n.setInput(0,nuke.toNode(n.knob(\"anchor\").value()))\nexcept:\n    nuke.message(\"Unable to reconnect.\")\ntry:\n    import stamps\n    stamps.wiredGetStyle(n)\nexcept:\n    pass\n"}
+ addUserKnob {22 reconnect_similar l similar t "Reconnect this Stamp and similar ones to their Anchor, by their stored anchor name." -STARTLINE T stamps.wiredReconnectSimilar()}
+ addUserKnob {22 reconnect_all l all t "Reconnect all the Stamps to their Anchors, by their stored anchor names." -STARTLINE T stamps.wiredReconnectAll()}
+ addUserKnob {26 space_2 l "" +STARTLINE T " "}
+ addUserKnob {20 advanced_reconnection l "Advanced Reconnection" n 2}
+ addUserKnob {26 reconnect_by_title_label l "<font color=gold>By Title:" t "Reconnect by searching for a matching title." T " "}
+ addUserKnob {22 reconnect_by_title_this l this t "Look for an Anchor that shares this Stamp's title, and connect this Stamp to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitle()}
+ addUserKnob {22 reconnect_by_title_similar l similar t "Look for an Anchor that shares this Stamp's title, and connect this Stamp and similar ones to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitleSimilar()}
+ addUserKnob {22 reconnect_by_title_selected l selected t "For each Stamp selected, look for an Anchor that shares its title, and connect to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitleSelected()}
+ addUserKnob {26 reconnect_by_selection_label l "<font color=orangered>By Selection:" t "Force reconnect to a selected Anchor." T " "}
+ addUserKnob {22 reconnect_by_selection_this l this t "Force reconnect this Stamp to a selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelection()}
+ addUserKnob {22 reconnect_by_selection_similar l similar t "Force reconnect this Stamp and similar ones to a selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelectionSimilar()}
+ addUserKnob {22 reconnect_by_selection_selected l selected t "Force reconnect all selected Stamps to an also selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelectionSelected()}
+ addUserKnob {1 anchor l Anchor}
+ anchor Anchor_2a3ace0fd2
+ addUserKnob {6 auto_reconnect_by_title l "<font color=#ED9977>&nbsp; auto-reconnect by title" t "When creating this stamp again (like on copy-paste), auto-reconnect it by title instead of doing it by the saved anchor's name, and auto-turn this off immediately.\nIMPORTANT: Should be off by default. Only use this for setting up templates." +STARTLINE}
+ addUserKnob {26 line2 l "" +STARTLINE}
+ addUserKnob {22 buttonHelp l Help -STARTLINE T stamps.showHelp()}
+ addUserKnob {26 version l " " t "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019." -STARTLINE T "<a href=\"http://www.nukepedia.com/gizmos/other/stamps\" style=\"color:#666;text-decoration: none;\"><span style=\"color:#666\"> <big>Stamps v1.0</big></b></a>"}
+}
+STMap {
+ inputs 2
+ uv rgba
+ name STMap1
+ xpos 737
+ ypos 120
+}

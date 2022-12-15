@@ -3,10 +3,9 @@ Group {
  tile_color 0x434343ff
  note_font_color 0x7dadf9ff
  addUserKnob {20 User l "Point Render" t dd}
- addUserKnob {26 info_header l "" +STARTLINE T "Point Render v1.2"}
+ addUserKnob {26 info_header l "" +STARTLINE T "Point Render v1.4"}
  addUserKnob {26 devider_general l "<b><font color=#7DADF9>General</font><b>"}
  addUserKnob {4 RenderMode l "Render Mode" t "Some generators support multiple render modes other than just point rendering. This should be considered a experimental feature, but can be used to great effect.\n\nIn the Render Settings tab you can find more controls relating to Wire and Facet rendering modes.\n\nNote that Facet Render can be slow when really close to a object. " M {"Point Render" "Wire Render" "Facet Render (experimental)" "" "" ""}}
- RenderMode "Point Render"
  addUserKnob {7 FocalLength l "Focal Length" t "The point render does not take the focal length from the input camera, so if you want to match it to a camera you should link the focal length from the camera to this." +INVISIBLE R 0 200}
  FocalLength 40
  addUserKnob {7 horizontalApeture l "Horiz Apeture" +INVISIBLE R 0 100}
@@ -311,7 +310,7 @@ Group {
   xpos -550
   ypos -1234
  }
-set N8982cc00 [stack 0]
+set Nd0e70400 [stack 0]
  Reformat {
   type "to box"
   box_width 100
@@ -338,7 +337,7 @@ set N8982cc00 [stack 0]
   xpos -550
   ypos -712
  }
-set N8982dc00 [stack 0]
+set Ne462b400 [stack 0]
  Group {
   name FrameHold3
   tile_color 0xb0a45dff
@@ -375,8 +374,8 @@ set N8982dc00 [stack 0]
   xpos -467
   ypos -659
  }
-set N7c4ba800 [stack 0]
-push $N8982dc00
+set Ne462a800 [stack 0]
+push $Ne462b400
  Group {
   name FrameHold2
   tile_color 0xb0a45dff
@@ -413,7 +412,7 @@ push $N8982dc00
   xpos -626
   ypos -659
  }
-set N7c4bb400 [stack 0]
+set Nd0efdc00 [stack 0]
  Dissolve {
   inputs 2
   which {{frame-floor(frame)}}
@@ -422,8 +421,8 @@ set N7c4bb400 [stack 0]
   ypos -666
   disable {{1-parent.mb_enable}}
  }
-set N7c4bb800 [stack 0]
-push $N8982dc00
+set Nd0efd800 [stack 0]
+push $Ne462b400
  Switch {
   inputs 2
   which {{parent.Fast}}
@@ -442,7 +441,7 @@ push $N8982dc00
   addUserKnob {3 gentype l "Type Of Generator"}
   addUserKnob {26 info l "" -STARTLINE T "0 = unknown, 1 = Card, 2 = Sphere, 3 = Grid"}
  }
-set N7c4bbc00 [stack 0]
+set Nd0efd000 [stack 0]
  Dot {
   name Dot3
   xpos -635
@@ -505,7 +504,7 @@ set N7c4bbc00 [stack 0]
   xpos 118
   ypos 163
  }
-set N88f86000 [stack 0]
+set Ne4638800 [stack 0]
  Input {
   inputs 0
   name Aux
@@ -533,7 +532,7 @@ set N88f86000 [stack 0]
   xpos -324
   ypos 462
  }
-push $N7c4bbc00
+push $Nd0efd000
 add_layer {pos pos.red pos.green pos.blue pos.alpha}
  Shuffle {
   in pos
@@ -541,7 +540,7 @@ add_layer {pos pos.red pos.green pos.blue pos.alpha}
   xpos -584
   ypos -192
  }
-set N88f87800 [stack 0]
+set Nce9f9400 [stack 0]
  Reformat {
   type "to box"
   format "1280 720 0 0 1280 720 1 HD_720"
@@ -567,7 +566,7 @@ set N88f87800 [stack 0]
   xpos -550
   ypos 166
  }
-set N8f950400 [stack 0]
+set Nce9f8400 [stack 0]
  Group {
   name Point_Normal2
   tile_color 0x434343ff
@@ -636,8 +635,8 @@ set N8f950400 [stack 0]
   xpos -324
   ypos 498
  }
-set N8fd85a80 [stack 0]
-push $N88f87800
+set Nd11ac400 [stack 0]
+push $Nce9f9400
  Expression {
   temp_name0 xd
   temp_expr0 red-Camera1.world_matrix.3
@@ -665,7 +664,7 @@ push $N88f87800
   xpos -456
   ypos -168
  }
-push $N7c4bbc00
+push $Nd0efd000
  Dot {
   name Dot7
   xpos -307
@@ -684,7 +683,7 @@ push $N7c4bbc00
   xpos -341
   ypos 8
  }
-set N8e8ed400 [stack 0]
+set Ne2611000 [stack 0]
  Shuffle {
   red white
   green white
@@ -693,7 +692,7 @@ set N8e8ed400 [stack 0]
   xpos -28
   ypos 76
  }
-push $N8f950400
+push $Nce9f8400
  BlinkScript {
   inputs 4
   kernelSourceFile /Users/madshagbarth/Github/Nuke-Private/Blink/PointRender/Render/3D_PointRender_v18.cpp
@@ -774,7 +773,6 @@ push $N8f950400
  Expression {
   expr3 a!=0?a/r:0
   name Expression3
-  selected true
   xpos 63
   ypos 324
  }
@@ -783,10 +781,10 @@ push $N8f950400
   xpos 97
   ypos 414
  }
-push $N88f86000
-push $N8fd85a80
-push $N8e8ed400
-push $N8f950400
+push $Ne4638800
+push $Nd11ac400
+push $Ne2611000
+push $Nce9f8400
  BlinkScript {
   inputs 4
   kernelSourceFile /Users/madshagbarth/Github/Nuke-Private/Blink/PointRender/Render/3D_PointRender_v17.cpp
@@ -845,10 +843,10 @@ push $N8f950400
   format "1280 720 0 0 1280 720 1 HD_720"
   rebuild_finalise ""
   name BlinkScript1
+  selected true
   xpos -27
   ypos 159
  }
-set N8e083000 [stack 0]
  TimeBlur {
   divisions {{parent.Samples}}
   shutter {{parent.Shutter}}
@@ -902,7 +900,7 @@ set N8e083000 [stack 0]
    xpos -248
    ypos 500
   }
-set N8ad98800 [stack 0]
+set Nd1101c00 [stack 0]
   Expression {
    expr0 r/(r+parent.Offset)*parent.Add
    expr1 g/(g+parent.Offset)*parent.Add
@@ -912,7 +910,7 @@ set N8ad98800 [stack 0]
    xpos -339
    ypos 576
   }
-push $N8ad98800
+push $Nd1101c00
   ShuffleCopy {
    inputs 2
    red red
@@ -946,19 +944,19 @@ push $N8ad98800
   xpos -27
   ypos 897
  }
-push $N8e8ed400
+push $Ne2611000
  PositionToPoints2 {
   display textured
   render_mode textured
   P_channel pos
   detail 0.25
-  pointSize 0.6
+  pointSize 0.006
   name PreviewNode
   xpos -22
   ypos 8
   disable {{!parent.Enable3DPreview}}
  }
-push $N8982cc00
+push $Nd0e70400
  Reformat {
   type "to box"
   box_width 100
@@ -973,9 +971,9 @@ push $N8982cc00
   ypos -1109
   disable {{!wire_type==1}}
  }
-push $N7c4ba800
-push $N7c4bb400
-push $N7c4bb800
+push $Ne462a800
+push $Nd0efdc00
+push $Nd0efd800
  Merge2 {
   inputs 2
   operation min
@@ -996,7 +994,7 @@ push $N7c4bb800
   xpos -582
   ypos -602
  }
-push $N7c4bbc00
+push $Nd0efd000
  Crop {
   box {0 0 {width} {height}}
   reformat true
@@ -1004,14 +1002,6 @@ push $N7c4bbc00
   name InputFormat
   xpos -456
   ypos -402
- }
-push $N8e083000
- Viewer {
-  frame 36
-  frame_range 1-100
-  name Viewer1
-  xpos -27
-  ypos 325
  }
  Input {
   inputs 0
@@ -1047,7 +1037,7 @@ push $N8e083000
   ypos 198
   addUserKnob {20 DummyCam l Defaults}
   addUserKnob {43 the_cam +INVISIBLE}
-  the_cam "\[\nset the_knob \"focal\"\nset knob_index 0\nset starting_point \"this.input0\"\nset default \"this\"\nset default \[append default \".d_\"]\n\n# If cam has no inputs, return the default...\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{\[class \$x]==\"Input\"\} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{\[exists \$inp]\} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  the_cam "\[\nset the_knob \"focal\"\nset knob_index 0\nset starting_point \"this.input0\"\nset default \"this\"\nset default \[append default \".d_\"]\n\n# If cam has no inputs, return the default...\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera3\" &&\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{\[class \$x]==\"Input\"\} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{\[exists \$inp]\} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
   addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
   addUserKnob {7 d_focal l focal R 0 100}
   d_focal 50

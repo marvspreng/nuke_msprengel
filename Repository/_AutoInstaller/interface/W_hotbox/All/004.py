@@ -2,7 +2,7 @@
 #
 # AUTOMATICALLY GENERATED FILE TO BE USED BY W_HOTBOX
 #
-# NAME: Convert to...
+# NAME: ReformThat
 #
 #----------------------------------------------------------------------------------------------------------
 
@@ -12,86 +12,83 @@
 # January 2016
 # v1.0
 #----------------------------------------------------------------------------------------------------------
+import nuke
 
-#launch panel to define nodeclass
-nodeclassPanel = nuke.Panel('Convert to...')
-nodeclassPanel.addSingleLineInput('NodeClass', '')
-nodeclassPanel.show()
-
-nodeClass = nodeclassPanel.value('NodeClass')
-
-selection = nuke.selectedNodes()
-newNodes = []
-
-for node in selection:
-
-    #check whether original node has a mask input
-    maskInput = None
-    for knob in node.knobs().keys():
-        if knob.startswith('maskChannel'):
-            maskInput = node.minInputs() - 1
-
-    #save inputs
-    inputs = {}
-
-    counter = 0
-    for i in range(node.maxInputs()):
-        inputNode =  node.input(i)
-        if inputNode != None:
-            if i == maskInput:
-                inputs['MASK'] = inputNode
-                counter -= 1
-            else:
-                inputs[counter] = inputNode
-        counter += 1
+def reformThat():
+    '''
+    Quickly set the format knob on a reformatnode to the format of an other node. If no reformat node is selected,
+    a new one will be created.
+    '''
+    selection = nuke.selectedNodes()
     
-    #save position
-    position = [node.xpos(),node.ypos()]
+    #if you've nothing selected you probably missclicked while trying to create a regular reformat
+    #so I'll be nice and create a regular reformat for you anyway and do nothing else
+    if len(selection) < 1:
+        nuke.createNode('Reformat')
+        return
+    
+    #if you selected a group of nodes, I'm not sure which node to steal the format from. So please try again
+    if len(selection) > 2:
+        nuke.message('please select only two nodes')
+        return
 
-    #make sure no nodes are selected
-    for i in nuke.selectedNodes():
-        i.knob('selected').setValue(False)
+    #if you've only one node selected, we have something to steal from but nothing to apply it to..
+    #so create a new reformatnode
+    
+    reformatNode = ''
+    
+    if len(selection) == 1:
+        selection[0].knob('selected').setValue(False)
+        reformatNode = nuke.createNode('Reformat')
+        
+    #define the reformat node
+    for i in selection:
+        if i.Class() == 'Reformat' and reformatNode == '':
+            reformatNode = i
+            selection.remove(i)
+            break
+    
+    #if none of the selected nodes is a reformat. Check the nodes for a format knob.
+    #if one of the nodes happens to have one, use that node. 
+    if len(selection) == 2:
+        for i in selection[::-1]:
+	    if i.Class() != 'Read' and 'format' in i.knobs():
+	        reformatNode = i
+                selection.remove(i)
+                break
+                
+    #if you've multiple nodes selected at least one should be formatable. 
+    #Otherwise we have plenty of selected sources to steal our formats from, but nowhere to store are just acquired treasures
+    if len(selection) == 2:
+        nuke.message('If you select multiple nodes, make sure at least one is a reformat or has an formatknob')
+        return
+        
+    #define the node you want to match the format from
+    targetNode = selection[0]
+     
+    #built a dictionary of all the existing formats in the scene
+    formatsDict = {}
+    for i in nuke.formats():
+        if i.name() != None:
+            formatsDict[(i.width(), i.height(),i.pixelAspect())]=i.name()
 
-    #create new node
-    newNode = nuke.createNode(nodeClass, inpanel = False)
-    newNodes.append(newNode)
+    targetFormat = (targetNode.format().width(), targetNode.format().height(), targetNode.format().pixelAspect())
 
-    newNode.knob('selected').setValue(False)
+    #check whether the format you're trying to copy already exists in your script
+    if targetFormat in formatsDict:
+        name = formatsDict[targetFormat]
 
-    #check whether new node has a mask input
-    maskInput = None
-    for knob in newNode.knobs().keys():
-        if knob.startswith('maskChannel'):
-            maskInput = newNode.minInputs() - 1
-
-    #reconnect inputs
-    counter = 0
-    for i in range(newNode.maxInputs()):
-        if i == maskInput:
-            try:
-                newNode.setInput(maskInput,inputs['MASK'])
-            except:
-                pass
-        else:
-            try:
-                newNode.setInput(i,inputs[counter])
-            except:
-                pass
+    #if that's not the case, add it.
+    else:
+        name = 'custom 01'
+        counter = 2
+        while name in formatsDict.values():
+            name = 'custom ' + str(counter).zfill(2)
             counter += 1
 
-    #reconnect outputs
-    node.knob('selected').setValue(True)
-    tmpDotNode = nuke.createNode('Dot')
-    node.knob('selected').setValue(False)
-    
-    tmpDotNode.setInput(0,newNode)
-    nuke.delete(tmpDotNode)
+        nuke.addFormat(' '.join(map(str,targetFormat)) + ' ' + name)
 
-    #delete original
-    nuke.delete(node)
-        
-    newNode.setXpos(position[0])
-    newNode.setYpos(position[1])
+    #set the reformatnode to new format
+    reformatNode.knob('format').setValue(name)
 
-for i in newNodes:
-    i.knob('selected').setValue(True)
+reformThat()

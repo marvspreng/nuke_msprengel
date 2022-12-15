@@ -2,19 +2,16 @@
 #
 # AUTOMATICALLY GENERATED FILE TO BE USED BY W_HOTBOX
 #
-# NAME: disable all enableOnRender
-# COLOR: #524a3b
+# NAME: Set Viewer Input
 #
 #----------------------------------------------------------------------------------------------------------
 
-import nuke
+node = nuke.activeViewer().node()
 
-nodes = nuke.allNodes()
+curNodeName = nuke.selectedNode().name()
 
-for n in nodes:
-
-    str = n.knob('label').getValue()
-
-    if "enableOnRender" in str:
-        n.knob('disable').setValue(True)
-        
+if node.knob('input_process_node').value() == curNodeName:
+	node.knob('input_process').setValue(1-node.knob('input_process').value())
+else:
+	node.knob('input_process_node').setValue(nuke.selectedNode().name())
+	node.knob('input_process').setValue(True)

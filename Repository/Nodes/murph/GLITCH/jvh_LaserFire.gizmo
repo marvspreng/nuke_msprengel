@@ -1,0 +1,276 @@
+Gizmo {
+ inputs 2
+ help "jvh_LaserFire 1.0.0\n@2019 Johan van Huyssteen. All rights reserved.\nseoul.ddp@gmail.com\n\nLaser Fire generator in 3D.\nWorking order is top-to-bottom. Select source/ destination locations. Then adjust 'Emitter' properties. Finally, you can fine-tune the colour- and opacity over time in the 'Look' group."
+ knobChanged "\n\npoint_3D = nuke.thisNode().knob('point_3D')\ndst_choice = nuke.thisNode().knob('dst_choice').value()\noffset = nuke.thisNode().knob('offset')\n\nif dst_choice == \"3D point\":\n    point_3D.setVisible(True)\n    point_3D.setEnabled(True)\n    offset.setVisible(False)\n    offset.setEnabled(False)\n    nuke.toNode('switch_normals').knob('which').setValue(1)\n    \nelse:\n    point_3D.setVisible(False)\n    offset.setVisible(True)\n    offset.setEnabled(True)\n    nuke.toNode('switch_normals').knob('which').setValue(0)\n\n\n\nk = nuke.thisKnob()\nif k.name() == 'inputChange':\n    n = nuke.thisNode()\n\n    if n.input(0) is None:\n        nuke.toNode('Switch2').knob('which').setValue(1)\n    else:\n        nuke.toNode('Switch2').knob('which').setValue(0)\n\n    if n.input(1) is None:\n        nuke.toNode('Switch1').knob('which').setValue(0)\n        nuke.thisNode().knob('source_text').setVisible(True)\n        nuke.thisNode().knob('emt_src').setVisible(True)\n    else:\n        nuke.toNode('Switch1').knob('which').setValue(1)\n        nuke.thisNode().knob('source_text').setVisible(False)\n        nuke.thisNode().knob('emt_src').setVisible(False)\n\n    \n"
+ addUserKnob {20 Laser}
+ addUserKnob {52 knobChanged_all_statements T "nuke.thisNode().knob('knobChanged').setValue(\"\"\"\n\npoint_3D = nuke.thisNode().knob('point_3D')\ndst_choice = nuke.thisNode().knob('dst_choice').value()\noffset = nuke.thisNode().knob('offset')\n\nif dst_choice == \"3D point\":\n    point_3D.setVisible(True)\n    point_3D.setEnabled(True)\n    offset.setVisible(False)\n    offset.setEnabled(False)\n    nuke.toNode('switch_normals').knob('which').setValue(1)\n    \nelse:\n    point_3D.setVisible(False)\n    offset.setVisible(True)\n    offset.setEnabled(True)\n    nuke.toNode('switch_normals').knob('which').setValue(0)\n\n\n\nk = nuke.thisKnob()\nif k.name() == 'inputChange':\n    n = nuke.thisNode()\n\n    if n.input(0) is None:\n        nuke.toNode('Switch2').knob('which').setValue(1)\n    else:\n        nuke.toNode('Switch2').knob('which').setValue(0)\n\n    if n.input(1) is None:\n        nuke.toNode('Switch1').knob('which').setValue(0)\n        nuke.thisNode().knob('source_text').setVisible(True)\n        nuke.thisNode().knob('emt_src').setVisible(True)\n    else:\n        nuke.toNode('Switch1').knob('which').setValue(1)\n        nuke.thisNode().knob('source_text').setVisible(False)\n        nuke.thisNode().knob('emt_src').setVisible(False)\n\n    \n\"\"\")" +STARTLINE}
+ addUserKnob {41 format l Format T Reformat1.format}
+ addUserKnob {26 source_text l "@b;Source"}
+ addUserKnob {13 emt_src l point t "Starting position"}
+ emt_src {0 0 -10}
+ addUserKnob {26 dest_text l "@b;Destination"}
+ addUserKnob {68 dst_choice l cam/point t "Direction to fire laser." M {camera "3D point" "" ""}}
+ addUserKnob {13 point_3D l point t "End position." +HIDDEN}
+ point_3D {1 -1 0}
+ addUserKnob {13 offset t "offset from camera centre"}
+ offset {1 1 0}
+ addUserKnob {20 emt l Emitter t "Laser emitter properties" n 1}
+ addUserKnob {41 start_frame l "start frame" T ParticleEmitter1.start_frame}
+ addUserKnob {3 emission_freq l "emission frequency" t "Specify every 'n' frames to emit."}
+ emission_freq 1
+ addUserKnob {3 emission_rate l "emission rate" t "Attempt to emit 'n' amount of particles per frame"}
+ emission_rate 1
+ addUserKnob {41 selection_only l "only emit from selected points" -STARTLINE T ParticleEmitter1.selection_only}
+ addUserKnob {41 emit_from l "emit from" T ParticleEmitter1.emit_from}
+ addUserKnob {41 emit_order l "" -STARTLINE T ParticleEmitter1.emit_order}
+ addUserKnob {41 randomize_type l "" -STARTLINE T ParticleEmitter1.randomize_type}
+ addUserKnob {7 vel l velocity R 1 100}
+ vel 1
+ addUserKnob {41 lifetime l "max lifetime" T ParticleEmitter1.lifetime}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 look l Look t "Laser effects and color" n 1}
+ look 0
+ addUserKnob {7 size t "particle size" R 0.01 10}
+ size 0.1
+ addUserKnob {41 samples T ScanlineRender4.samples}
+ addUserKnob {41 shutteroffset l "shutter offset" T ScanlineRender4.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T ScanlineRender4.shuttercustomoffset}
+ addUserKnob {6 streaking t "create a streaking motion?" +STARTLINE}
+ addUserKnob {6 glow +STARTLINE}
+ addUserKnob {20 group_sc l "Start Color/ End Color" t "Select the particle color over lifetime, per color channel, where:\n\nx-axis = lifetime (0 birth 1 death)\ny-axis = lifetime (0 no color 1 full color)\n" n 1}
+ addUserKnob {41 curves l "" -STARTLINE T ParticleCurve1.curves}
+ addUserKnob {20 endGroup_3 l group_sc_end n -1}
+ addUserKnob {20 endGroup n -1}
+}
+ Camera2 {
+  inputs 0
+  name default_cam
+  selected true
+  xpos -118
+  ypos 290
+ }
+ Input {
+  inputs 0
+  name camera
+  tile_color 0x9c0000ff
+  xpos -370
+  ypos 182
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch2
+  xpos -370
+  ypos 310
+ }
+ Dot {
+  name Dot2
+  xpos -336
+  ypos 450
+ }
+set N29001c00 [stack 0]
+ Constant {
+  inputs 0
+  channels rgb
+  color {1 1 1 0}
+  format "64 64 0 0 64 64 1 laser_particle"
+  name constant_start_color1
+  xpos -1061
+  ypos 123
+ }
+set N29001800 [stack 0]
+ BlendMat {
+  surfaceblend modulate
+  name BlendMat2
+  xpos -920
+  ypos 254
+ }
+ Sphere {
+  receive_shadow false
+  rows 8
+  columns 8
+  uniform_scale 0.1
+  name Sphere3
+  xpos -920
+  ypos 278
+ }
+ Axis2 {
+  inputs 0
+  translate {{parent.point_3D} {parent.point_3D} {parent.point_3D}}
+  uniform_scale 10
+  name emt_dst1
+  xpos -1570
+  ypos 426
+ }
+push $N29001800
+ BlendMat {
+  surfaceblend modulate
+  name BlendMat1
+  xpos -1250
+  ypos 230
+ }
+set N29000400 [stack 0]
+ Dot {
+  name Dot1
+  xpos -1106
+  ypos 234
+ }
+ Input {
+  inputs 0
+  name cstm_emitter
+  xpos -1023
+  ypos 371
+  number 1
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos -1140
+  ypos 371
+ }
+push $N29000400
+ Sphere {
+  rows 1
+  columns 1
+  name emt_src1
+  xpos -1250
+  ypos 278
+ }
+ TransformGeo {
+  translate {{parent.emt_src} {parent.emt_src} {parent.emt_src}}
+  name TransformGeo1
+  xpos -1250
+  ypos 326
+ }
+ Switch {
+  inputs 2
+  name Switch1
+  knobChanged "if nuke.thisKnob().name() == 'inputChange': print 'input has Changed'"
+  xpos -1250
+  ypos 371
+ }
+ Dot {
+  name Dot5
+  xpos -1216
+  ypos 402
+ }
+set N2902a800 [stack 0]
+ Dot {
+  name Dot3
+  xpos -1326
+  ypos 402
+ }
+ Normals {
+  inputs 2
+  action lookat
+  name normals_3D_point
+  xpos -1360
+  ypos 446
+ }
+ Dot {
+  name Dot4
+  xpos -1326
+  ypos 546
+ }
+push $N29001c00
+push $N2902a800
+ Normals {
+  inputs 2
+  action lookat
+  normal {{parent.offset} {parent.offset} {parent.offset}}
+  name normals_cam
+  xpos -1250
+  ypos 446
+ }
+ Switch {
+  inputs 2
+  name switch_normals
+  xpos -1250
+  ypos 542
+ }
+push 0
+ ParticleEmitter {
+  inputs 3
+  start_frame 1
+  emit_order "in order"
+  rate {{frame%emission_freq==0?emission_rate:0}}
+  selection_threshhold 1
+  velocity {{parent.vel}}
+  size {{parent.size}}
+  transfer_velocity 1
+  color_from_texture true
+  frame_advance constant
+  name ParticleEmitter1
+  selected true
+  xpos -920
+  ypos 542
+ }
+ ParticleCurve {
+  curves {r {curve l 1.391137362 0.4069651365}
+    g {curve l 1.391137362 0.004726469517}
+    b {curve l 1.505146384 -0.2333332896}
+    a {curve l 1 0.0127351284}
+    size {curve 1 0.02224910259}
+    mass {}}
+  name ParticleCurve1
+  xpos -920
+  ypos 612
+ }
+ Scene {
+  name Scene5
+  xpos -910
+  ypos 804
+ }
+set N29054800 [stack 0]
+ Reformat {
+  inputs 0
+  name Reformat1
+  xpos -233
+  ypos 824
+  hide_input true
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  samples 10
+  shutter 1
+  motion_vectors_type distance
+  name ScanlineRender4
+  xpos -370
+  ypos 824
+ }
+set N29263c00 [stack 0]
+push $N29054800
+ Viewer {
+  inputs 2
+  frame_range 1001-1091
+  fps 23.97602463
+  gain 0.145
+  name Viewer1
+  xpos -480
+  ypos 896
+ }
+push $N29263c00
+ TimeBlur {
+  shutteroffset start
+  shuttercustomoffset 0
+  name TimeBlur1
+  xpos -370
+  ypos 896
+  disable {{!parent.streaking}}
+ }
+ Glow2 {
+  tolerance 0.18
+  brightness 5
+  size 36
+  name Glow1
+  xpos -370
+  ypos 922
+  disable {{!parent.glow x1040 1}}
+ }
+ Output {
+  name Output2
+  xpos -370
+  ypos 992
+ }
+end_group

@@ -1,0 +1,126 @@
+#! C:/Program Files/Nuke12.2v3/nuke-12.2.3.dll -nx
+version 12.2 v3
+Gizmo {
+ tile_color 0xae63e0ff
+ note_font "Verdana Bold"
+ note_font_size 20
+ addUserKnob {20 Glitchpass l "Glitchy Highpass"}
+ addUserKnob {41 colorspace_out_1 l out T PassColorspace.colorspace_out}
+ addUserKnob {41 size T PassBlur.size}
+ addUserKnob {7 Gayyn R 5 500}
+ Gayyn 136
+ addUserKnob {41 saturation_1 l saturation T Passsaetigung.saturation}
+ addUserKnob {6 mix l "Plus or Mult ?" +STARTLINE}
+ mix true
+ addUserKnob {41 minimum_enable l "Clip Black" -STARTLINE T Passclamp.minimum_enable}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 0
+ }
+ Dot {
+  name Dot1
+  xpos 34
+  ypos 107
+ }
+set Ndba8a400 [stack 0]
+ Dot {
+  name Dot2
+  xpos 230
+  ypos 107
+ }
+ Colorspace {
+  colorspace_out Cineon
+  name PassColorspace
+  xpos 196
+  ypos 160
+ }
+set Ndba89c00 [stack 0]
+push $Ndba89c00
+ Blur {
+  size 1
+  filter quadratic
+  name PassBlur
+  xpos 306
+  ypos 228
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Passmerge
+  xpos 196
+  ypos 234
+ }
+ Grade {
+  white {{parent.Gayyn}}
+  add {{"parent.mix == 0 ? 1:0"}}
+  black_clamp false
+  name Passgrade
+  xpos 196
+  ypos 283
+ }
+ Saturation {
+  saturation 1.86
+  name Passsaetigung
+  xpos 196
+  ypos 327
+ }
+ Clamp {
+  minimum_enable false
+  maximum_enable false
+  name Passclamp
+  xpos 196
+  ypos 368
+ }
+ Dot {
+  name Dot4
+  xpos 230
+  ypos 533
+ }
+set Ndba88400 [stack 0]
+ Dot {
+  name Dot3
+  xpos 230
+  ypos 613
+ }
+push $Ndba88400
+push $Ndba8a400
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  name PassmergeMult
+  label "\[if \{\[value mix]<1\} \{ value mix \}]"
+  xpos 0
+  ypos 530
+  disable {{"parent.mix == 0 ? 0:1"}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox B
+  output rgb
+  name PassmergePlus
+  label "\[if \{\[value mix]<1\} \{ value mix \}]"
+  note_font_size 20
+  xpos 0
+  ypos 605
+  disable {{"parent.mix == 1 ? 0:1" x168 1}}
+ }
+set N35d83400 [stack 0]
+ Output {
+  name Output1
+  xpos 0
+  ypos 708
+ }
+push $N35d83400
+ Viewer {
+  frame 179
+  frame_range 1-11000
+  fps 25
+  name Viewer1
+  xpos 524
+  ypos 538
+ }
+end_group

@@ -128,8 +128,10 @@ def getOCIOConfig():
 		return OCIO.GetCurrentConfig()
 	else:
 		nukeDir = os.path.dirname(nuke.env['ExecutablePath'])
-		nuke_default_config = OCIO.Config.CreateFromFile("{0}/plugins/OCIOConfigs/configs/nuke-default/config.ocio".format(nukeDir))
+		#nuke_default_config = OCIO.Config.CreateFromFile("/Applications/Nuke14.0v1/Nuke14.0v1.app/Contents/Resources/OCIOConfigs/configs/studio-config-v1.0.0_aces-v1.3_ocio-v2.1.ocio".format(nukeDir))
+		nuke_default_config = OCIO.Config.CreateFromFile("{0}/../Resources/OCIOConfigs/configs/nuke-default/config.ocio".format(nukeDir))
 		return nuke_default_config
+
 
 def getOCIOColorSpaces():	
 	'''
@@ -174,6 +176,7 @@ def colorspaceNameFix(colorspace):
 	else:
 		return colorspace
 
+
 def rootFolderHelp():
 
 	helpText = """
@@ -199,7 +202,7 @@ def sb_autoRenderNode(rootFolderMethod="search word", rootFolderUserInput="scrip
 	# Environment variable that override the argument.
 	# The USE_OCIO env is also used by sb_createRead.py.
 	if os.getenv("USE_OCIO") in ["1", "True"]:
-		useOCIO = True
+		useOCIO = False
 
 	# Get the OCIO config.
 	# If the $OCIO env is not set, it will return the internal Nuke config.

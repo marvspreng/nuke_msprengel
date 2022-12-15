@@ -3,7 +3,9 @@ Group {
  tile_color 0x434343ff
  note_font_color 0x7dadf9ff
  addUserKnob {20 User}
- addUserKnob {26 info l "" +STARTLINE T "Point Dublicator v1.0"}
+ addUserKnob {26 info l "" +STARTLINE T "Point Dublicator v1.1"}
+ addUserKnob {6 useGPU l "Use GPU if available" +STARTLINE}
+ useGPU true
  addUserKnob {26 divider_general l "<b><font color=#7DADF9>General</font><b>"}
  addUserKnob {3 copies l Copies}
  copies 2
@@ -41,7 +43,7 @@ Group {
   xpos 249
   ypos -439
  }
-set N46973400 [stack 0]
+set N8a452000 [stack 0]
  Crop {
   box {{curve} {curve} {Input1.bbox.width} {(Input1.bbox.height+parent.Offset)*parent.copies}}
   reformat true
@@ -66,7 +68,7 @@ set N46973400 [stack 0]
   xpos 249
   ypos -310
  }
-push $N46973400
+push $N8a452000
  Dot {
   name Dot2
   xpos 423
@@ -78,7 +80,7 @@ push $N46973400
   filter Impulse
   name STMap1
   xpos 389
-  ypos -314
+  ypos -316
  }
 add_layer {id id.r}
 add_layer {pos pos.red pos.green pos.blue pos.alpha}
@@ -105,13 +107,13 @@ add_layer {pos pos.red pos.green pos.blue pos.alpha}
   xpos 423
   ypos -182
  }
-set N469a3400 [stack 0]
+set N8a3f3c00 [stack 0]
  Dot {
   name Dot3
   xpos 535
   ypos -182
  }
-set N469a3000 [stack 0]
+set N8a3f3800 [stack 0]
  Shuffle {
   in pos
   in2 id
@@ -122,12 +124,12 @@ set N469a3000 [stack 0]
  }
  BlinkScript {
   kernelSourceFile /Users/madshagbarth/Github/Nuke-Private/Blink/PointRender/Modify/PointRender_Transform.cpp
-  recompileCount 91
+  recompileCount 92
   ProgramGroup 1
-  KernelDescription "2 \"SaturationKernel\" iterate pixelWise 8d377e4ceff6f5f8c790408d6fb99bb84fd346b2355d084e2fcebb8e490604e4 2 \"src\" Read Point \"dst\" Write Point 6 \"Samples\" Int 1 AQAAAA== \"Rotation\" Float 1 AADgQA== \"Offset\" Float 1 AAAAAA== \"AxisCenter\" Float 3 AAAAPwAAAD8AAAA/AAAAAA== \"RotationAxis\" Int 1 AAAAAA== \"cam_Matrix\" Float 16 AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAAAAAAAAAAACAPw== 6 \"samples\" 1 1 \"inputRot\" 1 1 \"pOffset\" 1 1 \"AxisCenter\" 3 1 \"pRotateAxis\" 1 1 \"rm\" 16 1 0"
-  kernelSource "kernel SaturationKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image\n  Image<eWrite> dst; // the output image\n\n  param:\n    int samples;\n    float inputRot; // This parameter is made available to the user.\n    float pOffset;\n    float3 AxisCenter;\n    int pRotateAxis;\n    float4x4 rm;\n\n  void define() \{\n    defineParam(samples, \"Samples\", 1);\n    defineParam(inputRot, \"Rotation\", 7.0f);\n    defineParam(pOffset, \"Offset\", 0.0f);\n    defineParam(AxisCenter, \"AxisCenter\", float3(0.5f,0.5f,0.5f));\n    defineParam(pRotateAxis, \"RotationAxis\", 0);\n    defineParam(rm, \"cam_Matrix\", float4x4( 1.0f,0.0f,0.0f,0.0f,\n                                                    0.0f,1.0f,0.0f,0.0f,\n                                                    0.0f,0.0f,1.0f,0.0f,\n                                                    0.0f,0.0f,0.0f,1.0f));    \n  \}\n\n  void process() \{\n    // Read the input image\n    float percent = inputRot / (2*PI) ;\n    float4 sample = src();\n    float sub_index = sample.w / (float)samples;\n    float over_index = sample.w;\n\n    float3 Input = float3(sample.x,sample.y,sample.z);\n    float4x4 rotMatrix = \{1.0f,0.0f,0.0f,0.0f, 0.0f,1.0f,0.0f,0.0f, 0.0f,0.0f,1.0f,0.0f, 0.0f,0.0f,0.0f,1.0f\};\n    rotMatrix.setElements(rm\[0]\[0],rm\[0]\[1],rm\[0]\[2],rm\[0]\[3],rm\[1]\[0],rm\[1]\[1],rm\[1]\[2],rm\[1]\[3],rm\[2]\[0],rm\[2]\[1],rm\[2]\[2],rm\[2]\[3],rm\[3]\[0],rm\[3]\[1],rm\[3]\[2],rm\[3]\[3]);\n    //rotMatrix.translate(float4(-AxisCenter.x,-AxisCenter.y,-AxisCenter.z,1.0f));\n    if (pRotateAxis == 1) \{\n      rotMatrix.rotateY((sample.y-.5+pOffset)*-inputRot); //\n    \}\n    else if (pRotateAxis == 2) \{\n      rotMatrix.rotateZ((sample.z-.5+pOffset)*-inputRot); //\n    \}\n    else \{\n      rotMatrix.rotateX((sample.x-.5+pOffset)*-inputRot); //\n    \}\n\n    //rotMatrix.translate(float4(AxisCenter.x,AxisCenter.y,AxisCenter.z,-1.0f));\n    sample.w = 1.0f;\n\n    float4 rotation = sample;\n    for (int i=1;i<max(int(over_index)+1,1);i++)\{\n      rotation = rotMatrix*rotation;\n    \}\n\n    dst() = float4(rotation.x, rotation.y, rotation.z, over_index);\n  \}\n\};\n\n\n"
+  KernelDescription "2 \"SaturationKernel\" iterate pixelWise a2bb1405069c41184f835cc7663755f614827ab8fd0a3c4179a83414986ce334 2 \"src\" Read Point \"dst\" Write Point 5 \"Rotation\" Float 1 AADgQA== \"Offset\" Float 1 AAAAAA== \"AxisCenter\" Float 3 AAAAPwAAAD8AAAA/AAAAAA== \"RotationAxis\" Int 1 AAAAAA== \"cam_Matrix\" Float 16 AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAAAAAAAAAAACAPw== 5 \"inputRot\" 1 1 \"pOffset\" 1 1 \"AxisCenter\" 3 1 \"pRotateAxis\" 1 1 \"rm\" 16 1 0"
+  kernelSource "kernel SaturationKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image\n  Image<eWrite> dst; // the output image\n\n  param:\n    float inputRot; // This parameter is made available to the user.\n    float pOffset;\n    float3 AxisCenter;\n    int pRotateAxis;\n    float4x4 rm;\n\n  void define() \{\n    defineParam(inputRot, \"Rotation\", 7.0f);\n    defineParam(pOffset, \"Offset\", 0.0f);\n    defineParam(AxisCenter, \"AxisCenter\", float3(0.5f,0.5f,0.5f));\n    defineParam(pRotateAxis, \"RotationAxis\", 0);\n    defineParam(rm, \"cam_Matrix\", float4x4( 1.0f,0.0f,0.0f,0.0f,\n                                                    0.0f,1.0f,0.0f,0.0f,\n                                                    0.0f,0.0f,1.0f,0.0f,\n                                                    0.0f,0.0f,0.0f,1.0f));    \n  \}\n\n  void process() \{\n    // Read the input image\n    float percent = inputRot / (2*PI) ;\n    float4 sample = src();\n    float3 Input = float3(sample.x,sample.y,sample.z);\n    float4x4 rotMatrix;\n    rotMatrix.setIdentity();\n    rotMatrix.setElements(rm\[0]\[0],rm\[0]\[1],rm\[0]\[2],rm\[0]\[3],rm\[1]\[0],rm\[1]\[1],rm\[1]\[2],rm\[1]\[3],rm\[2]\[0],rm\[2]\[1],rm\[2]\[2],rm\[2]\[3],rm\[3]\[0],rm\[3]\[1],rm\[3]\[2],rm\[3]\[3]);\n    rotMatrix.translate(float4(-AxisCenter.x,-AxisCenter.y,-AxisCenter.z,1.0f));\n    if (pRotateAxis == 1) \{\n      rotMatrix.rotateY((sample.y-.5+pOffset)*-inputRot); //\n    \}\n    else if (pRotateAxis == 2) \{\n      rotMatrix.rotateZ((sample.z-.5+pOffset)*-inputRot); //\n    \}\n    else \{\n      rotMatrix.rotateX((sample.x-.5+pOffset)*-inputRot); //\n    \}\n\n    rotMatrix.translate(float4(AxisCenter.x,AxisCenter.y,AxisCenter.z,-1.0f));\n    sample.w = 1.0f; //Updated in 1.2\n    float4 rotation = rotMatrix*sample;\n\n    dst() = float4(rotation.x, rotation.y, rotation.z, sample.w);\n  \}\n\};\n\n\n"
+  useGPUIfAvailable {{parent.useGPU}}
   rebuild ""
-  SaturationKernel_Samples {{parent.copies}}
   SaturationKernel_Rotation 0
   SaturationKernel_AxisCenter {0 0 0}
   SaturationKernel_cam_Matrix {
@@ -142,7 +144,7 @@ set N469a3000 [stack 0]
   xpos 501
   ypos -57
  }
-push $N469a3000
+push $N8a3f3800
  Dot {
   name Dot4
   xpos 632
@@ -165,7 +167,7 @@ push $N469a3000
   xpos 598
   ypos 34
  }
-push $N469a3400
+push $N8a3f3c00
  Merge2 {
   inputs 2
   operation copy
