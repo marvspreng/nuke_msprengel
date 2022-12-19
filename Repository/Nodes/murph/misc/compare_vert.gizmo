@@ -1,0 +1,84 @@
+#! /Applications/Nuke10.0v4/Nuke10.0v4.app/Contents/MacOS//libnuke-10.0.4.dylib -nx
+version 10.0 v4
+Gizmo {
+ inputs 2
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 532
+  ypos -158
+ }
+ Shuffle {
+  alpha white
+  name Shuffle2
+  xpos 532
+  ypos -118
+ }
+ Mirror2 {
+  flip true
+  flop true
+  name Mirror2_1
+  xpos 532
+  ypos -94
+ }
+ Reformat {
+  type scale
+  scale {1 2}
+  center false
+  black_outside true
+  name Reformat2
+  xpos 532
+  ypos -70
+ }
+ Premult {
+  name Premult2
+  xpos 532
+  ypos -46
+ }
+ Mirror2 {
+  flip true
+  flop true
+  name Mirror2_2
+  xpos 532
+  ypos -22
+ }
+ Input {
+  inputs 0
+  name Input2
+  xpos 422
+  ypos -84
+  number 1
+ }
+ Shuffle {
+  alpha white
+  name Shuffle3
+  xpos 422
+  ypos -44
+ }
+ Premult {
+  name Premult3
+  xpos 422
+  ypos -20
+ }
+ Reformat {
+  type scale
+  scale {1 2}
+  center false
+  black_outside true
+  name Reformat1
+  xpos 422
+  ypos 3
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos 532
+  ypos 3
+ }
+ Output {
+  name Output1
+  xpos 532
+  ypos 103
+ }
+end_group

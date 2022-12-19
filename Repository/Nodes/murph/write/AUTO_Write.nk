@@ -1,0 +1,64 @@
+#! C:/Program Files/Nuke11.3v3/nuke-11.3.3.dll -nx
+#write_info AUTO_Write file:"" format:"2048 1556 1" chans:":" framerange:"1 100" fps:"0" colorspace:"default" datatype:"unknown" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 11.3 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="-8" y="-8" w="3440" h="1377" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="2246" stretch="1"/>
+            <splitter orientation="2">
+                <split size="1081"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="248"/>
+                <dock id="" activePageId="Curve Editor.1">
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="1146"/>
+            <dock id="" activePageId="DAG.1" focus="true">
+                <page id="DAG.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "C:/Users/Dan Bruce/Desktop/auto_write.nk"
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Write {
+ inputs 0
+ channels rgba
+ create_directories true
+ checkHashOnRead false
+ name AUTO_Write
+ tile_color 0x7f00ffff
+ note_font_color 0xffffffff
+ xpos -52
+ ypos -55
+ addUserKnob {20 autoWriteTab l "AUTO Write"}
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "" +STARTLINE T "  "}
+ addUserKnob {22 runAutoWrite l "Run AUTO Write" t "Paths the file directory of this Write node to the saved files location and installs a python script into the Project Settings / Python / onScriptSave to mirror the saved files version." T "def runAutoWrite():\n    filePath = nuke.root().name()\n    ##Check for file save\n    if filePath == 'Root':\n        nuke.message(\"Save the file before running AUTO Write.\")\n        return\n    ##Creat Path for Write node\n    dirPath = os.path.dirname(filePath)\n    fileName = os.path.basename(filePath)\n    fileName = fileName.split('.')\n    fileName = fileName\[0]\n    verNum = fileName.split('_')\n    verNum = verNum\[len(verNum)-1]\n    ##Check for file version\n    if verNum\[0].lower() != 'v':\n        nuke.message(\"Save the file with a version number at the end before running AUTO Write.\\nFor example: your_file_v001.nk\")\n        return\n    fileName = fileName.rstrip('_'+verNum)\n    savePath = os.path.join(dirPath,verNum,fileName)\n    savePath = savePath+\".%04d.exr\"\n    savePath = os.path.normpath(savePath).replace(\"\\\\\", \"/\")\n    nuke.thisNode()\['file'].setValue( savePath )\n    ##Check for Project onScriptSave\n    findScriptSave = nuke.root()\['onScriptSave'].value()\n    if (\"### AUTO Write\" in findScriptSave) != True and findScriptSave != \"\":\n        nuke.message(\"Project Settings / Python / onScriptSave is in use.\\nClear before running AUTO Write.\")\n        return\n    ##Add Auto Version to Project onScriptSave\n    nuke.root()\['onScriptSave'].setValue(\"### AUTO Write \\nimport re\\n\"+\"rootVersion=re.search(\\'\[vV]\\d+\\',os.path.split(nuke.root().name())\[1]).group()\\n\"+\"for each in nuke.allNodes():\\n\"+\" if each.Class() == \\'Write\\':\\n\"+\"  each\[\\'file\\'].setValue(re.sub(\\'\[vV]\\d+\\',rootVersion,each\[\\'file\\'].value()))\")\n    \nrunAutoWrite()\n" +STARTLINE}
+ addUserKnob {26 _2 l "" +STARTLINE T "  "}
+ addUserKnob {26 ""}
+ addUserKnob {26 info l "" +STARTLINE T "  \nCreated by Dan C Bruce\nwww.dancbruce.com\n\nVersion 1.0.0\nUpdated on March 26, 2020\n  "}
+ addUserKnob {26 ""}
+}

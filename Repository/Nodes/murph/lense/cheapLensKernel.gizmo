@@ -1,11 +1,9 @@
-Group {
- name cheapLensKernel1
+#! /Applications/Nuke13.2v2/Nuke13.2v2.app/Contents/MacOS/libnuke-13.2.2.dylib -nx
+version 13.2 v2
+Gizmo {
  knobChanged "node = nuke.thisNode()\nknob = nuke.thisKnob()\n\nif knob.name() in \[\"method\", \"guiSwitch\"]:\n    unlocked = (node\[\"method\"].value() == \"kernel convolution\") or (node\[\"guiSwitch\"].value() == True)\n    node\[\"padding\"].setEnabled(unlocked)\n    \nelif knob.name() == \"kernel\":\n    with node:\n        fft = nuke.toNode(\"LensKernelFFT1\")\n        fft\[\"kernel\"].setValue(int(node\[\"kernel\"].getValue()))\n            \nelif knob.name() == \"chan\":\n    with node:\n        fft = nuke.toNode(\"LensKernelFFT1\")\n        fft\[\"c\"].setValue(int(node\[\"chan\"].getValue()))"
  tile_color 0xcc804eff
  label "\[value method] \[value \[if \{\[value guiSwitch]\} \{return \" (force)\"\} \{return \"\"\}]]"
- selected true
- xpos -524
- ypos -281
  addUserKnob {20 Controls}
  addUserKnob {4 method t "Pick which method the gizmo will use to simulate a lens:\n~ channel blur (really blazing fast)\n~ kernel convolution (super-duper slow)" M {"channel blur" "kernel convolution" ""}}
  addUserKnob {6 guiSwitch l "force convolution at render" t "Will use kernel convolution for render no matter what is selected as method." -STARTLINE}
@@ -16,7 +14,7 @@ Group {
  addUserKnob {3 padding l "pad frame" +DISABLED}
  addUserKnob {7 mix t "dissolve between input and kernel"}
  mix 0.4
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {26 id l " " T "v1.1  -  Mitchell Kehn  -  8 August 2019"}
 }
  BackdropNode {
@@ -69,25 +67,25 @@ Group {
   xpos 2806
   ypos -203
  }
-set N14e8f400 [stack 0]
+set Na12fc500 [stack 0]
  Dot {
   name Dot26
   xpos 4195
   ypos -203
  }
-set N14e8f000 [stack 0]
+set Na12feba0 [stack 0]
  Dot {
   name Dot2
   xpos 4987
   ypos -203
  }
-set N14e8ec00 [stack 0]
+set Na12aee00 [stack 0]
  Dot {
   name Dot6
   xpos 5292
   ypos -203
  }
-set N14e8e800 [stack 0]
+set Na12b14a0 [stack 0]
  Group {
   name LensKernelFFT1
   tile_color 0xff7f28ff
@@ -111,6 +109,7 @@ set N14e8e800 [stack 0]
   Read {
    inputs 0
    file_type exr
+   file /Users/marvinsprengel/Desktop/Launch/repository/Repository_active/nuke_msprengel/Repository/Nodes/murph/lense/ignore.dat/35mmf56_normalized_v01.exr
    format "3908 2602 0 0 3908 2602 1 "
    origset true
    name Read3
@@ -119,27 +118,26 @@ set N14e8e800 [stack 0]
    xpos -252
    ypos -23
   }
+set Na12b90e0 [stack 0]
   Read {
    inputs 0
    file_type exr
+   file /Users/marvinsprengel/Desktop/Launch/repository/Repository_active/nuke_msprengel/Repository/Nodes/murph/lense/ignore.dat/35mmf28_normalized_v01.exr
    format "3908 2602 0 0 3908 2602 1 "
    origset true
-   name Read2
-   tile_color 0xf7fffcff
-   label f2.8
+   name Read4
    xpos -382
-   ypos -23
+   ypos -29
   }
   Read {
    inputs 0
    file_type exr
+   file /Users/marvinsprengel/Desktop/Launch/repository/Repository_active/nuke_msprengel/Repository/Nodes/murph/lense/ignore.dat/35mmf14_normalized_v01.exr
    format "3908 2602 0 0 3908 2602 1 "
    origset true
-   name Read1
-   tile_color 0xf7fffcff
-   label f1.4
-   xpos -512
-   ypos -23
+   name Read2
+   xpos -490
+   ypos -26
   }
   Switch {
    inputs 3
@@ -151,7 +149,7 @@ set N14e8e800 [stack 0]
   Transform {
    translate {1 0}
    center {1954 1301}
-   filter Impulse
+   filter impulse
    name Transform
    label recenter
    xpos -382
@@ -162,7 +160,7 @@ set N14e8e800 [stack 0]
    xpos -348
    ypos 170
   }
-set N153af000 [stack 0]
+set Na04e3af0 [stack 0]
   Dot {
    name Dot2
    xpos -238
@@ -175,7 +173,7 @@ set N153af000 [stack 0]
    xpos -272
    ypos 224
   }
-push $N153af000
+push $Na04e3af0
   Copy {
    inputs 2
    from0 rgba.red
@@ -190,7 +188,7 @@ push $N153af000
    xpos -348
    ypos 272
   }
-set N153ae000 [stack 0]
+set Na12c0760 [stack 0]
   Dot {
    name Dot9
    xpos -458
@@ -217,13 +215,13 @@ set N153ae000 [stack 0]
    xpos 34
    ypos 59
   }
-set N14dc4c00 [stack 0]
+set Na12cc350 [stack 0]
   Reformat {
    type "to box"
    box_width {{"width + (2* parent.pad)"}}
    box_height {{"height + (2* parent.pad)"}}
    resize none
-   filter Impulse
+   filter impulse
    name Reformat_PadFrame
    xpos 0
    ypos 334
@@ -239,13 +237,13 @@ set N14dc4c00 [stack 0]
    xpos 34
    ypos 451
   }
-push $N153ae000
+push $Na12c0760
   Reformat {
    type "to box"
    box_width {{LensKernelFFT1.Reformat_PadFrame.box_width.main}}
    box_height {{LensKernelFFT1.Reformat_PadFrame.box_height.main}}
    resize none
-   filter Impulse
+   filter impulse
    name ReformatKernel
    xpos -382
    ypos 350
@@ -279,13 +277,13 @@ push $N153ae000
    xpos -138
    ypos 548
   }
-set N14f58000 [stack 0]
+set Na11f52d0 [stack 0]
   Dot {
    name Dot7
    xpos 15
    ypos 548
   }
-push $N14dc4c00
+push $Na12cc350
   Dot {
    name Dot13
    xpos 170
@@ -296,7 +294,7 @@ push $N14dc4c00
    box_width {{"width + (2* parent.pad)"}}
    box_height {{"height + (2* parent.pad)"}}
    resize none
-   filter Impulse
+   filter impulse
    name Reformat_PadFrame1
    xpos 136
    ypos 334
@@ -306,13 +304,13 @@ push $N14dc4c00
    xpos 170
    ypos 415
   }
-set N14e60c00 [stack 0]
+set Na11c1250 [stack 0]
   Dot {
    name Dot5
    xpos 34
    ypos 501
   }
-set N14e60800 [stack 0]
+set Na11c38f0 [stack 0]
   Copy {
    inputs 2
    channels rgba
@@ -320,8 +318,8 @@ set N14e60800 [stack 0]
    xpos 0
    ypos 578
   }
-push $N14f58000
-push $N14e60800
+push $Na11f52d0
+push $Na11c38f0
   Dot {
    name Dot8
    xpos -68
@@ -346,7 +344,7 @@ push $N14e60800
    box_width {{ImgIn.width i}}
    box_height {{ImgIn.height i}}
    resize none
-   filter Impulse
+   filter impulse
    name ReformatOutput
    xpos 0
    ypos 692
@@ -358,7 +356,7 @@ push $N14e60800
    xpos 0
    ypos 742
   }
-push $N14e60c00
+push $Na11c1250
   Dot {
    name Dot14
    xpos 170
@@ -377,25 +375,48 @@ push $N14e60c00
    xpos 0
    ypos 871
   }
+push $Na12b90e0
+  Viewer {
+   frame 1001
+   frame_range 1001-2000
+   fps 25
+   viewerProcess "sRGB (default)"
+   monitorOutOutputTransform "rec709 (default)"
+   name Viewer1
+   xpos -252
+   ypos 74
+   addUserKnob {20 viewerLockInputStates +INVISIBLE}
+   addUserKnob {26 READ_ME +INVISIBLE T "The following knobs are needed for the Viewer Lock\nplugin to function. If you don\"t have Viewer Lock,\nyou can safely ignore or delete them.\n\nIf they\"re causing problems, let me know at\nmatt_roe@live.com.\n"}
+   addUserKnob {6 inputState0 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState1 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState2 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState3 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState4 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState5 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState6 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState7 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState8 +INVISIBLE +STARTLINE}
+   addUserKnob {6 inputState9 +INVISIBLE +STARTLINE}
+  }
  end_group
  Dot {
   name Dot5
   xpos 5292
   ypos 1430
  }
-push $N14e8ec00
+push $Na12aee00
  Dot {
   name Dot39
   xpos 4987
   ypos 1270
  }
-push $N14e8f000
+push $Na12feba0
  Dot {
   name Dot7
   xpos 4195
   ypos -24
  }
-set N16f2d400 [stack 0]
+set Na11308b0 [stack 0]
  Dot {
   name Dot8
   xpos 4696
@@ -422,14 +443,14 @@ set N16f2d400 [stack 0]
   xpos 4696
   ypos 224
  }
-set N16f2c400 [stack 0]
+set Na113fc90 [stack 0]
  Blur {
   size 9
   name Blur9
   xpos 4712
   ypos 278
  }
-push $N16f2c400
+push $Na113fc90
  Blur {
   size {1.9 1.1}
   name Blur10
@@ -448,9 +469,9 @@ push $N16f2c400
   xpos 4696
   ypos 508
  }
-set N1714b400 [stack 0]
+set Na1154580 [stack 0]
 push 0
-push $N16f2d400
+push $Na11308b0
  Dot {
   name Dot22
   xpos 3646
@@ -477,14 +498,14 @@ push $N16f2d400
   xpos 3646
   ypos 224
  }
-set N1714a400 [stack 0]
+set Na3052b00 [stack 0]
  Blur {
   size 10
   name Blur11
   xpos 3687
   ypos 278
  }
-push $N1714a400
+push $Na3052b00
  Blur {
   size {2 1.3}
   name Blur12
@@ -503,8 +524,8 @@ push $N1714a400
   xpos 3646
   ypos 508
  }
-set N17175400 [stack 0]
-push $N16f2d400
+set Na30673f0 [stack 0]
+push $Na11308b0
  Remove {
   operation keep
   channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
@@ -526,14 +547,14 @@ push $N16f2d400
   xpos 4195
   ypos 224
  }
-set N17174800 [stack 0]
+set Na3073ff0 [stack 0]
  Blur {
   size 8
   name Blur13
   xpos 4236
   ypos 278
  }
-push $N17174800
+push $Na3073ff0
  Blur {
   size {2 1}
   name Blur14
@@ -552,7 +573,7 @@ push $N17174800
   xpos 4195
   ypos 508
  }
-set N171a1800 [stack 0]
+set Na3088a10 [stack 0]
  Merge2 {
   inputs 3+1
   operation average
@@ -565,10 +586,10 @@ set N171a1800 [stack 0]
   xpos 4414
   ypos 715
  }
-push $N1714b400
+push $Na1154580
 push 0
-push $N17175400
-push $N171a1800
+push $Na30673f0
+push $Na3088a10
  Merge2 {
   inputs 3+1
   operation plus
@@ -590,13 +611,13 @@ push $N171a1800
   xpos 3950
   ypos 947
  }
-push $N14e8f400
+push $Na12fc500
  Dot {
   name Dot14
   xpos 2806
   ypos -24
  }
-set N171a0000 [stack 0]
+set Na30a66d0 [stack 0]
  Dot {
   name Dot17
   xpos 2257
@@ -623,14 +644,14 @@ set N171a0000 [stack 0]
   xpos 2257
   ypos 224
  }
-set N171cb000 [stack 0]
+set Na30b5ab0 [stack 0]
  Blur {
   size 10
   name Blur4
   xpos 2298
   ypos 278
  }
-push $N171cb000
+push $Na30b5ab0
  Blur {
   size 1.8
   name Blur5
@@ -649,9 +670,9 @@ push $N171cb000
   xpos 2257
   ypos 499
  }
-set N171ca000 [stack 0]
+set Na30ca3a0 [stack 0]
 push 0
-push $N171a0000
+push $Na30a66d0
  Remove {
   operation keep
   channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
@@ -673,14 +694,14 @@ push $N171a0000
   xpos 2806
   ypos 224
  }
-set N171ef400 [stack 0]
+set Na30d6fa0 [stack 0]
  Blur {
   size 8
   name Blur6
   xpos 2847
   ypos 278
  }
-push $N171ef400
+push $Na30d6fa0
  Blur {
   size 1.8
   name Blur8
@@ -699,8 +720,8 @@ push $N171ef400
   xpos 2806
   ypos 511
  }
-set N171ee400 [stack 0]
-push $N171a0000
+set Na30ec1c0 [stack 0]
+push $Na30a66d0
  Dot {
   name Dot15
   xpos 3307
@@ -727,14 +748,14 @@ push $N171a0000
   xpos 3307
   ypos 224
  }
-set N1721b400 [stack 0]
+set Na30fb460 [stack 0]
  Blur {
   size 9
   name Blur2
   xpos 3323
   ypos 278
  }
-push $N1721b400
+push $Na30fb460
  Blur {
   size 1.8
   name Blur3
@@ -753,7 +774,7 @@ push $N1721b400
   xpos 3307
   ypos 499
  }
-set N1721a400 [stack 0]
+set Na14b1d90 [stack 0]
  Merge2 {
   inputs 3+1
   operation average
@@ -766,10 +787,10 @@ set N1721a400 [stack 0]
   xpos 3045
   ypos 715
  }
-push $N1721a400
+push $Na14b1d90
 push 0
-push $N171ca000
-push $N171ee400
+push $Na30ca3a0
+push $Na30ec1c0
  Merge2 {
   inputs 3+1
   operation plus
@@ -786,7 +807,7 @@ push $N171ee400
   xpos 2547
   ypos 705
  }
-push $N14e8f400
+push $Na12fc500
  Dot {
   name Dot65
   xpos 1392
@@ -797,7 +818,7 @@ push $N14e8f400
   xpos 1392
   ypos -24
  }
-set N1724cc00 [stack 0]
+set Na1458a70 [stack 0]
  Dot {
   name Dot34
   xpos 1893
@@ -824,14 +845,14 @@ set N1724cc00 [stack 0]
   xpos 1893
   ypos 224
  }
-set N17271c00 [stack 0]
+set Na1467e50 [stack 0]
  Blur {
   size 9
   name Blur17
   xpos 1909
   ypos 278
  }
-push $N17271c00
+push $Na1467e50
  Blur {
   size 2
   name Blur16
@@ -850,9 +871,9 @@ push $N17271c00
   xpos 1893
   ypos 505
  }
-set N17270c00 [stack 0]
+set Na147c740 [stack 0]
 push 0
-push $N1724cc00
+push $Na1458a70
  Dot {
   name Dot11
   xpos 843
@@ -879,14 +900,14 @@ push $N1724cc00
   xpos 843
   ypos 224
  }
-set N17299c00 [stack 0]
+set Na148b9e0 [stack 0]
  Blur {
   size 8
   name Blur27
   xpos 883
   ypos 278
  }
-push $N17299c00
+push $Na148b9e0
  Blur {
   size 2
   name Blur1
@@ -905,8 +926,8 @@ push $N17299c00
   xpos 843
   ypos 505
  }
-set N17298c00 [stack 0]
-push $N1724cc00
+set Na14a02d0 [stack 0]
+push $Na1458a70
  Remove {
   operation keep
   channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
@@ -928,14 +949,14 @@ push $N1724cc00
   xpos 1392
   ypos 224
  }
-set N17298000 [stack 0]
+set Na14081b0 [stack 0]
  Blur {
   size 8
   name Blur26
   xpos 1432
   ypos 278
  }
-push $N17298000
+push $Na14081b0
  Blur {
   size 2.5
   name Blur7
@@ -954,7 +975,7 @@ push $N17298000
   xpos 1395
   ypos 505
  }
-set N172c1000 [stack 0]
+set Na141caa0 [stack 0]
  Merge2 {
   inputs 3+1
   operation average
@@ -967,10 +988,10 @@ set N172c1000 [stack 0]
   xpos 1704
   ypos 715
  }
-push $N17270c00
+push $Na147c740
 push 0
-push $N17298c00
-push $N172c1000
+push $Na14a02d0
+push $Na141caa0
  Merge2 {
   inputs 3+1
   operation plus
@@ -1015,7 +1036,7 @@ push $N172c1000
   xpos 2547
   ypos 1426
  }
-push $N14e8e800
+push $Na12b14a0
  Dot {
   name Dot1
   xpos 5579

@@ -1,0 +1,100 @@
+#! C:/Program Files/Nuke11.1v1/nuke-11.1.1.dll -nx
+version 11.1 v1
+Gizmo {
+ inputs 2
+ addUserKnob {20 User}
+ addUserKnob {7 smooth l Smooth t "Suppress ringing artifacts and noise throughout the image at the expense of absolute sharpness" R 0 100}
+ smooth 30
+ addUserKnob {7 prescale l "Pre Scale" t "Reduce ringing artifacts at the edges by expanding the image borders. Higher is slower but better quality.\n\nRecommended values:\n1\n1.25\n2\n4" R 1 4}
+ prescale 2
+ addUserKnob {6 kernel_normalize l "Normalize kernel input" +STARTLINE}
+ kernel_normalize true
+}
+ Input {
+  inputs 0
+  name Kernel
+  xpos 789
+  ypos -288
+  number 1
+ }
+ Reformat {
+  type scale
+  scale {{parent.prescale}}
+  resize none
+  name Reformat1
+  xpos 789
+  ypos -222
+ }
+ set C607f8700 [stack 0]
+ FFT {
+  normalize_input {{parent.kernel_normalize}}
+  center_kernel true
+  name FFT8
+  selected true
+  xpos 789
+  ypos -162
+ }
+ Expression {
+  temp_name0 K
+  temp_expr0 "pow(1.07, parent.smooth) / 10000"
+  channel0 rgba
+  expr0 "r / (pow(r, 2) + K)"
+  name Expression4
+  xpos 789
+  ypos -88
+ }
+ Input {
+  inputs 0
+  name Image
+  xpos 638
+  ypos -285
+ }
+ Crop {
+  box {{curve} {curve} {input.width} {input.height}}
+  crop false
+  name Crop1
+  xpos 638
+  ypos -246
+ }
+clone $C607f8700 {
+  xpos 638
+  ypos -222
+  selected false
+ }
+ Crop {
+  box {{curve} {curve} {input.width} {input.height}}
+  crop false
+  name Crop2
+  xpos 638
+  ypos -198
+ }
+ FFT {
+  name FFT9
+  xpos 638
+  ypos -161
+ }
+ FFTMultiply {
+  inputs 2
+  name FFTMultiply4
+  xpos 638
+  ypos -92
+ }
+ InvFFT {
+  name InvFFT5
+  xpos 638
+  ypos -27
+ }
+ Reformat {
+  type scale
+  scale {{1/parent.Reformat1.scale}}
+  resize none
+  name Reformat2
+  xpos 638
+  ypos 26
+ }
+ Output {
+  name Output1
+  xpos 638
+  ypos 77
+ }
+end_group

@@ -1,0 +1,732 @@
+set cut_paste_input [stack 0]
+version 11.0 v1
+push $cut_paste_input
+Group {
+ name C_Locamotive_Temporal_Median_Chain
+ selected true
+ xpos 12940
+ ypos -1498
+ addUserKnob {20 User}
+ addUserKnob {41 ReferenceFrames l "Reference Frames" T Control.ReferenceFrames}
+ addUserKnob {41 Stack T Control.Stack}
+ addUserKnob {41 IntervalMultiplier l "Interval Multiplier" T Control.IntervalMultiplier}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode10
+  tile_color 0xaaaaaa00
+  label "Temporal Median Setup"
+  note_font_size 50
+  xpos -54
+  ypos -743
+  bdwidth 769
+  bdheight 721
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode6
+  tile_color 0xaaaaaa00
+  label "Temporal Median Setup"
+  note_font_size 50
+  xpos -54
+  ypos -3911
+  bdwidth 769
+  bdheight 721
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode7
+  tile_color 0xaaaaaa00
+  label "Temporal Median Setup"
+  note_font_size 50
+  xpos -54
+  ypos -3120
+  bdwidth 769
+  bdheight 721
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode8
+  tile_color 0xaaaaaa00
+  label "Temporal Median Setup"
+  note_font_size 50
+  xpos -54
+  ypos -2328
+  bdwidth 769
+  bdheight 721
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode9
+  tile_color 0xaaaaaa00
+  label "Temporal Median Setup"
+  note_font_size 50
+  xpos -54
+  ypos -1536
+  bdwidth 769
+  bdheight 721
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 510
+  ypos -4029
+ }
+ Dot {
+  name Dot81
+  label In
+  note_font_size 20
+  xpos 544
+  ypos -3989
+ }
+set N1a7dd180 [stack 0]
+ Dot {
+  name Dot43
+  label In
+  note_font_size 20
+  xpos 544
+  ypos -3820
+ }
+set N1a7dce00 [stack 0]
+ Dot {
+  name Dot30
+  xpos 544
+  ypos -3724
+ }
+set N1a7dca80 [stack 0]
+ Dot {
+  name Dot32
+  xpos 324
+  ypos -3724
+ }
+set N1a7dc700 [stack 0]
+ Dot {
+  name Dot38
+  xpos 104
+  ypos -3724
+ }
+ TimeOffset {
+  time_offset {{(Control.Stack*5-4)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset5
+  selected true
+  xpos 70
+  ypos -3682
+ }
+ Dot {
+  name Dot39
+  xpos 104
+  ypos -3629
+ }
+set N1a7dc000 [stack 0]
+push 0
+push $N1a7dc700
+ TimeOffset {
+  time_offset {{-(Control.Stack*5-4)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset4
+  xpos 290
+  ypos -3682
+ }
+ Dot {
+  name Dot37
+  xpos 324
+  ypos -3629
+ }
+set Nc931c00 [stack 0]
+push $N1a7dca80
+ Dot {
+  name Dot31
+  xpos 544
+  ypos -3628
+ }
+set Nc931880 [stack 0]
+ Merge2 {
+  inputs 3+1
+  operation max
+  name Merge12
+  xpos 70
+  ypos -3512
+ }
+ Dot {
+  name Dot40
+  xpos 104
+  ypos -3364
+ }
+push $N1a7dc000
+push 0
+push $Nc931c00
+push $Nc931880
+ Merge2 {
+  inputs 3+1
+  operation min
+  name Merge13
+  xpos 290
+  ypos -3512
+ }
+ Dot {
+  name Dot41
+  xpos 324
+  ypos -3436
+ }
+push $N1a7dc000
+push 0
+push $Nc931c00
+push $Nc931880
+ Merge2 {
+  inputs 3+1
+  operation plus
+  name Merge14
+  xpos 510
+  ypos -3512
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge17
+  xpos 510
+  ypos -3440
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge18
+  xpos 510
+  ypos -3368
+ }
+set Nc930000 [stack 0]
+ Dot {
+  name Dot45
+  label Out
+  note_font_size 20
+  xpos 544
+  ypos -3268
+ }
+set Ne8bd7c00 [stack 0]
+ Dot {
+  name Dot20
+  label In
+  note_font_size 20
+  xpos 544
+  ypos -3029
+ }
+ Dot {
+  name Dot21
+  xpos 544
+  ypos -2933
+ }
+set Ne8bd7500 [stack 0]
+ Dot {
+  name Dot22
+  xpos 324
+  ypos -2933
+ }
+set Ne8bd7180 [stack 0]
+ Dot {
+  name Dot23
+  xpos 104
+  ypos -2933
+ }
+ TimeOffset {
+  time_offset {{((Control.Stack*5-4)+1)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset1
+  xpos 70
+  ypos -2889
+ }
+ Dot {
+  name Dot24
+  xpos 104
+  ypos -2838
+ }
+set Ne8bd6a80 [stack 0]
+push 0
+push $Ne8bd7180
+ TimeOffset {
+  time_offset {{-((Control.Stack*5-4)+1)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset3
+  xpos 290
+  ypos -2890
+ }
+ Dot {
+  name Dot25
+  xpos 324
+  ypos -2838
+ }
+set Ne8bd6700 [stack 0]
+push $Ne8bd7500
+ Dot {
+  name Dot26
+  xpos 544
+  ypos -2837
+ }
+set Ne8bd6380 [stack 0]
+ Merge2 {
+  inputs 3+1
+  operation max
+  name Merge7
+  xpos 70
+  ypos -2721
+ }
+ Dot {
+  name Dot29
+  xpos 104
+  ypos -2573
+ }
+push $Ne8bd6a80
+push 0
+push $Ne8bd6700
+push $Ne8bd6380
+ Merge2 {
+  inputs 3+1
+  operation min
+  name Merge8
+  xpos 290
+  ypos -2721
+ }
+ Dot {
+  name Dot46
+  xpos 324
+  ypos -2645
+ }
+push $Ne8bd6a80
+push 0
+push $Ne8bd6700
+push $Ne8bd6380
+ Merge2 {
+  inputs 3+1
+  operation plus
+  name Merge9
+  xpos 510
+  ypos -2721
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge10
+  xpos 510
+  ypos -2649
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge11
+  xpos 510
+  ypos -2577
+ }
+ Dot {
+  name Dot47
+  label Out
+  note_font_size 20
+  xpos 544
+  ypos -2477
+ }
+set Nbd23a700 [stack 0]
+ Dot {
+  name Dot48
+  label In
+  note_font_size 20
+  xpos 544
+  ypos -2237
+ }
+ Dot {
+  name Dot49
+  xpos 544
+  ypos -2141
+ }
+set Nbd23a000 [stack 0]
+ Dot {
+  name Dot51
+  xpos 324
+  ypos -2141
+ }
+set N26a33c00 [stack 0]
+ Dot {
+  name Dot52
+  xpos 104
+  ypos -2141
+ }
+ TimeOffset {
+  time_offset {{((Control.Stack*5-4)+2)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset6
+  xpos 70
+  ypos -2098
+ }
+ Dot {
+  name Dot53
+  xpos 104
+  ypos -2046
+ }
+set N26a33500 [stack 0]
+push 0
+push $N26a33c00
+ TimeOffset {
+  time_offset {{-((Control.Stack*5-4)+2)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset7
+  xpos 290
+  ypos -2098
+ }
+ Dot {
+  name Dot54
+  xpos 324
+  ypos -2046
+ }
+set N26a33180 [stack 0]
+push $Nbd23a000
+ Dot {
+  name Dot55
+  xpos 544
+  ypos -2045
+ }
+set N26a32e00 [stack 0]
+ Merge2 {
+  inputs 3+1
+  operation max
+  name Merge19
+  xpos 70
+  ypos -1929
+ }
+ Dot {
+  name Dot56
+  xpos 104
+  ypos -1781
+ }
+push $N26a33500
+push 0
+push $N26a33180
+push $N26a32e00
+ Merge2 {
+  inputs 3+1
+  operation min
+  name Merge20
+  xpos 290
+  ypos -1929
+ }
+ Dot {
+  name Dot57
+  xpos 324
+  ypos -1853
+ }
+push $N26a33500
+push 0
+push $N26a33180
+push $N26a32e00
+ Merge2 {
+  inputs 3+1
+  operation plus
+  name Merge21
+  xpos 510
+  ypos -1929
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge22
+  xpos 510
+  ypos -1857
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge23
+  xpos 510
+  ypos -1785
+ }
+ Dot {
+  name Dot58
+  label Out
+  note_font_size 20
+  xpos 544
+  ypos -1685
+ }
+set N1d607180 [stack 0]
+ Dot {
+  name Dot59
+  label In
+  note_font_size 20
+  xpos 544
+  ypos -1445
+ }
+ Dot {
+  name Dot60
+  xpos 544
+  ypos -1349
+ }
+set N1d606a80 [stack 0]
+ Dot {
+  name Dot62
+  xpos 324
+  ypos -1349
+ }
+set N1d606700 [stack 0]
+ Dot {
+  name Dot63
+  xpos 104
+  ypos -1349
+ }
+ TimeOffset {
+  time_offset {{((Control.Stack*5-4)+3)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset8
+  xpos 70
+  ypos -1306
+ }
+ Dot {
+  name Dot64
+  xpos 104
+  ypos -1254
+ }
+set N1d606000 [stack 0]
+push 0
+push $N1d606700
+ TimeOffset {
+  time_offset {{-((Control.Stack*5-4)+3)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset9
+  xpos 290
+  ypos -1306
+ }
+ Dot {
+  name Dot65
+  xpos 324
+  ypos -1254
+ }
+set N9857c00 [stack 0]
+push $N1d606a80
+ Dot {
+  name Dot66
+  xpos 544
+  ypos -1253
+ }
+set N9857880 [stack 0]
+ Merge2 {
+  inputs 3+1
+  operation max
+  name Merge24
+  xpos 70
+  ypos -1137
+ }
+ Dot {
+  name Dot67
+  xpos 104
+  ypos -989
+ }
+push $N1d606000
+push 0
+push $N9857c00
+push $N9857880
+ Merge2 {
+  inputs 3+1
+  operation min
+  name Merge25
+  xpos 290
+  ypos -1137
+ }
+ Dot {
+  name Dot68
+  xpos 324
+  ypos -1061
+ }
+push $N1d606000
+push 0
+push $N9857c00
+push $N9857880
+ Merge2 {
+  inputs 3+1
+  operation plus
+  name Merge26
+  xpos 510
+  ypos -1137
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge27
+  xpos 510
+  ypos -1065
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge28
+  xpos 510
+  ypos -993
+ }
+ Dot {
+  name Dot69
+  label Out
+  note_font_size 20
+  xpos 544
+  ypos -893
+ }
+set N2a8a7c00 [stack 0]
+ Dot {
+  name Dot70
+  label In
+  note_font_size 20
+  xpos 544
+  ypos -652
+ }
+ Dot {
+  name Dot71
+  xpos 544
+  ypos -556
+ }
+set N2a8a7500 [stack 0]
+ Dot {
+  name Dot72
+  xpos 324
+  ypos -556
+ }
+set N2a8a7180 [stack 0]
+ Dot {
+  name Dot73
+  xpos 104
+  ypos -556
+ }
+ TimeOffset {
+  time_offset {{((Control.Stack*5-4)+4)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset10
+  xpos 70
+  ypos -512
+ }
+ Dot {
+  name Dot74
+  xpos 104
+  ypos -461
+ }
+set N2a8a6a80 [stack 0]
+push 0
+push $N2a8a7180
+ TimeOffset {
+  time_offset {{-((Control.Stack*5-4)+4)*Control.IntervalMultiplier}}
+  time ""
+  name TimeOffset11
+  xpos 290
+  ypos -513
+ }
+ Dot {
+  name Dot75
+  xpos 324
+  ypos -461
+ }
+set N2a8a6700 [stack 0]
+push $N2a8a7500
+ Dot {
+  name Dot76
+  xpos 544
+  ypos -460
+ }
+set N2a8a6380 [stack 0]
+ Merge2 {
+  inputs 3+1
+  operation max
+  name Merge29
+  xpos 70
+  ypos -344
+ }
+ Dot {
+  name Dot77
+  xpos 104
+  ypos -196
+ }
+push $N2a8a6a80
+push 0
+push $N2a8a6700
+push $N2a8a6380
+ Merge2 {
+  inputs 3+1
+  operation min
+  name Merge30
+  xpos 290
+  ypos -344
+ }
+ Dot {
+  name Dot78
+  xpos 324
+  ypos -268
+ }
+push $N2a8a6a80
+push 0
+push $N2a8a6700
+push $N2a8a6380
+ Merge2 {
+  inputs 3+1
+  operation plus
+  name Merge31
+  xpos 510
+  ypos -344
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge32
+  xpos 510
+  ypos -272
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge33
+  xpos 510
+  ypos -200
+ }
+ Dot {
+  name Dot79
+  label Out
+  note_font_size 20
+  xpos 544
+  ypos -100
+ }
+push $N2a8a7c00
+push $N1d607180
+push $Nbd23a700
+push $Ne8bd7c00
+push $N1a7dce00
+ Switch {
+  inputs 6
+  which {{parent.Control.ReferenceFrames}}
+  name Switch1
+  xpos 840
+  ypos -104
+ }
+ Dot {
+  name Dot80
+  label Out
+  note_font_size 20
+  xpos 874
+  ypos 91
+ }
+ Output {
+  name Output1
+  xpos 840
+  ypos 206
+ }
+ NoOp {
+  inputs 0
+  name Control
+  xpos 950
+  ypos -3753
+  addUserKnob {20 User}
+  addUserKnob {3 ReferenceFrames l "Reference Frames" t "How many are referenced forwards and backwards from the current frame. (Max 5, being 11 frames in total)"}
+  ReferenceFrames 5
+  addUserKnob {3 Stack t "Used for stacking temporal median chains one after the other (use minimally, very heavy)"}
+  Stack 1
+  addUserKnob {3 IntervalMultiplier l "Interval Multiplier" t "increase the frames invtervals"}
+  IntervalMultiplier 2
+ }
+push $N1a7dd180
+push $Nc930000
+ Viewer {
+  inputs 2
+  frame 1008
+  frame_range 1001-1059
+  name Viewer1
+  xpos 817
+  ypos -3850
+ }
+end_group
